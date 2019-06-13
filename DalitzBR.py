@@ -22,8 +22,9 @@
 #
 # Written in python3 should work also in python2
 #
-# Claudio 31 May 2019
-# Prettified 7 June 2019  
+# Claudio            31 May 2019
+# Prettified          7 June 2019
+# Fixed small bugs   13 June 2019
 #
 from __future__ import print_function  # python2 compatibility (hopefully?)
 import argparse
@@ -40,7 +41,8 @@ def DgammaDs(emass, mesonMass, s):
     c3 = 1 + 2*emass**2/s
     c4 = np.sqrt(1 - 4*emass**2/s)
     c5 = (rhoMass**2 - s)**2 + (rhoMass*rhoWidth)**2 
-    return c1 * c2**3 * c3 * c4 * rhoMass**4 / c5
+#    return c1 * c2**3 * c3 * c4 * rhoMass**4 / c5     # changed on June 13, 2019
+    return c1 * c2**3 * c3 * c4 * (rhoMass**4 + (rhoMass*rhoWidth)**2 ) / c5
    
 # The ArgumentParser object will hold the information
 # necessary to parse the command line into python data types
@@ -96,7 +98,8 @@ for thisMass,   thisBR,   thisName,   thisX, thisXmass in zip(
     # need very fine binning.
     sarray   = np.linspace( diMassMin**2, diMassMax**2, 20000000)
     ds       = sarray[1]-sarray[0]
-    dgds     = DgammaDs(mass, thisMass, sarray)
+#   dgds     = DgammaDs(mass, thisMass, sarray)    # changed 13 Jun 2019
+    dgds     = DgammaDs(mass, diMassMax, sarray)
     br       = 0.5 * np.sum( (dgds[1:]+dgds[:-1])) * ds * thisBR
 
     # if X is not a photon, need to divide by two because there
