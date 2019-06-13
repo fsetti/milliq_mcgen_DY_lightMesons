@@ -87,7 +87,7 @@ DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM=true){
     
     TF1 pdf_q2;
     if(useVDM){
-        pdf_q2 = TF1("pdf_q2","1/x * (1-x/[0]^2)^3 * (1+2*[1]^2/x) * sqrt(1-4*[1]^2/x) * [2]^4/(([2]^2-x)^2+([2]*[3])^2)", 2*me*2*me, (mP-mX)*(mP-mX));
+        pdf_q2 = TF1("pdf_q2","1/x * (1-x/[0]^2)^3 * (1+2*[1]^2/x) * sqrt(1-4*[1]^2/x) * ([2]^4+([2]*[3])^2)/(([2]^2-x)^2+([2]*[3])^2)", 2*me*2*me, (mP-mX)*(mP-mX));
         pdf_q2.SetParameter(0, mP);
         pdf_q2.SetParameter(1, me);
         pdf_q2.SetParameter(2, 0.7755); // mass of rho, part of the form factor F(q^2)
