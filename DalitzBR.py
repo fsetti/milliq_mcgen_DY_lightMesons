@@ -25,6 +25,8 @@
 # Claudio            31 May 2019
 # Prettified          7 June 2019
 # Fixed small bugs   13 June 2019
+# Even better formula whan X is not a gamma
+#                                   13 June 2019
 #
 from __future__ import print_function  # python2 compatibility (hopefully?)
 import argparse
@@ -32,16 +34,21 @@ import numpy as np
 import math
 
 # http://cds.cern.ch/record/683210/files/soft-96-032.pdf
-def DgammaDs(emass, mesonMass, s):
+def DgammaDs(emass, mesonMass, daughterMesonMass, s):
     alpha    = 1./137.036
     rhoMass  = 775.5
     rhoWidth = 145.
-    c1 = 2*alpha/(3*math.pi*s)
-    c2 = 1 - s/mesonMass**2
+    if daughterMesonMass < 1e-4:
+        c1 = 2*alpha/(3*math.pi*s)
+        c2 = 1 - s/mesonMass**2
+    else:
+        c1  = alpha/(3*math.pi*s)
+        dm2 = mesonMass**2 - daughterMesonMass**2
+        c2  = (1 + s/dm2)**2 - 4*s*mesonMass**2/(dm2*dm2)
+        c2  = np.sqrt(c2)
     c3 = 1 + 2*emass**2/s
     c4 = np.sqrt(1 - 4*emass**2/s)
     c5 = (rhoMass**2 - s)**2 + (rhoMass*rhoWidth)**2 
-#    return c1 * c2**3 * c3 * c4 * rhoMass**4 / c5     # changed on June 13, 2019
     return c1 * c2**3 * c3 * c4 * (rhoMass**4 + (rhoMass*rhoWidth)**2 ) / c5
    
 # The ArgumentParser object will hold the information
@@ -95,18 +102,12 @@ for thisMass,   thisBR,   thisName,   thisX, thisXmass in zip(
         
     # Brute force integral.
     # Because the function varies very fast near 0,
-    # need very fine binning.
-    sarray   = np.linspace( diMassMin**2, diMassMax**2, 20000000)
+    # need very fine binning. (the 1e-5 is to avoid numerical trouble)
+    sarray   = np.linspace( diMassMin**2, (diMassMax**2- 1e-5), 20000000)
     ds       = sarray[1]-sarray[0]
-#   dgds     = DgammaDs(mass, thisMass, sarray)    # changed 13 Jun 2019
-    dgds     = DgammaDs(mass, diMassMax, sarray)
+    dgds     = DgammaDs(mass, thisMass, thisXmass, sarray)
     br       = 0.5 * np.sum( (dgds[1:]+dgds[:-1])) * ds * thisBR
 
-    # if X is not a photon, need to divide by two because there
-    # is only one photon in the process that can "convert" to an ee pair
-    if thisXmass > 1e-4:
-        br = br/2.
-    
     # Output the results
     print("Branching ratio for ",thisName,"-> ee", thisX, " = ", br)
 
