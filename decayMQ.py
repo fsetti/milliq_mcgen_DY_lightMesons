@@ -69,16 +69,18 @@ def DoDalitz(p4_mother, me, mX, useVME=True):
     # pdf of q^2 = m(e+e-)^2
     print useVME
     if useVME:
-        pdf = r.TF1("logq2_pdf", "(1-exp(x)/[0]^2)^3 * (1+2*[1]^2/exp(x)) * sqrt(1-4*[1]^2/exp(x)) * ([2]^4+([2]*[3])^2)/(([2]^2-exp(x))^2+([2]*[3])^2)", log((2*me)**2), log((mP-mX)**2))
-        pdf.SetParameter(0, mP)
-        pdf.SetParameter(1, me)
-        pdf.SetParameter(2, 0.7755)  # part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
-        pdf.SetParameter(3, 0.1462)  # part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
+        pdf = r.TF1("logq2_pdf","((1+exp(x)/([0]*[1]))^2-([0]+[1])^2*exp(x)/([0]*[1])^2)^1.5 * (1+0.5*[2]^2/exp(x)) * sqrt(1-[2]^2/exp(x)) * ([3]^4+([3]*[4])^2)/(([3]^2-exp(x))^2+([3]*[4])^2)", log((2*me)**2), log((mP-mX)**2))        
+        pdf.SetParameter(0, mP-mX)
+        pdf.SetParameter(1, mP+mX)
+        pdf.SetParameter(2, 2*me)
+        pdf.SetParameter(3, 0.7755)  # part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
+        pdf.SetParameter(4, 0.1462)  # part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
     else:
-        pdf = r.TF1("logq2_pdf", "(1-exp(x)/[0]^2)^3 * (1+2*[1]^2/exp(x)) * sqrt(1-4*[1]^2/exp(x)) * (1+[2]*exp(x)/[0]^2)^2", log((2*me)**2), log((mP-mX)**2))
-        pdf.SetParameter(0, mP)
-        pdf.SetParameter(1, me)
-        pdf.SetParameter(2, 0.03)  # part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
+        pdf = r.TF1("logq2_pdf", "((1+exp(x)/([0]*[1]))^2-([0]+[1])^2*exp(x)/([0]*[1])^2)^1.5 * (1+0.5*[2]^2/exp(x)) * sqrt(1-[2]^2/exp(x)) * (1+[3]*exp(x)/[0]^2)^2", log((2*me)**2), log((mP-mX)**2))
+        pdf.SetParameter(0, mP-mX)
+        pdf.SetParameter(1, mP+mX)
+        pdf.SetParameter(2, me)
+        pdf.SetParameter(3, 0.03)  # part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
     pdf.SetNpx(1000)
     
     q2 = exp(pdf.GetRandom()) 
@@ -87,8 +89,8 @@ def DoDalitz(p4_mother, me, mX, useVME=True):
     pX, pgstar = Do2BodyDecay(p4_mother, mX, sqrt(q2), random.uniform(-1,1), random.uniform(-pi,pi))
 
     # pdf of cos(theta) in the gstar -> e+e- decay
-    pdf = r.TF1("cosTheta_pdf", "1 + x^2 + 4*[0]^2/[1]*(1-x^2)", -1, 1)
-    pdf.SetParameter(0, me)
+    pdf = r.TF1("cosTheta_pdf", "1 + x^2 + [0]^2/[1]*(1-x^2)", -1, 1)
+    pdf.SetParameter(0, 2*me)
     pdf.SetParameter(1, q2)
     pdf.SetNpx(1000)
 
@@ -108,7 +110,7 @@ if __name__=="__main__":
 
     p4_pi = r.TLorentzVector()
     p4_pi.SetPtEtaPhiM(0, 0, 0, 0.139)
-    pX, pe1, pe2 = DoDalitz(p4_pi, 0.000511, 0)
+    pX, pe1, pe2 = DoDalitz(p4_pi, 0.000511, 0.05)
     pX.Print()
     pe1.Print()
     pe2.Print()

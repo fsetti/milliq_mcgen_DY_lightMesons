@@ -87,28 +87,30 @@ DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM=true){
     
     TF1 pdf_q2;
     if(useVDM){
-        pdf_q2 = TF1("pdf_q2","1/x * (1-x/[0]^2)^3 * (1+2*[1]^2/x) * sqrt(1-4*[1]^2/x) * ([2]^4+([2]*[3])^2)/(([2]^2-x)^2+([2]*[3])^2)", 2*me*2*me, (mP-mX)*(mP-mX));
-        pdf_q2.SetParameter(0, mP);
-        pdf_q2.SetParameter(1, me);
-        pdf_q2.SetParameter(2, 0.7755); // mass of rho, part of the form factor F(q^2)
-        pdf_q2.SetParameter(3, 0.1462); // width of rho, part of the form factor F(q^2)
+        pdf_q2 = TF1("logq2_pdf","((1+exp(x)/([0]*[1]))^2-([0]+[1])^2*exp(x)/([0]*[1])^2)^1.5 * (1+0.5*[2]^2/exp(x)) * sqrt(1-[2]^2/exp(x)) * ([3]^4+([3]*[4])^2)/(([3]^2-exp(x))^2+([3]*[4])^2)", log(2*me*2*me), log((mP-mX)*(mP-mX)));
+        pdf_q2.SetParameter(0, mP-mX); // max q2
+        pdf_q2.SetParameter(1, mP+mX);
+        pdf_q2.SetParameter(2, 2*me);  // min q2
+        pdf_q2.SetParameter(3, 0.7755); // mass of rho, part of the form factor F(q^2)
+        pdf_q2.SetParameter(4, 0.1462); // width of rho, part of the form factor F(q^2)
     }else{
-        pdf_q2 = TF1("pdf_q2","1/x * (1-x/[0]^2)^3 * (1+2*[1]^2/x) * sqrt(1-4*[1]^2/x) * (1+[2]*x/[0]^2)^2", 2*me*2*me, (mP-mX)*(mP-mX));
-        pdf_q2.SetParameter(0, mP);
-        pdf_q2.SetParameter(1, me);
-        pdf_q2.SetParameter(2, 0.03); // part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
+        pdf_q2 = TF1("logq2","((1+exp(x)/([0]*[1]))^2-([0]+[1])^2*exp(x)/([0]*[1])^2)^1.5 * (1+0.5*[2]^2/exp(x)) * sqrt(1-[2]^2/exp(x)) * (1+[3]*exp(x)/[0]^2)^2", log(2*me*2*me), log((mP-mX)*(mP-mX)));
+        pdf_q2.SetParameter(0, mP-mX);
+        pdf_q2.SetParameter(1, mP+mX);
+        pdf_q2.SetParameter(2, 2*me);
+        pdf_q2.SetParameter(3, 0.03); // part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
     }
     pdf_q2.SetNpx(1000);
 
-    double q2 = pdf_q2.GetRandom();
+    double q2 = exp(pdf_q2.GetRandom());
 
     // do the P -> X gstar decay. cos(theta) is uniform here
     TLorentzVector pX, pgstar;
     std::tie(pX, pgstar) = Do2BodyDecay(p4_mother, mX, sqrt(q2));
 
     // pdf of cos(theta) in the gstar -> e+e- decay
-    TF1 pdf_ct = TF1("pdf_ct", "1 + x^2 + 4*[0]^2/[1]*(1-x^2)", -1, 1);
-    pdf_ct.SetParameter(0, me);
+    TF1 pdf_ct = TF1("pdf_ct", "1 + x^2 + [0]^2/[1]*(1-x^2)", -1, 1);
+    pdf_ct.SetParameter(0, 2*me);
     pdf_ct.SetParameter(1, q2);
     pdf_ct.SetNpx(1000);
 
