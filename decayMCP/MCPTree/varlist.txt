@@ -1,0 +1,11 @@
+MCPTree
+unsigned int, event
+LorentzPtEtaPhiMf, p4_parent
+int, decay_flag
+LorentzPtEtaPhiMf, p4_1
+LorentzPtEtaPhiMf, p4_2
+float, xsec
+float, BR_q1
+float, weight
+float, weight_up
+float, weight_dn

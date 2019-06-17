@@ -6,8 +6,10 @@
 #include <utility>
 #include <cmath>
 
+#include "decayMQ.h"
+
 std::pair<TLorentzVector,TLorentzVector>
-Do2BodyDecay(TLorentzVector p4_mother, double m1, double m2, double cosTheta=-999, double phi=-999){
+Do2BodyDecay(TLorentzVector p4_mother, double m1, double m2, double cosTheta, double phi){
     // get four-momenta p1,p2 of 2 daughter particles in decay m -> d1 + d2
     // p4_mother is four momentum of mother particle
     // m1, m2 are masses of daughters d1 and d2
@@ -71,7 +73,7 @@ Do2BodyDecay(TLorentzVector p4_mother, double m1, double m2, double cosTheta=-99
 }
 
 std::tuple<TLorentzVector,TLorentzVector,TLorentzVector>
-DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM=true){
+DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM){
     // Dalitz decay of the form P -> e+e-X (e can be electron, but doesn't have to be)
     // returns a 3-tuple of four-momenta pX, pe+, pe-
     // useVDM controls the type of form factor to use

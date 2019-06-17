@@ -41,13 +41,18 @@ data = np.loadtxt(txtFile)
 hfile = TFile(rootFile, 'RECREATE')
 
 # Extract the columns we want
-pt        = data[:,0]
+pt_coarse = data[:,0]
 central   = data[:,1]
 down      = data[:,2]
 up        = data[:,3]
 
+pt = np.linspace(pt_coarse[0], pt_coarse[-1], 500)
+central = np.interp(pt, pt_coarse, central)
+down = np.interp(pt, pt_coarse, down)
+up = np.interp(pt, pt_coarse, up)
+
 # parameters of the histograms
-nbins   = np.shape(data)[0]
+nbins   = len(pt)
 binsize = pt[1] - pt[0]
 ptmin   = pt[0]  - 0.5*binsize
 ptmax   = pt[-1] + 0.5*binsize
