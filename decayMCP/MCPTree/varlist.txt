@@ -1,6 +1,7 @@
 MCPTree
 unsigned int, event
-LorentzPtEtaPhiMf, p4_parent
+LorentzPtEtaPhiMf, parent_p4
+int, parent_pdgId
 int, decay_flag
 LorentzPtEtaPhiMf, p4_1
 LorentzPtEtaPhiMf, p4_2

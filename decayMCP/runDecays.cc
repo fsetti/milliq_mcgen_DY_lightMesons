@@ -16,6 +16,7 @@ TFile *finfo;
 float etamin, etamax;
 float xsec_inclusive;
 float mMCP, m_parent, BR;
+int parent_pdgId;
 MCPTree outtree;
 
 
@@ -25,12 +26,14 @@ int initialize(int decayMode){
         etamin = -1;
         etamax = 1;
         xsec_inclusive = 1.015e6;
+        parent_pdgId = 443;
         m_parent = 3.0969;
     }else if(decayMode == 2){
         finfo = new TFile("../oniaFromB/psiprime.root");
         etamin = -1;
         etamax = 1;
         xsec_inclusive = 2.635e5;
+        parent_pdgId = 100443;
         m_parent = 3.6861;
     }else{
         return -1;
@@ -53,9 +56,9 @@ void DoDecay(){
     float eta = gRandom->Uniform(etamin, etamax);
     float phi = gRandom->Uniform(-M_PI, M_PI);
 
-    *outtree.p4_parent = LorentzVector(pt, eta, phi, m_parent);
+    *outtree.parent_p4 = LorentzVector(pt, eta, phi, m_parent);
     
-    std::tie(*outtree.p4_1,*outtree.p4_2) = Do2BodyDecay(*outtree.p4_parent, mMCP, mMCP);
+    std::tie(*outtree.p4_1,*outtree.p4_2) = Do2BodyDecay(*outtree.parent_p4, mMCP, mMCP);
 
 }
 
@@ -90,6 +93,7 @@ int main(int argc, char **argv){
     outtree.BR_q1 = BR;
     outtree.weight = 1.0;
     outtree.xsec = xsec_inclusive;
+    outtree.parent_pdgId = parent_pdgId;
 
     for(uint i=0; i<nEvents; i++){
         outtree.event = i;

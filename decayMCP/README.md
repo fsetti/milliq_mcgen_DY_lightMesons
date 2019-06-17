@@ -18,7 +18,8 @@ Usage: `./runDecays <decayMode> <mMCP> <BR> <nEvents> <outfile>`
 Output root tree has the following branches:
 * `event`: integer event number, starting from 0
 * `decay_flag`: copy of the `decayMode` argument to the program, defined above
-* `p4_parent`: four-momentum of parent of mCP's (e.g. the J/psi for B -> J/psi X, J/psi -> mCP mCP)
+* `parent_p4`: four-momentum of parent of mCP's (e.g. the J/psi for B -> J/psi X, J/psi -> mCP mCP)
+* `parent_pdgId`: PDG ID of parent of mCP's
 * `p4_1`: four-momentum of first mCP
 * `p4_2`: four-momentum of second mCP
 * `xsec`: the cross-section of the process, before mCP BR, inclusively in pT/eta

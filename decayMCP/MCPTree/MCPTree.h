@@ -20,7 +20,8 @@ class MCPTree {
   public:
 
     unsigned int       event;
-    LorentzPtEtaPhiMf* p4_parent = 0;
+    LorentzPtEtaPhiMf* parent_p4 = 0;
+    int                parent_pdgId;
     int                decay_flag;
     LorentzPtEtaPhiMf* p4_1 = 0;
     LorentzPtEtaPhiMf* p4_2 = 0;
@@ -42,7 +43,8 @@ class MCPTree {
     TTree *tree;
 
     TBranch *b_event = 0;
-    TBranch *b_p4_parent = 0;
+    TBranch *b_parent_p4 = 0;
+    TBranch *b_parent_pdgId = 0;
     TBranch *b_decay_flag = 0;
     TBranch *b_p4_1 = 0;
     TBranch *b_p4_2 = 0;
