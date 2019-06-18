@@ -9,6 +9,7 @@
 
 #include "MCPTree/MCPTree.h"
 #include "../utils/decayMQ.h"
+#include "../utils/branching_ratios.h"
 
 typedef LorentzPtEtaPhiMf LorentzVector;
 
@@ -28,6 +29,7 @@ int initialize(int decayMode){
         xsec_inclusive = 1.015e6;
         parent_pdgId = 443;
         m_parent = 3.0969;
+        BR = br_onia(mMCP, parent_pdgId);
     }else if(decayMode == 2){
         finfo = new TFile("../oniaFromB/psiprime.root");
         etamin = -1;
@@ -35,6 +37,7 @@ int initialize(int decayMode){
         xsec_inclusive = 2.635e5;
         parent_pdgId = 100443;
         m_parent = 3.6861;
+        BR = br_onia(mMCP, parent_pdgId);
     }else{
         return -1;
     }
@@ -64,8 +67,8 @@ void DoDecay(){
 
 int main(int argc, char **argv){
 
-    if(argc < 6){
-        std::cout << "usage: runDecays <decayMode> <mMCP> <BR> <nEvents> <outfile>" << std::endl;
+    if(argc < 5){
+        std::cout << "usage: runDecays <decayMode> <mMCP> <nEvents> <outfile>" << std::endl;
         std::cout << "--DECAY MODES--" << std::endl;
         std::cout << "  1: b -> psi X, psi -> mCP mCP" << std::endl;
         std::cout << "  2: b -> psi' X, psi' -> mCP mCP" << std::endl;
@@ -74,8 +77,7 @@ int main(int argc, char **argv){
 
     int decayMode = atoi(argv[1]);
     mMCP = atof(argv[2]);
-    BR = atof(argv[3]);
-    int nEvents = atoi(argv[4]);    
+    int nEvents = atoi(argv[3]);    
     
     if(initialize(decayMode)){
         std::cout << "Invalid decay mode!\n";
@@ -86,7 +88,7 @@ int main(int argc, char **argv){
         return 1;
     }
     
-    TFile *fout = new TFile(argv[5], "RECREATE");
+    TFile *fout = new TFile(argv[4], "RECREATE");
     outtree.Init();
 
     outtree.decay_flag = decayMode;
