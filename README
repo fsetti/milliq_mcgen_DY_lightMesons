@@ -1,9 +1,17 @@
--------------------------------------
-To calculate branching ratios for various types of Dalitz decays
-or various types of vector/onia decays:
-    ./DalitzBR mass
-    ./OniaBR mass
-where mass is the mass of mCP in MeV.
-The file decayMQ.C contains functions Do2BodyDecay and DoDalitz
-to perform 2-body and Dalitz decays.
-----------------------------------------
+Contents of subdirectories:
+
+decayMCP:
+Generate mCP decays
+
+docs:
+Documentation
+
+oniaFromB:
+Theoretical distributions of onia from theory
+
+scripts:
+Python scripts to calculate Dalitz and Onia BR
+and to perform two-body and Dalitz decays
+
+utils:
+utilities
