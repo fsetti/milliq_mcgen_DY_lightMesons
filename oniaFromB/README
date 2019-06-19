@@ -1,0 +1,25 @@
+psi.txt psiprime.txt
+---------------------
+Tables of cross sections as a function of pt for B->psi B->psiprime
+http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html
+The kinematical cuts are documented in the files
+
+fonll2root.py
+-------------
+Script to turn the tables into root histograms and make
+pretty plots
+
+*.root *.pdf
+------------
+Outputs of fonll2root.py
+
+psi_total_xsec.txt psiprime_total_xsec.txt
+-------------------------------------------
+Total cross sections from 
+http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html
+for the kinematical cuts in psi.txt and psiprime.txt
+
+
+CAREFUL: The cross-sections are for single b only.
+For bbbar they need to be multiplied by 2.
+(To be confirmed)
