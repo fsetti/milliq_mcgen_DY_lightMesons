@@ -7,58 +7,58 @@
 
 using namespace std;
 
-MCPTree::MCPTree(TTree *tree){
-    if(tree != NULL)
-        Init(tree);
+MCPTree::MCPTree(TTree *t){
+    if(t != NULL)
+        Init(t);
 }
 
-void MCPTree::Init(TTree *tree){
-    if(tree == NULL){
+void MCPTree::Init(TTree *t){
+    if(t == NULL){
         // if we don't pass a tree, open in "write" mode. pointers have to be initialized,
         // and then create the branches.
-        this->tree = new TTree("Events","");
+        this->t = new TTree("Events","");
 
         this->parent_p4    = new LorentzPtEtaPhiMf;
-        this->p4_1         = new LorentzPtEtaPhiMf;
-        this->p4_2         = new LorentzPtEtaPhiMf;
+        this->p4_p         = new LorentzPtEtaPhiMf;
+        this->p4_m         = new LorentzPtEtaPhiMf;
 
-        b_event        = this->tree->Branch("event", &event, "event/i");
-        b_parent_p4    = this->tree->Branch("parent_p4", &parent_p4);
-        b_parent_pdgId = this->tree->Branch("parent_pdgId", &parent_pdgId, "parent_pdgId/I");
-        b_decay_flag   = this->tree->Branch("decay_flag", &decay_flag, "decay_flag/I");
-        b_p4_1         = this->tree->Branch("p4_1", &p4_1);
-        b_p4_2         = this->tree->Branch("p4_2", &p4_2);
-        b_xsec         = this->tree->Branch("xsec", &xsec, "xsec/F");
-        b_BR_q1        = this->tree->Branch("BR_q1", &BR_q1, "BR_q1/F");
-        b_filter_eff   = this->tree->Branch("filter_eff", &filter_eff, "filter_eff/F");
-        b_weight       = this->tree->Branch("weight", &weight, "weight/F");
-        b_weight_up    = this->tree->Branch("weight_up", &weight_up, "weight_up/F");
-        b_weight_dn    = this->tree->Branch("weight_dn", &weight_dn, "weight_dn/F");
+        b_event        = this->t->Branch("event", &event, "event/i");
+        b_parent_p4    = this->t->Branch("parent_p4", &parent_p4);
+        b_parent_pdgId = this->t->Branch("parent_pdgId", &parent_pdgId, "parent_pdgId/I");
+        b_decay_flag   = this->t->Branch("decay_flag", &decay_flag, "decay_flag/I");
+        b_p4_p         = this->t->Branch("p4_p", &p4_p);
+        b_p4_m         = this->t->Branch("p4_m", &p4_m);
+        b_xsec         = this->t->Branch("xsec", &xsec, "xsec/F");
+        b_BR_q1        = this->t->Branch("BR_q1", &BR_q1, "BR_q1/F");
+        b_filter_eff   = this->t->Branch("filter_eff", &filter_eff, "filter_eff/F");
+        b_weight       = this->t->Branch("weight", &weight, "weight/F");
+        b_weight_up    = this->t->Branch("weight_up", &weight_up, "weight_up/F");
+        b_weight_dn    = this->t->Branch("weight_dn", &weight_dn, "weight_dn/F");
 
         Reset();
     }else{
         // if we do pass a tree, open in "read" mode
-        this->tree = tree;
-        //this->tree->SetMakeClass(1);
+        this->t = t;
+        //this->t->SetMakeClass(1);
 
-        this->tree->SetBranchAddress("event", &event, &b_event);
-        this->tree->SetBranchAddress("parent_p4", &parent_p4, &b_parent_p4);
-        this->tree->SetBranchAddress("parent_pdgId", &parent_pdgId, &b_parent_pdgId);
-        this->tree->SetBranchAddress("decay_flag", &decay_flag, &b_decay_flag);
-        this->tree->SetBranchAddress("p4_1", &p4_1, &b_p4_1);
-        this->tree->SetBranchAddress("p4_2", &p4_2, &b_p4_2);
-        this->tree->SetBranchAddress("xsec", &xsec, &b_xsec);
-        this->tree->SetBranchAddress("BR_q1", &BR_q1, &b_BR_q1);
-        this->tree->SetBranchAddress("filter_eff", &filter_eff, &b_filter_eff);
-        this->tree->SetBranchAddress("weight", &weight, &b_weight);
-        this->tree->SetBranchAddress("weight_up", &weight_up, &b_weight_up);
-        this->tree->SetBranchAddress("weight_dn", &weight_dn, &b_weight_dn);
+        this->t->SetBranchAddress("event", &event, &b_event);
+        this->t->SetBranchAddress("parent_p4", &parent_p4, &b_parent_p4);
+        this->t->SetBranchAddress("parent_pdgId", &parent_pdgId, &b_parent_pdgId);
+        this->t->SetBranchAddress("decay_flag", &decay_flag, &b_decay_flag);
+        this->t->SetBranchAddress("p4_p", &p4_p, &b_p4_p);
+        this->t->SetBranchAddress("p4_m", &p4_m, &b_p4_m);
+        this->t->SetBranchAddress("xsec", &xsec, &b_xsec);
+        this->t->SetBranchAddress("BR_q1", &BR_q1, &b_BR_q1);
+        this->t->SetBranchAddress("filter_eff", &filter_eff, &b_filter_eff);
+        this->t->SetBranchAddress("weight", &weight, &b_weight);
+        this->t->SetBranchAddress("weight_up", &weight_up, &b_weight_up);
+        this->t->SetBranchAddress("weight_dn", &weight_dn, &b_weight_dn);
 
     }
 }
 
 void MCPTree::Fill(){
-    tree->Fill();
+    t->Fill();
 }
 
 void MCPTree::Reset(){
@@ -66,8 +66,8 @@ void MCPTree::Reset(){
     *parent_p4 = LorentzPtEtaPhiMf();
     parent_pdgId = -999;
     decay_flag = -999;
-    *p4_1 = LorentzPtEtaPhiMf();
-    *p4_2 = LorentzPtEtaPhiMf();
+    *p4_p = LorentzPtEtaPhiMf();
+    *p4_m = LorentzPtEtaPhiMf();
     xsec = -999;
     BR_q1 = -999;
     filter_eff = -999;
@@ -79,9 +79,9 @@ void MCPTree::Reset(){
 
 void MCPTree::Write(TDirectory *d){
     d->cd();
-    tree->Write();
+    t->Write();
 }
 
 void MCPTree::GetEntry(ULong64_t i){
-    this->tree->GetEntry(i);
+    this->t->GetEntry(i);
 }
