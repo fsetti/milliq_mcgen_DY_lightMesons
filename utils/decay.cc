@@ -6,7 +6,7 @@
 #include <utility>
 #include <cmath>
 
-#include "decayMQ.h"
+#include "decay.h"
 
 std::pair<TLorentzVector,TLorentzVector>
 Do2BodyDecay(TLorentzVector p4_mother, double m1, double m2, double cosTheta, double phi){

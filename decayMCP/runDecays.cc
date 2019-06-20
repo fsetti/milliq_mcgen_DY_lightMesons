@@ -8,7 +8,7 @@
 #include "TH1F.h"
 
 #include "MCPTree/MCPTree.h"
-#include "../utils/decayMQ.h"
+#include "../utils/decay.h"
 #include "../utils/branching_ratios.h"
 
 typedef LorentzPtEtaPhiMf LorentzVector;

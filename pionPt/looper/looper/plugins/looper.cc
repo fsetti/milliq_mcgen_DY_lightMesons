@@ -61,8 +61,8 @@ class looper : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
       virtual void endJob() override;
 
     TFile *fout;
-    TH1D *h_nevents, *h_eta;
-    TH1D *h_pi0, *h_pi, *h_omega, *h_rho, *h_phi;
+    TH1D *h_nevents, *h_etaall;
+    TH1D *h_pi0, *h_pi, *h_omega, *h_rho, *h_phi, *h_eta, *h_etap;
     // TTree *tree;
 
       // ----------member data ---------------------------
@@ -105,7 +105,7 @@ looper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         if(fabs(gp.eta()) > 1)
             continue;
 
-        h_eta->Fill(gp.eta());
+        h_etaall->Fill(gp.eta());
 
         if(gp.status()==1 && abs(gp.pdgId()) == 211)
             h_pi->Fill(gp.pt());
@@ -117,6 +117,10 @@ looper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             h_omega->Fill(gp.pt());
         if(gp.status()==2 && gp.pdgId() == 333)
             h_phi->Fill(gp.pt());
+        if(gp.status()==2 && gp.pdgId() == 221)
+            h_eta->Fill(gp.pt());
+        if(gp.status()==2 && gp.pdgId() == 331)
+            h_etap->Fill(gp.pt());
     }
 
 
@@ -131,13 +135,15 @@ looper::beginJob()
     fout = new TFile("output.root", "RECREATE");
 
     h_nevents = new TH1D("h_nevents","",1,0,2);
-    h_eta = new TH1D("h_eta",";#eta",100,-2,2);
+    h_etaall = new TH1D("h_etaall",";#eta",100,-2,2);
 
     h_pi = new TH1D("h_pi",";p_{T} [GeV]",2000,0,100);
     h_pi0 = new TH1D("h_pi0",";p_{T} [GeV]",2000,0,100);
     h_rho = new TH1D("h_rho",";p_{T} [GeV]",2000,0,100);
     h_omega = new TH1D("h_omega",";p_{T} [GeV]",2000,0,100);
     h_phi = new TH1D("h_phi",";p_{T} [GeV]",2000,0,100);
+    h_eta = new TH1D("h_eta",";p_{T} [GeV]",2000,0,100);
+    h_etap = new TH1D("h_etap",";p_{T} [GeV]",2000,0,100);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -146,21 +152,25 @@ looper::endJob()
 {
     fout->cd();
     h_nevents->Write();
-    h_eta->Write();
+    h_etaall->Write();
     h_pi->Write();
     h_pi0->Write();
     h_rho->Write();
     h_omega->Write();
     h_phi->Write();
+    h_eta->Write();
+    h_etap->Write();
     fout->Close();
 
     delete h_nevents;
-    delete h_eta;
+    delete h_etaall;
     delete h_pi;
     delete h_pi0;
     delete h_rho;
     delete h_omega;
     delete h_phi;
+    delete h_eta;
+    delete h_etap;
     delete fout;
 }
 
