@@ -26,8 +26,8 @@ Output root tree has the following branches:
 * `decay_flag`: copy of the `decayMode` argument to the program, defined above
 * `parent_p4`: four-momentum of parent of mCP's (e.g. the J/&psi; for B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>)
 * `parent_pdgId`: PDG ID of parent of mCP's
-* `p4_1`: four-momentum of first mCP
-* `p4_2`: four-momentum of second mCP
+* `p4_p`: four-momentum of positively-charged mCP
+* `p4_m`: four-momentum of negatively-charged mCP
 * `xsec`: the cross-section of the process, before mCP BR, inclusively in pT/eta
 * `BR_q1`: the BR to mCPs for q(mCP)=1.
 * `filter_eff`: efficiency of any eta/phi cuts applied
@@ -35,4 +35,4 @@ Output root tree has the following branches:
 * `weight_up` the up-variation weight. Computed as `pdf_up(pt) / pdf_central(pt)`, where pt is pt of mCP parent, when these functions are available
 * `weight_dn` the down-variation weight. Computed as `pdf_down(pt) / pdf_central(pt)`, where pt is pt of mCP parent, when these functions are available
 
-**note:** the proper per-event weight is given by `xsec * BR_q1 * filter_eff * weight[_up/dn] / Nevents`
+**note:** the proper per-event weight is given by `xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI / NEVENTS`
