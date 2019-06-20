@@ -30,6 +30,7 @@ void MCPTree::Init(TTree *tree){
         b_p4_2         = this->tree->Branch("p4_2", &p4_2);
         b_xsec         = this->tree->Branch("xsec", &xsec, "xsec/F");
         b_BR_q1        = this->tree->Branch("BR_q1", &BR_q1, "BR_q1/F");
+        b_filter_eff   = this->tree->Branch("filter_eff", &filter_eff, "filter_eff/F");
         b_weight       = this->tree->Branch("weight", &weight, "weight/F");
         b_weight_up    = this->tree->Branch("weight_up", &weight_up, "weight_up/F");
         b_weight_dn    = this->tree->Branch("weight_dn", &weight_dn, "weight_dn/F");
@@ -48,6 +49,7 @@ void MCPTree::Init(TTree *tree){
         this->tree->SetBranchAddress("p4_2", &p4_2, &b_p4_2);
         this->tree->SetBranchAddress("xsec", &xsec, &b_xsec);
         this->tree->SetBranchAddress("BR_q1", &BR_q1, &b_BR_q1);
+        this->tree->SetBranchAddress("filter_eff", &filter_eff, &b_filter_eff);
         this->tree->SetBranchAddress("weight", &weight, &b_weight);
         this->tree->SetBranchAddress("weight_up", &weight_up, &b_weight_up);
         this->tree->SetBranchAddress("weight_dn", &weight_dn, &b_weight_dn);
@@ -68,6 +70,7 @@ void MCPTree::Reset(){
     *p4_2 = LorentzPtEtaPhiMf();
     xsec = -999;
     BR_q1 = -999;
+    filter_eff = -999;
     weight = -999;
     weight_up = -999;
     weight_dn = -999;

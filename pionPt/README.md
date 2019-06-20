@@ -10,6 +10,6 @@ cd looper/looper/python
 cmsRun test_cfg.py
 ```
 
-Tools for batch submission are in looper/looper batchsubmit
+Tools for batch submission are in looper/looper/batchsubmit
 
 Once done, `hadd` them all somewhere. The script `stitch.py` makes stitched histograms for all particles, in `pt_dists.root`.

@@ -27,6 +27,7 @@ class MCPTree {
     LorentzPtEtaPhiMf* p4_2 = 0;
     float              xsec;
     float              BR_q1;
+    float              filter_eff;
     float              weight;
     float              weight_up;
     float              weight_dn;
@@ -50,6 +51,7 @@ class MCPTree {
     TBranch *b_p4_2 = 0;
     TBranch *b_xsec = 0;
     TBranch *b_BR_q1 = 0;
+    TBranch *b_filter_eff = 0;
     TBranch *b_weight = 0;
     TBranch *b_weight_up = 0;
     TBranch *b_weight_dn = 0;
