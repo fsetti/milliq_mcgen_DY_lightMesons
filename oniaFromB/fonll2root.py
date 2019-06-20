@@ -10,7 +10,7 @@
 #
 # Claudio June 16, 2019
 #
-from ROOT import TH1F, TFile
+from ROOT import TH1D, TFile
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -58,9 +58,9 @@ ptmin   = pt[0]  - 0.5*binsize
 ptmax   = pt[-1] + 0.5*binsize
 
 # book the histograms
-hCentral = TH1F("central", "central", nbins, ptmin, ptmax)
-hUp      = TH1F("up",      "up",      nbins, ptmin, ptmax)
-hDown    = TH1F("down",    "down",    nbins, ptmin, ptmax)
+hCentral = TH1D("central", "central", nbins, ptmin, ptmax)
+hUp      = TH1D("up",      "up",      nbins, ptmin, ptmax)
+hDown    = TH1D("down",    "down",    nbins, ptmin, ptmax)
 
 # fill the histograms
 for p, c, d, u in zip(pt, central, down, up):
