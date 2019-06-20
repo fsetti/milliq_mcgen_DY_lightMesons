@@ -1,0 +1,6 @@
+Jpsi and Psi2S production cross section --- based on NLO NRQCD calculation in Phys.Rev.Lett. 106 (2011) 042002 by Yan-Qing Ma, Kai Wang and Kuang-Ta Chao. For more information, see also Phys.Rev. D84 (2011) 114001 by Yan-Qing Ma, Kai Wang and Kuang-Ta Chao.
+
+ Upsilon(nS) production cross section times Br(Upsilong(nS)->ll)--- based on NLO NRQCD calculation in Phys.Rev. D94 (2016) , 014028 by Hao Han, Yan-Qing Ma, Ce Meng, Hua-Sheng Shao, Yu-Jie Zhang, Kuang-Ta Chao.
+
+ All differential cross sections are in unit of nb/GeV. The form is {pt, min_value, cen_value, max_value}.
+
