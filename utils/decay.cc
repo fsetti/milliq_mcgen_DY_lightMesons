@@ -8,6 +8,10 @@
 
 #include "decay.h"
 
+// use global TF1s. Otherwise, the overhead of re-computing integrals every time is verrrry slow
+TF1 *PDF_LOGQ2_VDM = 0;
+TF1 *PDF_LOGQ2_NONVDM = 0;
+
 std::pair<TLorentzVector,TLorentzVector>
 Do2BodyDecay(TLorentzVector p4_mother, double m1, double m2, double cosTheta, double phi){
     // get four-momenta p1,p2 of 2 daughter particles in decay m -> d1 + d2
@@ -87,36 +91,43 @@ DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM){
     
     // pdf of q^2 = m(e+e-)^2
     
-    TF1 pdf_q2;
+    TF1 *pdf_q2;
     if(useVDM){
-        pdf_q2 = TF1("logq2_pdf","((1+exp(x)/([0]*[1]))^2-([0]+[1])^2*exp(x)/([0]*[1])^2)^1.5 * (1+0.5*[2]^2/exp(x)) * sqrt(1-[2]^2/exp(x)) * ([3]^4+([3]*[4])^2)/(([3]^2-exp(x))^2+([3]*[4])^2)", log(2*me*2*me), log((mP-mX)*(mP-mX)));
-        pdf_q2.SetParameter(0, mP-mX); // max q2
-        pdf_q2.SetParameter(1, mP+mX);
-        pdf_q2.SetParameter(2, 2*me);  // min q2
-        pdf_q2.SetParameter(3, 0.7755); // mass of rho, part of the form factor F(q^2)
-        pdf_q2.SetParameter(4, 0.1462); // width of rho, part of the form factor F(q^2)
+        if(PDF_LOGQ2_VDM == 0){
+            PDF_LOGQ2_VDM = new TF1("logq2_pdf", DGDLOGQ2_VDM, log(2*me*2*me), log((mP-mX)*(mP-mX)));
+            PDF_LOGQ2_VDM->SetParameter(0, mP-mX); // max q2
+            PDF_LOGQ2_VDM->SetParameter(1, mP+mX);
+            PDF_LOGQ2_VDM->SetParameter(2, 2*me);  // min q2
+            PDF_LOGQ2_VDM->SetParameter(3, 0.7755); // mass of rho, part of the form factor F(q^2)
+            PDF_LOGQ2_VDM->SetParameter(4, 0.1462); // width of rho, part of the form factor F(q^2)
+            PDF_LOGQ2_VDM->SetNpx(1000);
+        }
+        pdf_q2 = PDF_LOGQ2_VDM;
     }else{
-        pdf_q2 = TF1("logq2","((1+exp(x)/([0]*[1]))^2-([0]+[1])^2*exp(x)/([0]*[1])^2)^1.5 * (1+0.5*[2]^2/exp(x)) * sqrt(1-[2]^2/exp(x)) * (1+[3]*exp(x)/[0]^2)^2", log(2*me*2*me), log((mP-mX)*(mP-mX)));
-        pdf_q2.SetParameter(0, mP-mX);
-        pdf_q2.SetParameter(1, mP+mX);
-        pdf_q2.SetParameter(2, 2*me);
-        pdf_q2.SetParameter(3, 0.03); // part of the form factor F(q^2) = 1 + 0.03*q^2/mP^2
+        if(PDF_LOGQ2_NONVDM == 0){
+            PDF_LOGQ2_NONVDM = new TF1("logq2", DGDLOGQ2_NONVDM, log(2*me*2*me), log((mP-mX)*(mP-mX)));
+            PDF_LOGQ2_NONVDM->SetParameter(0, mP-mX);
+            PDF_LOGQ2_NONVDM->SetParameter(1, mP+mX);
+            PDF_LOGQ2_NONVDM->SetParameter(2, 2*me);
+            PDF_LOGQ2_NONVDM->SetParameter(3, 0.03); // "a" of the form factor F(q^2) = 1 + 0.03*q^2/mpi^2
+            PDF_LOGQ2_NONVDM->SetParameter(4, 0.1350); // "mpi" of the form factor F(q^2) = 1 + 0.03*q^2/mpi^2
+            PDF_LOGQ2_NONVDM->SetNpx(1000);
+        }
+        pdf_q2 = PDF_LOGQ2_NONVDM;
     }
-    pdf_q2.SetNpx(1000);
 
-    double q2 = exp(pdf_q2.GetRandom());
+    double q2 = exp(pdf_q2->GetRandom());
 
     // do the P -> X gstar decay. cos(theta) is uniform here
     TLorentzVector pX, pgstar;
     std::tie(pX, pgstar) = Do2BodyDecay(p4_mother, mX, sqrt(q2));
 
-    // pdf of cos(theta) in the gstar -> e+e- decay
-    TF1 pdf_ct = TF1("pdf_ct", "1 + x^2 + [0]^2/[1]*(1-x^2)", -1, 1);
-    pdf_ct.SetParameter(0, 2*me);
-    pdf_ct.SetParameter(1, q2);
-    pdf_ct.SetNpx(1000);
-
-    double cosTheta = pdf_ct.GetRandom();
+    // want to generate cost(theta) according to PDF:
+    //     dN/dcos(theta) = 1 + cos^2(theta) + 4*me^2/q^2*sin^2(theta)
+    // But TF1s are slowwwwww. So numerically solve for CDF(cos(theta)) = R,
+    // where R is a random number between 0,1
+    double R =  gRandom->Uniform(0,1);
+    double cosTheta = newton(4*me*me/q2, R);
 
     TLorentzVector pe1, pe2;
     std::tie(pe1, pe2) = Do2BodyDecay(pgstar, me, me, cosTheta);
@@ -125,7 +136,7 @@ DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM){
 
 }
 
-void decayMQ(){
+void decay_test(){
     gRandom->SetSeed(1);
     TLorentzVector p4_pi0, p4_1, p4_2, pX, pe1, pe2;
 
@@ -148,3 +159,20 @@ void decayMQ(){
 }
 
 
+double pdf_ct(double ct, double a){
+    // pdf of cos(theta), where a = 4*me^2/q^2, normalized to unit area
+    return 3./(4.*(2+a)) * ((1-a)*ct*ct + (1+a));
+}
+double cdf_ct(double ct, double a){
+    // this is the integral of above, from -1 to ct
+    return 3./(4.*(2+a)) * ((1-a)*ct*ct*ct/3. + (1+a)*ct + 2./3.*(2+a));
+}
+double newton(double a, double R, double guess, double tol){
+    double x = guess;
+    double xold = guess+tol+1;
+    while(fabs(x-xold) > tol){
+        xold = x;
+        x = x - (cdf_ct(x,a) - R) / pdf_ct(x,a);
+    }
+    return x;
+}

@@ -3,8 +3,8 @@
 Usage: `./runDecays <decayMode> <mMCP> <nEvents> <outfile>`
 
 `decayMode` is an integer specifiying which mode you want to generate. Currently supported:
-1. B &rarr; &psi; X, &psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-2. B &rarr; &psi;' X, &psi;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+1. B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+2. B &rarr; &psi;(2S) X, &psi;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 3. &rho; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 4. &omega; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 5. &phi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
@@ -13,6 +13,11 @@ Usage: `./runDecays <decayMode> <mMCP> <nEvents> <outfile>`
 8. &eta;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&gamma;
 9. &omega; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&pi;<sup>0</sup>
 10. &eta;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&omega;
+11. J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+12. &psi;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+13. &Upsilon;(1S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+14. &Upsilon;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+15. &Upsilon;(3S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 
 `mMCP` is the mass of the milli-charged particle.
 

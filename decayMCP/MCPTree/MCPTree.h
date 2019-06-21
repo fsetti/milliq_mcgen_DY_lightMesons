@@ -3,6 +3,8 @@
 #define MCPTree_h
 
 #include <vector>
+#include <chrono>
+#include <numeric>
 
 #include "TROOT.h"
 #include "TTree.h"
@@ -39,10 +41,12 @@ class MCPTree {
     void Write(TDirectory *d);
     void GetEntry(ULong64_t entry);
     TTree * tree(){ return t; }
-    static void progress(int nEventsTotal, int nEventsChain);
+    void progress(int nEventsTotal, int nEventsChain, int period=1000, uint smoothing=30);
 
   private:
     TTree *t;
+    std::chrono::time_point<std::chrono::system_clock> t_old;
+    std::vector<double> deq;
 
     TBranch *b_event = 0;
     TBranch *b_parent_p4 = 0;
