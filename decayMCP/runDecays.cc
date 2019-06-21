@@ -90,7 +90,7 @@ int Initialize(int decayMode){
         decayType = TWOBODY;
         BR = br_onia(mMCP, parent_pdgId);
     }else if(decayMode >= 3 && decayMode <= 10){
-        finfo = new TFile("../pionPt/pt_dists.root");
+        finfo = new TFile("../mesonPt/pt_dists.root");
         if(decayMode == 3){
             // rho -> mCP mCP
             h1 = (TH1D*)finfo->Get("h_rho");
