@@ -1,0 +1,14 @@
+Upsilon measurements from Atlas at 7 TeV.
+From Phys.Rev. D87 (2013) 052004, 2013
+
+From HEPData Table 6, 7, and 8 are for 1S, 2S, 3S.
+
+makeOutput.py reads the HEPData files and does some
+manipulations to provide the "central" value, the
+"up" and the "down" variations in files
+Atlas_1S.root
+Atlas_2S.root
+Atlas_3S.root
+
+The normalization is dsigma/dPt in nb/GeV for the
+rapidity interval abs(y)<1.2
