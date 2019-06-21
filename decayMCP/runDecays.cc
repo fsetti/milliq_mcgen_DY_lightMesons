@@ -266,6 +266,7 @@ int main(int argc, char **argv){
     outtree.tree()->SetBranchStatus("filter_eff", 0); // turn off and fill later once we're done
     unsigned long nAttempts = 0;
     for(uint i=0; i<nEvents; i++){
+        outtree.progress(i, nEvents, 200);
         outtree.event = i;
         do{            
             DoDecay(decayMode);
