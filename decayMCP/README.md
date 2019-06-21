@@ -41,3 +41,5 @@ Output root tree has the following branches:
 * `weight_dn` the down-variation weight. Computed as `pdf_down(pt) / pdf_central(pt)`, where pt is pt of mCP parent, when these functions are available
 
 **note:** the proper per-event weight is given by `xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI / NEVENTS`
+
+**units:** throughout this program, all masses/momenta are in GeV, and cross sections in pb;

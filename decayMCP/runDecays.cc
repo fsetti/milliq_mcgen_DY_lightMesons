@@ -63,16 +63,17 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
     m_X = 9999;  // mass of X in dalitz decay A -> B+B-X;
 
     if(decay_mode >= 1 && decay_mode <= 2){
+        // psi's produced from B's
         if(decay_mode == 1){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile("../oniaFromB/psi.root");
-            xsec_inclusive = 1.015e6 * 2; // *2 since b's produced in pairs
+            xsec_inclusive = 1.015e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decay_mode == 2){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile("../oniaFromB/psiprime.root");
-            xsec_inclusive = 2.635e5 * 2; // *2 since b's produced in pairs
+            xsec_inclusive = 2.635e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }
@@ -84,6 +85,7 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         decay_type = TWOBODY;
         BR = br_onia(m_mCP, parent_pdgId);
     }else if(decay_mode >= 3 && decay_mode <= 10){
+        // direct production of pi, rho, omega, phi, eta, etaprime
         finfo = new TFile("../mesonPt/pt_dists.root");
         if(decay_mode == 3){
             // rho -> mCP mCP
@@ -128,6 +130,9 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         }
         etamin = -1;
         etamax = 1;
+        // bins in this histogram are "particles per minbias event per 50 MeV bin"
+        // so the integral is "particles per minbias event"
+        // scale by the minbias xsec to get the xsec for producing this particle type
         xsec_inclusive = h1->Integral() * MINBIAS_XSEC;
         if(decay_mode >= 3 && decay_mode <= 5){
             // direct 2-body decay
@@ -139,6 +144,7 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
             BR = br_dalitz(m_mCP, parent_pdgId, m_X);
         }
     }else if(decay_mode >= 11 && decay_mode <= 15){
+        // direct onia (ccbar and bbbar) production
         if(decay_mode == 11){
             // direct J/psi
             finfo = new TFile("../oniaDirect/theory_for_BPH-15-005/CMS_Jpsi_tot_0_1.2_Tev_13_CMS_1.root");
@@ -170,6 +176,8 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         h1 = (TH1D*)finfo->Get("central");
         h2 = (TH1D*)finfo->Get("up");
         h3 = (TH1D*)finfo->Get("down");
+        // bins in this histogram are dsigma/dpt, in units of nb/GeV
+        // So sum bin contents, multiply by bin width, and *1000 to convert to pb
         xsec_inclusive = h1->Integral() * h1->GetBinWidth(1) * 1000; // nb to pb
         decay_type = TWOBODY;
         BR = br_onia(m_mCP, parent_pdgId);        
