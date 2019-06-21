@@ -157,17 +157,17 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
             m_parent = 3.6861;
         }else if(decay_mode == 13){
             // direct Y(1S)
-            finfo = new TFile("../oniaDirect/theory_for_BPH-15-005/CMS_Y1S_tot_0_0_1.2_Tev_13_CMS_1.root");
+            finfo = new TFile("../oniaDirect/upsilon/ups1S_combined.root");
             parent_pdgId = 553;
             m_parent = 9.4603;
         }else if(decay_mode == 14){
             // direct Y(2S)
-            finfo = new TFile("../oniaDirect/theory_for_BPH-15-005/CMS_Y2S_tot_0_1.2_Tev_13_CMS_1.root");
+            finfo = new TFile("../oniaDirect/upsilon/ups2S_combined.root");
             parent_pdgId = 100553;
             m_parent = 10.023;
         }else if(decay_mode == 15){
             // direct Y(3S)
-            finfo = new TFile("../oniaDirect/theory_for_BPH-15-005/CMS_Y3S_tot_0_1.2_Tev_13_CMS_1.root");
+            finfo = new TFile("../oniaDirect/upsilon/ups3S_combined.root");
             parent_pdgId = 200553;
             m_parent = 10.355;
         }
@@ -178,7 +178,7 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         h3 = (TH1D*)finfo->Get("down");
         // bins in this histogram are dsigma/dpt, in units of nb/GeV
         // So sum bin contents, multiply by bin width, and *1000 to convert to pb
-        xsec_inclusive = h1->Integral() * h1->GetBinWidth(1) * 1000; // nb to pb
+        xsec_inclusive = h1->Integral("width") * 1000; // nb to pb
         decay_type = TWOBODY;
         BR = br_onia(m_mCP, parent_pdgId);        
     }else{
