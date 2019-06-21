@@ -12,3 +12,6 @@ Atlas_3S.root
 
 The normalization is dsigma/dPt in nb/GeV for the
 rapidity interval abs(y)<1.2
+
+There is also a rescaling applied of 13 GeV to 7 GeV
+according to the LHCb measurement of this quantity.

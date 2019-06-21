@@ -1,0 +1,26 @@
+atlas_cms_comparison.C
+----------------------
+Root macro to compare the rescaled 7 TeV Atlas upsilon xsections
+with the 13 TeV CMS ones
+
+combineXsec.py
+--------------
+Reads the upsilon ROOT files for Atlas and CMS from
+../CMS_13_TeV/data and ../Atlas_7_Tev
+and combines them into an output ROOT file
+
+histio.cc
+---------
+utility
+
+upsilon_*s_atlas_cms_comparison.pdf
+-----------------------------------
+Plots made by atlas_cms_comparisons.C
+
+ups*_combined.root
+------------------
+Root files with the pt spectra of upsilons combining
+data from Atlas and CMS.  Files contain "central" value,
+the "up" and the "down" variations
+The normalization is dsigma/dPt in nb/GeV for the
+rapidity interval abs(y)<1.2

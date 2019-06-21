@@ -1,0 +1,13 @@
+The txt files are doubly differential cross-sections
+BR(mu mu) * d2sigma/(dpt dy)
+in pb/GeV measured in abs(eta)<1.2 in CMS-BPH-15-005
+published in Phys. Lett. B 780 (2018) 251
+
+txt2root.py reads the HEPData files and does some
+manipulations to provide the "central" value, the
+"up" and the "down" variations in root files.
+
+The normalization is dsigma/dPt in nb/GeV for the
+rapidity interval abs(y)<1.2
+
+
