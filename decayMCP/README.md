@@ -19,9 +19,9 @@ Usage: `./runDecays <decayMode> <mMCP> <nEvents> <outfile>`
 14. &Upsilon;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 15. &Upsilon;(3S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 
-`mMCP` is the mass of the milli-charged particle.
+`m_mCP` is the mass of the milli-charged particle.
 
-`nEvents` is the number of events to generate.
+`n_events` is the number of events to generate.
 
 `outfile` is the name of the ROOT file to output to.
 
@@ -41,3 +41,5 @@ Output root tree has the following branches:
 * `weight_dn` the down-variation weight. Computed as `pdf_down(pt) / pdf_central(pt)`, where pt is pt of mCP parent, when these functions are available
 
 **note:** the proper per-event weight is given by `xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI / NEVENTS`
+
+**units:** throughout this program, all masses/momenta are in GeV, and cross sections in pb;

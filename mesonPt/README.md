@@ -5,6 +5,7 @@ To run looper to extract pT distributions:
 cmsrel CMSSW_9_4_14
 cp -r looper CMSSW_9_4_14/src
 cd CMSSW_9_4_14/src
+eval `scramv1 runtime -sh`
 scram b -j12
 cd looper/looper/python
 cmsRun test_cfg.py
