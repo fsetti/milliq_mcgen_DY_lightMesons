@@ -1,0 +1,8 @@
+*.o
+*.pyc
+*.log
+CMSSW*
+runDecays
+test.root
+output.root
+*.xz
