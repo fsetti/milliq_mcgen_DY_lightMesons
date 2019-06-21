@@ -119,9 +119,8 @@ int Initialize(int decayMode){
             // direct 2-body decay
             BR = br_onia(mMCP, parent_pdgId);
         }else{
-            // Dalitz decay (TODO)
-            // BR = br_dalitz(mMCP, m_parent, m_X);
-            BR = 1.0;
+            // Dalitz decay
+            BR = br_dalitz(mMCP, parent_pdgId, m_X);
         }
     }else{
         return -1;
@@ -171,7 +170,7 @@ int main(int argc, char **argv){
         std::cout << "Invalid decay mode!\n";
         return 1;
     }
-    if(!finfo){
+    if(!finfo or finfo->IsZombie()){
         std::cout << "Couldn't find decay info file!\n";
         return 1;
     }
