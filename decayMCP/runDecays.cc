@@ -22,7 +22,7 @@ TH1D *h1,*h2,*h3;
 float etamin, etamax;
 float xsec_inclusive;
 float mMCP, m_parent, BR, m_X;
-int parent_pdgId, X_pdgId, decayType;
+int parent_pdgId, decayType;
 MCPTree outtree;
 
 const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
@@ -72,13 +72,13 @@ int Initialize(int decayMode){
         if(decayMode == 1){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile("../oniaFromB/psi.root");
-            xsec_inclusive = 1.015e6;
+            xsec_inclusive = 1.015e6 * 2; // *2 since b's produced in pairs
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decayMode == 2){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile("../oniaFromB/psiprime.root");
-            xsec_inclusive = 2.635e5;
+            xsec_inclusive = 2.635e5 * 2; // *2 since b's produced in pairs
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }
@@ -172,7 +172,7 @@ int Initialize(int decayMode){
             m_parent = 10.355;
         }
         etamin = -1.2;
-        etamax -1.2;
+        etamax = 1.2;
         h1 = (TH1D*)finfo->Get("central");
         h2 = (TH1D*)finfo->Get("up");
         h3 = (TH1D*)finfo->Get("down");
@@ -251,10 +251,8 @@ int main(int argc, char **argv){
     std::cout << "      parent_pdgId: " << parent_pdgId << std::endl;
     std::cout << "    m_parent (GeV): " << m_parent << std::endl;
     std::cout << "        decay type: " << (decayType==DALITZ ? "Dalitz" : "Two-body") << std::endl;
-    if(decayType == DALITZ){
-        std::cout << "           X_pdgId: " << X_pdgId << std::endl;
+    if(decayType == DALITZ)
         std::cout << "         m_X (GeV): " << m_X << std::endl;
-    }
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "    parent eta min: " << etamin << std::endl;
     std::cout << "    parent eta max: " << etamax << std::endl;
