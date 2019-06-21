@@ -4,3 +4,8 @@ Jpsi and Psi2S production cross section --- based on NLO NRQCD calculation in Ph
 
  All differential cross sections are in unit of nb/GeV. The form is {pt, min_value, cen_value, max_value}.
 
+CAREFUL: THESE ARE FOR abs(eta)<1.2
+
+txt files:   straight from the theorists
+root files:  root histograms
+pdf files:   pretty plots
