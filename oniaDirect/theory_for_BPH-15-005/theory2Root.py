@@ -81,7 +81,13 @@ for p, c, d, u in zip(pt, central, down, up):
     hUp.Fill(p, u)
     hDown.Fill(p, d)
 
-    # Write the root file
+# Get rid of annoying error bars
+zero = np.zeros(nbins)
+hCentral.SetError(zero)
+hUp.SetError(zero)
+hDown.SetError(zero)
+
+# Write the root file
 hfile.Write()
 
 
