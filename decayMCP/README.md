@@ -13,6 +13,11 @@ Usage: `./runDecays <decayMode> <mMCP> <nEvents> <outfile>`
 8. &eta;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&gamma;
 9. &omega; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&pi;<sup>0</sup>
 10. &eta;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&omega;
+11. &psi;(1S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+12. &psi;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+13. &Upsilon;(1S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+14. &Upsilon;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+15. &Upsilon;(3S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 
 `mMCP` is the mass of the milli-charged particle.
 
