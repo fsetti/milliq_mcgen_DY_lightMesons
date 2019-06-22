@@ -7,20 +7,30 @@ combineXsec.py
 --------------
 Reads the upsilon ROOT files for Atlas and CMS from
 ../CMS_13_TeV/data and ../Atlas_7_Tev
-and combines them into an output ROOT file
+and combines them into output ROOT file
 
 histio.cc
 ---------
 utility
 
-upsilon_*s_atlas_cms_comparison.pdf
------------------------------------
-Plots made by atlas_cms_comparisons.C
+make_pretty_plots.C
+-------------------
+Root macro to make plots from ups*_combined.root
 
 ups*_combined.root
 ------------------
-Root files with the pt spectra of upsilons combining
-data from Atlas and CMS.  Files contain "central" value,
+Made by combineXsec.py
+Root files with the combined pt spectra of upsilons
+from Atlas and CMS.  Files contain "central" value,
 the "up" and the "down" variations
 The normalization is dsigma/dPt in nb/GeV for the
 rapidity interval abs(y)<1.2
+
+ups*s-full.pdf
+--------------
+Plots made by make_pretty_plots.C
+
+upsilon-*s-atlas-cms-comparison.pdf
+-----------------------------------
+Plots made by atlas_cms_comparisons.C
+
