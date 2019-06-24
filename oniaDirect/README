@@ -1,3 +1,9 @@
-theory_for_BPH-15-005
----------------------
-Theoretical predictions for the 13 TeV CMS measuremnt.  From the author of the paper.
+Atlas_7_TeV, CMS_13_TeV, LHCB-13-TeV
+-------------------------------------
+Folders with distributions and xsections with
+from the various paers
+
+upsilon
+-------
+Folder with "bottom line" distributions to
+be used in upsilon generation
