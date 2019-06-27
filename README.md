@@ -5,9 +5,9 @@ A collection of tools for generating signal Monte Carlo for the Milliqan experim
 * Simulate both two-body and Dalitz decays of parent particles into m<sub>CP</sub>'s
 * Generate root files with all relevant information needed to feed generated m<sub>CP</sub>'s into propagation/simulation software
 
-<p align="center">
+<p align="center"><a href="./scripts/plot_xsecs/mcp_xsec.pdf">
 <img src="./scripts/plot_xsecs/mcp_xsec.png" alt="plot of mCP cross sections" width="700"/>
-</p>
+</a></p>
 
 ### Contents of subdirectories:
 
@@ -21,6 +21,6 @@ A collection of tools for generating signal Monte Carlo for the Milliqan experim
 
 `mesonPt`: pT distributions for direct production of non-onia mesons (pi, rho, omega, phi, eta)
 
-`scripts`: scripts to calculate Dalitz and Onia BR, perform two-body and Dalitz decays, and plot/extract mCP cross sections
+`scripts`: scripts to calculate Dalitz and Onia BR, perform two-body and Dalitz decays, and extract/plot mCP cross sections
 
 `utils`: helper C++ functions to compute branching ratios and decay kinematics
