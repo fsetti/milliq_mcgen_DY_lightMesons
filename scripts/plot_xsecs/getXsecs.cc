@@ -6,7 +6,7 @@
 #include "TFile.h"
 #include "TGraph.h"
 
-#include "../DecayGen.h"
+#include "../../decayMCP/DecayGen.h"
 
 int main(){
 

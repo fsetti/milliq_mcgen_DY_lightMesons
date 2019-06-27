@@ -6,7 +6,7 @@ A collection of tools for generating signal Monte Carlo for the Milliqan experim
 * Generate root files with all relevant information needed to feed generated m<sub>CP</sub>'s into propagation/simulation software
 
 <p align="center">
-<img src="./decayMCP/plot_xsecs/mcp_xsec.png" alt="drawing" width="700"/>
+<img src="./scripts/plot_xsecs/mcp_xsec.png" alt="plot of mCP cross sections" width="700"/>
 </p>
 
 ### Contents of subdirectories:
@@ -15,12 +15,12 @@ A collection of tools for generating signal Monte Carlo for the Milliqan experim
 
 `docs`: Documentation
 
-`oniaDirect`: Various fordirect onia production
+`oniaDirect`: Various tools/data for direct onia production
 
 `oniaFromB`: Theoretical distributions of onia from b decays
 
 `mesonPt`: pT distributions for direct production of non-onia mesons (pi, rho, omega, phi, eta)
 
-`scripts`: Python scripts to calculate Dalitz and Onia BR and to perform two-body and Dalitz decays
+`scripts`: scripts to calculate Dalitz and Onia BR, perform two-body and Dalitz decays, and plot/extract mCP cross sections
 
-`utils`: helper functions to compute branching ratios and decay kinematics
+`utils`: helper C++ functions to compute branching ratios and decay kinematics

@@ -1,8 +1,8 @@
 CC=g++ -Wno-deprecated
 LDFLAGS=
 LIBS=
-SOURCES  = $(wildcard *.cc ../MCPTree/*.cc ../../utils/*.cc ../DecayGen.cc)
-INCLUDES = $(wildcard *.h ../MCPTree/*.h ../../utils/*.h ../DecayGen.o)
+SOURCES  = $(wildcard *.cc ../../decayMCP/MCPTree/*.cc ../../utils/*.cc ../../decayMCP/DecayGen.cc)
+INCLUDES = $(wildcard *.h ../../decayMCP/MCPTree/*.h ../../utils/*.h ../../decayMCP/DecayGen.o)
 OBJECTS  = $(SOURCES:.cc=.o)
 LINKERFLAGS  = $(shell root-config --ldflags --cflags --libs) -lGenVector
 CFLAGS = $(shell root-config --cflags)
