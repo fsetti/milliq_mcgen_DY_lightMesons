@@ -41,7 +41,7 @@ float br_onia(float mass, int parent_pdgId){
         BRe = 1.57e-5;
     }else{
         std::cout << "ERROR! pdgId " << parent_pdgId << " is not a known -onia ID\n";
-        throw std::exception();
+        return -1;
     }
 
     // convert to GeV
@@ -49,7 +49,7 @@ float br_onia(float mass, int parent_pdgId){
 
     if(2*mass > mp){
         std::cout << "ERROR! mCP mass is greater than half the parent mass " << mp << " GeV\n";
-        throw std::exception();
+        return -1;
     }
 
     float emass = 0.000511;
@@ -86,12 +86,12 @@ float br_dalitz(float mass, int parent_pdgId, float mX){
         BR = 0.0840;
     }else{
         std::cout << "ERROR! pdgId " << parent_pdgId << " is not a known dalitz-decaying particle!\n";
-        throw std::exception();
+        return -1;
     }
 
     if(2*mass + mX > mp){
         std::cout << "ERROR! mCP mCP X mass is greater than the parent mass " << mp << " GeV\n";
-        throw std::exception();
+        return -1;
     }
 
     float lo = (2*mass);
