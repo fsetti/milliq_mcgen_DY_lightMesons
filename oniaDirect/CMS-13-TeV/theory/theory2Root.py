@@ -8,6 +8,7 @@
 # Usage theory2Root XXXX
 #
 # Claudio June 20, 2019
+#  no underscores, no dots in file names  June 26, 2019
 #
 from ROOT import TH1F, TFile
 import math
@@ -30,8 +31,12 @@ args = vars(parser.parse_args())
 name = args['file'][0]
 
 # text and root files
+# (remove dots and underscores from rootfile and pdf files)
+betterName = name.replace("_","-")
+betterName = betterName.replace(".","")
 txtFile   = name + ".txt"
-rootFile  = name + ".root"
+rootFile  = betterName + ".root"
+figFile   = betterName + ".pdf" 
 
 # Need to strip off the leading and trailing curly bracket
 # Also in some cases "*^" is there instead of "e" for an exponent
@@ -105,9 +110,9 @@ ax.set_title(name)
 ax.set_yscale('log')
 ax.set_xlabel('Pt (Gev)')
 if "Y" in name:
-    ax.set_ylabel('dsigma/dpt * BR(mumu) (nb/GeV)')
+    ax.set_ylabel('dsigma/dpt * BR(mumu) (nb/GeV) eta<1.2')
 else:
-    ax.set_ylabel('dsigma/dpt (nb/GeV)')
+    ax.set_ylabel('dsigma/dpt (nb/GeV) eta<1.2')
 ax.legend(loc='upper right')
 # plt.xticks(np.arange(min(pt), max(pt)+1, 2.0))
 ax.tick_params("both", direction='in', length=10, right=True, top=True)
@@ -116,7 +121,6 @@ ax.tick_params("both", direction='in', length=10, right=True, top=True)
 fig.show()
 blah = input("Enter y if you want to save the plot to a pdf  ")
 if blah == 'y':
-    figFile = name + ".pdf" 
     print("Saving plot in ", figFile)
     fig.savefig(figFile)
 else:
