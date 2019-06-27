@@ -15,7 +15,7 @@ c.SetLogy()
 hdummy = r.TH1F("hdummy","",100,1e-2,10)
 hdummy.SetLineColor(r.kWhite)
 hdummy.GetXaxis().SetRangeUser(1e-2,10)
-hdummy.GetYaxis().SetRangeUser(1,1e11)
+hdummy.GetYaxis().SetRangeUser(1.01,1e11)
 
 hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
 hdummy.GetXaxis().SetTitleSize(0.045)
