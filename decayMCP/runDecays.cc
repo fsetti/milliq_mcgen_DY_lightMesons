@@ -147,12 +147,12 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         // direct onia (ccbar and bbbar) production
         if(decay_mode == 11){
             // direct J/psi
-            finfo = new TFile("../oniaDirect/CMS_13_TeV/theory/CMS_Jpsi_tot_0_1.2_Tev_13_CMS_1.root");
+            finfo = new TFile("../oniaDirect/CMS-13-TeV/theory/CMS-Jpsi-tot-0-12-Tev-13-CMS-1.root");
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decay_mode == 12){
             // direct psi(2S)
-            finfo = new TFile("../oniaDirect/CMS_13_TeV/theory/CMS_Psi2S_tot_0_1.2_Tev_13_CMS_1.root");
+            finfo = new TFile("../oniaDirect/CMS-13-TeV/theory/CMS-Psi2S-tot-0-12-Tev-13-CMS-1.root");
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }else if(decay_mode == 13){
