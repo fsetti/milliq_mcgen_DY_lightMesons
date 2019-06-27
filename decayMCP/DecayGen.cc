@@ -163,8 +163,11 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         return -1;
     }
 
-    if(finfo)
-        finfo->Close();
+    if(h1) h1->SetDirectory(0);
+    if(h2) h2->SetDirectory(0);
+    if(h3) h3->SetDirectory(0);
+    if(finfo) finfo->Close();
+
     return 0;
 }
 
@@ -174,7 +177,6 @@ int DecayGen::DoDecay(MCPTree& tree){
         std::cout << "ERROR: must initialize DecayGen first!" << std::endl;
         return -1;
     }
-
     float pt = h1->GetRandom();
     if((decay_mode >= 1 && decay_mode <= 2) || (decay_mode >= 11 && decay_mode <= 15)){
         int ibin = h1->GetXaxis()->FindBin(pt);

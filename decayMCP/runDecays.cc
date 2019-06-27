@@ -53,8 +53,8 @@ int main(int argc, char **argv){
         std::cout << "Invalid decay mode!\n";
         return 1;
     }
-    if(!dg.finfo or dg.finfo->IsZombie()){
-        std::cout << "Couldn't find decay info file!\n";
+    if(!dg.h1){
+        std::cout << "Couldn't find decay info file, or histogram within file!\n";
         return 1;
     }
     if(dg.BR < 0){
