@@ -1,6 +1,6 @@
 ### Generate mCP decays
 
-Usage: `./runDecays <decayMode> <mMCP> <nEvents> <outfile>`
+Usage: `./runDecays <decayMode> <m_mCP> <n_events> <outfile>`
 
 `decayMode` is an integer specifiying which mode you want to generate. Currently supported:
 1. B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>

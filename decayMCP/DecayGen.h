@@ -10,14 +10,18 @@ bool WithinBounds(LorentzVector p4, int q);
 
 class DecayGen {
   public:
-    DecayGen(){ BASE_DIR = ".."; }
+    DecayGen(){ 
+        BASE_DIR = ".."; 
+        decay_mode = -1;
+        h1 = 0; h2 = 0; h3 = 0;
+    }
     enum DecayType{ TWOBODY, DALITZ };
     static string GetDecayString(int decayMode);
     int Initialize(int decayMode, float m_mCP);
     int DoDecay(MCPTree& tree);
     
     TH1D *h1, *h2, *h3;
-    int decay_mode = -1;
+    int decay_mode;
     string decay_string;
     float etamin, etamax; // eta bounds of parent particle
     float xsec_inclusive; // xsec before BR to mCPs (in pb)
