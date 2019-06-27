@@ -38,14 +38,16 @@ int main(){
                 g->SetPoint(g->GetN(), mass_limit, 0.001);
                 break;
             }
-            g->SetPoint(g->GetN(), mass, dg.xsec_inclusive * dg.BR);
+            float xsec = dg.xsec_inclusive * dg.BR;
+            xsec /= (dg.etamax - dg.etamin) / 2; // normalize to eta in [-1,1]
+            g->SetPoint(g->GetN(), mass, xsec);
             double x,y, cur_xs;
             if(gt->GetN() > j){
                 gt->GetPoint(j, x, y);
                 cur_xs = y;
             }else
                 cur_xs = 0.0;
-            gt->SetPoint(j, mass, cur_xs + dg.xsec_inclusive * dg.BR);
+            gt->SetPoint(j, mass, cur_xs + xsec);
         }
         TFile fout = TFile("xsecs.root", "UPDATE");
         g->Write(g->GetName(), TObject::kWriteDelete);
