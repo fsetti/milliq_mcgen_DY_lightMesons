@@ -45,13 +45,13 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         if(decay_mode == 1){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile((BASE_DIR+"/oniaFromB/psi.root").c_str());
-            xsec_inclusive = 1.015e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+            xsec_inclusive = 1.0167e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decay_mode == 2){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile((BASE_DIR+"/oniaFromB/psiprime.root").c_str());
-            xsec_inclusive = 2.635e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+            xsec_inclusive = 2.6408e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }
@@ -125,12 +125,12 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         // direct onia (ccbar and bbbar) production
         if(decay_mode == 11){
             // direct J/psi
-            finfo = new TFile((BASE_DIR+"/oniaDirect/CMS_13_TeV/theory/CMS_Jpsi_tot_0_1.2_Tev_13_CMS_1.root").c_str());
+            finfo = new TFile((BASE_DIR+"/oniaDirect/CMS-13-TeV/theory/CMS-Jpsi-tot-0-12-Tev-13-CMS-1.root").c_str());
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decay_mode == 12){
             // direct psi(2S)
-            finfo = new TFile((BASE_DIR+"/oniaDirect/CMS_13_TeV/theory/CMS_Psi2S_tot_0_1.2_Tev_13_CMS_1.root").c_str());
+            finfo = new TFile((BASE_DIR+"/oniaDirect/CMS-13-TeV/theory/CMS-Psi2S-tot-0-12-Tev-13-CMS-1.root").c_str());
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }else if(decay_mode == 13){
