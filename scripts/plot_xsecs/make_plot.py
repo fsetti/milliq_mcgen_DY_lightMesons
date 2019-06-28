@@ -28,7 +28,7 @@ hdummy.Draw()
 
 colors = {
     1:  r.kBlue+2,
-    2:  r.kAzure-3,
+    2:  r.kAzure-4,
     3:  r.kRed,
     4:  r.kRed+2,
     5:  r.kOrange-3,
@@ -37,8 +37,8 @@ colors = {
     8:  r.kGreen+3,
     9:  r.kPink+1,
     10: r.kTeal-1,
-    11: r.kBlue,
-    12: r.kAzure-4,
+    11: r.kBlue-4,
+    12: r.kAzure+6,
     13: r.kMagenta,
     14: r.kMagenta+2,
     15: r.kMagenta+3,
@@ -66,10 +66,11 @@ text.SetTextFont(42)
 text.SetTextAlign(12)
 text.SetTextSize(0.032)
 line.DrawLineNDC(0.357, 0.916, 0.395, 0.916)
-text.DrawLatex(0.405, 0.919, "Total non-Drell-Yan cross section")
+text.DrawLatex(0.405, 0.919, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section")
 
 text.SetTextAlign(32)
-text.DrawLatex(0.95, 0.65, "#eta(parent) #in [-1, 1]")
+text.DrawLatex(0.95, 0.65, "#bf{pp} (13 TeV)")
+text.DrawLatex(0.95, 0.60, "#eta(parent) #in [-1, 1]")
 
 leg = r.TLegend(0.35,0.7,0.96,0.892)
 leg.SetFillStyle(0)
@@ -79,17 +80,17 @@ leg.SetNColumns(4)
 leg.AddEntry(gs[6], "#pi^{0}#rightarrow#zeta#zeta#gamma", 'l')
 leg.AddEntry(gs[3], "#rho#rightarrow#zeta#zeta", 'l')
 leg.AddEntry(gs[11], "J/#psi#rightarrow#zeta#zeta", 'l')
-leg.AddEntry(gs[13], "#Upsilon#scale[0.7]{(1S)}#rightarrow#zeta#zeta", 'l')
+leg.AddEntry(gs[13], "#varUpsilon#scale[0.7]{(1S)}#rightarrow#zeta#zeta", 'l')
 
 leg.AddEntry(gs[7], "#eta#rightarrow#zeta#zeta#gamma", 'l')
 leg.AddEntry(gs[8], "#eta'#rightarrow#zeta#zeta#gamma", 'l')
 leg.AddEntry(gs[12], "#psi#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
-leg.AddEntry(gs[14], "#Upsilon#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
+leg.AddEntry(gs[14], "#varUpsilon#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
 
 leg.AddEntry(gs[9], "#omega#rightarrow#zeta#zeta#pi^{0}", 'l')
 leg.AddEntry(gs[5], "#phi#rightarrow#zeta#zeta", 'l')
 leg.AddEntry(gs[1], "B#rightarrowJ/#psiX, J/#psi#rightarrow#zeta#zeta", 'l')
-leg.AddEntry(gs[15], "#Upsilon#scale[0.7]{(3S)}#rightarrow#zeta#zeta", 'l')
+leg.AddEntry(gs[15], "#varUpsilon#scale[0.7]{(3S)}#rightarrow#zeta#zeta", 'l')
 
 leg.AddEntry(gs[4], "#omega#rightarrow#zeta#zeta", 'l')
 leg.AddEntry(gs[10], "#eta'#rightarrow#zeta#zeta#omega", 'l')
