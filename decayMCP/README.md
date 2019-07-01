@@ -1,6 +1,9 @@
 ### Generate mCP decays
 
-Usage: `./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0]`
+Usage: 
+```
+./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0]
+```
 
 `decay_mode` is an integer specifiying which mode you want to generate. Currently supported:
 1. B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
@@ -25,7 +28,7 @@ Usage: `./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events
 
 `n_events` is the number of events to generate.
 
-`evtnum_offset" is the value at which to start numbering events (so if you're making multiple files, event numbers don't overlap).
+`evtnum_offset` is the value at which to start numbering events (so if you're making multiple files, event numbers don't overlap).
 
 
 ### File format
