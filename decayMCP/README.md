@@ -1,8 +1,8 @@
 ### Generate mCP decays
 
-Usage: `./runDecays <decayMode> <m_mCP> <n_events> <outfile>`
+Usage: `./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0]`
 
-`decayMode` is an integer specifiying which mode you want to generate. Currently supported:
+`decay_mode` is an integer specifiying which mode you want to generate. Currently supported:
 1. B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 2. B &rarr; &psi;(2S) X, &psi;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 3. &rho; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
@@ -19,11 +19,14 @@ Usage: `./runDecays <decayMode> <m_mCP> <n_events> <outfile>`
 14. &Upsilon;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 15. &Upsilon;(3S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
 
-`m_mCP` is the mass of the milli-charged particle.
+`outfile` is the name of the ROOT file to output to.
+
+`m_mCP` is the mass of the milli-charged particle, in GeV.
 
 `n_events` is the number of events to generate.
 
-`outfile` is the name of the ROOT file to output to.
+`evtnum_offset" is the value at which to start numbering events (so if you're making multiple files, event numbers don't overlap).
+
 
 ### File format
 Output root tree has the following branches:
