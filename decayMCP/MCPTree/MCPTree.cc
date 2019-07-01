@@ -25,7 +25,7 @@ void MCPTree::Init(TTree *t){
         b_event        = this->t->Branch("event", &event, "event/i");
         b_parent_p4    = this->t->Branch("parent_p4", &parent_p4);
         b_parent_pdgId = this->t->Branch("parent_pdgId", &parent_pdgId, "parent_pdgId/I");
-        b_decay_flag   = this->t->Branch("decay_flag", &decay_flag, "decay_flag/I");
+        b_decay_mode   = this->t->Branch("decay_mode", &decay_mode, "decay_mode/I");
         b_p4_p         = this->t->Branch("p4_p", &p4_p);
         b_p4_m         = this->t->Branch("p4_m", &p4_m);
         b_xsec         = this->t->Branch("xsec", &xsec, "xsec/F");
@@ -44,7 +44,7 @@ void MCPTree::Init(TTree *t){
         this->t->SetBranchAddress("event", &event, &b_event);
         this->t->SetBranchAddress("parent_p4", &parent_p4, &b_parent_p4);
         this->t->SetBranchAddress("parent_pdgId", &parent_pdgId, &b_parent_pdgId);
-        this->t->SetBranchAddress("decay_flag", &decay_flag, &b_decay_flag);
+        this->t->SetBranchAddress("decay_mode", &decay_mode, &b_decay_mode);
         this->t->SetBranchAddress("p4_p", &p4_p, &b_p4_p);
         this->t->SetBranchAddress("p4_m", &p4_m, &b_p4_m);
         this->t->SetBranchAddress("xsec", &xsec, &b_xsec);
@@ -66,7 +66,7 @@ void MCPTree::Reset(){
     event = -999;
     *parent_p4 = LorentzPtEtaPhiMf();
     parent_pdgId = -999;
-    decay_flag = -999;
+    decay_mode = -999;
     *p4_p = LorentzPtEtaPhiMf();
     *p4_m = LorentzPtEtaPhiMf();
     xsec = -999;

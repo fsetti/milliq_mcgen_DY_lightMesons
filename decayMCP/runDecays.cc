@@ -4,6 +4,7 @@
 #include <string>
 
 #include "TFile.h"
+#include "TRandom.h"
 
 #include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
@@ -34,20 +35,56 @@ bool WithinBounds(LorentzVector p4, int q){
 
 int main(int argc, char **argv){
 
-    if(argc < 5){
-        std::cout << "usage: runDecays <decay_mode> <m_mCP> <n_events> <outfile>" << std::endl;
-        std::cout << "--DECAY MODES--" << std::endl;
-        for(int i=1; i<=15; i++)
-            std::cout << "  " << i << ": " << DecayGen::GetDecayString(i) << std::endl;
-        return 1;
+    char opt;
+    bool help = false;
+    int decay_mode = -1;
+    float m_mCP = 0.001;
+    int n_events = 1000, evt_offset = 0;
+    string output_name = "";
+    while((opt = getopt(argc, argv, ":hd:o:m:n:e:")) != -1) {
+        switch(opt){
+        case 'h':
+            help = true;
+            break;
+        case 'd':
+            decay_mode = atoi(optarg);
+            break;
+        case 'o':
+            output_name = string(optarg);
+            break;
+        case 'm':
+            m_mCP = atof(optarg);
+            break;
+        case 'n':
+            n_events = atoi(optarg);
+            break;
+        case 'e':
+            evt_offset = atoi(optarg);
+            break;
+        case '?':
+            std::cout << "\nWARNING: unrecognized option " << argv[optind-1] << std::endl;
+            break;
+        case ':':
+            std::cout << "\nERROR: option " << argv[optind-1] << " requires a value\n";
+            help = true;
+            break;
+        }
     }
 
-    int decay_mode = atoi(argv[1]);
-    float m_mCP = atof(argv[2]);
-    int n_events = atoi(argv[3]);    
+    if(help || decay_mode < 0 || output_name=="" || m_mCP < 0 || n_events <= 0 || evt_offset < 0){
+        std::cout << "\nusage:\n";
+        std::cout << "    " << argv[0] << " -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0] \n\n";
+        std::cout << "--- DECAY MODES ---" << std::endl;
+        for(int i=1; i<=15; i++)
+            std::cout << "  " << i << ": " << DecayGen::GetDecayString(i) << std::endl;
+        std::cout << "\n";
+        return 1;
+    }    
 
     DecayGen dg;
     MCPTree outtree;
+
+    gRandom->SetSeed(0);
     
     if(dg.Initialize(decay_mode, m_mCP)){
         std::cout << "Invalid decay mode!\n";
@@ -62,10 +99,10 @@ int main(int argc, char **argv){
         return 1;
     }
     
-    TFile *fout = new TFile(argv[4], "RECREATE");
+    TFile *fout = new TFile(output_name.c_str(), "RECREATE");
     outtree.Init();
 
-    outtree.decay_flag = decay_mode;
+    outtree.decay_mode = decay_mode;
     outtree.BR_q1 = dg.BR;
     outtree.weight = 1.0;
     outtree.weight_up = 1.0;
@@ -100,7 +137,7 @@ int main(int argc, char **argv){
     unsigned long n_attempts = 0;
     for(uint i=0; i<n_events; i++){
         outtree.progress(i, n_events, 200);
-        outtree.event = i;
+        outtree.event = i + evt_offset;
         do{            
             dg.DoDecay(outtree);
             n_attempts++;

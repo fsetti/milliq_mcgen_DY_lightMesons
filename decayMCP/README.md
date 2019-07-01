@@ -28,18 +28,21 @@ Usage: `./runDecays <decayMode> <m_mCP> <n_events> <outfile>`
 ### File format
 Output root tree has the following branches:
 * `event`: integer event number, starting from 0
-* `decay_flag`: copy of the `decayMode` argument to the program, defined above
+* `decay_mode`: copy of the `decay_mode` argument to the program, defined above
 * `parent_p4`: four-momentum of parent of mCP's (e.g. the J/&psi; for B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>)
 * `parent_pdgId`: PDG ID of parent of mCP's
 * `p4_p`: four-momentum of positively-charged mCP
 * `p4_m`: four-momentum of negatively-charged mCP
 * `xsec`: the cross-section of the process, before mCP BR, inclusively in pT/eta
 * `BR_q1`: the BR to mCPs for q(mCP)=1.
-* `filter_eff`: efficiency of any eta/phi cuts applied
+* `filter_eff`: efficiency of any eta/phi cuts applied to the mCP's
 * `weight`: event weight, currently just equal to 1.0 for all events
 * `weight_up` the up-variation weight. Computed as `pdf_up(pt) / pdf_central(pt)`, where pt is pt of mCP parent, when these functions are available
 * `weight_dn` the down-variation weight. Computed as `pdf_down(pt) / pdf_central(pt)`, where pt is pt of mCP parent, when these functions are available
 
-**note:** the proper per-event weight is given by `xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI / NEVENTS`
+**note:** the proper per-event weight is given by:
+```
+Q^2 * xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI(pb^-1) / NEVENTS
+```
 
-**units:** throughout this program, all masses/momenta are in GeV, and cross sections in pb;
+**units:** throughout this program, all masses/momenta are in GeV, and cross sections in pb.

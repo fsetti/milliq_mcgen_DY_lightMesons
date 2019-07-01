@@ -24,7 +24,7 @@ class MCPTree {
     unsigned int       event;
     LorentzPtEtaPhiMf* parent_p4 = 0;
     int                parent_pdgId;
-    int                decay_flag;
+    int                decay_mode;
     LorentzPtEtaPhiMf* p4_p = 0;
     LorentzPtEtaPhiMf* p4_m = 0;
     float              xsec;
@@ -51,7 +51,7 @@ class MCPTree {
     TBranch *b_event = 0;
     TBranch *b_parent_p4 = 0;
     TBranch *b_parent_pdgId = 0;
-    TBranch *b_decay_flag = 0;
+    TBranch *b_decay_mode = 0;
     TBranch *b_p4_p = 0;
     TBranch *b_p4_m = 0;
     TBranch *b_xsec = 0;
