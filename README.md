@@ -24,3 +24,5 @@ A collection of tools for generating signal Monte Carlo for the Milliqan experim
 `scripts`: scripts to calculate Dalitz and Onia BR, perform two-body and Dalitz decays, and extract/plot mCP cross sections
 
 `utils`: helper C++ functions to compute branching ratios and decay kinematics
+
+`propagate`: script to propagate generated mCP's through the CMS environment with the [MilliqanSim](https://github.com/bjmarsh/MilliqanSim/tree/master) package

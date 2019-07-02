@@ -9,10 +9,10 @@
 #include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
 
-const float MCP_ETAMIN = 0.16 - 0.1;
-const float MCP_ETAMAX = 0.16 + 0.1;
-const float MCP_PHIMIN = -0.1;
-const float MCP_PHIMAX = 0.6;
+const float MCP_ETAMIN = 0.16 - 0.06;
+const float MCP_ETAMAX = 0.16 + 0.06;
+const float MCP_PHIMIN = -0.02;
+const float MCP_PHIMAX = 0.5;
 
 // check if an mCP 4-vector is within pre-defined eta/phi bounds
 // note that the phi selection gets inverted based on mCP charge sign,
