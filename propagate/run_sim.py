@@ -76,6 +76,7 @@ np.random.seed(1)
 fin = r.TFile(sys.argv[2])
 tin = fin.Get("Events")
 
+# copy tree and initialize new branches
 tout = tin.CopyTree("")
 sim_q = np.array([itg.Q], dtype=float)
 does_hit_p = np.zeros(1, dtype=bool)
@@ -94,8 +95,8 @@ b_hit_m_p4 = tout.Branch("hit_m_p4", hit_m_p4)
 
 bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz, b_hit_m_p4]
 
-# Nevt = tin.GetEntries()
-Nevt = 100
+Nevt = tin.GetEntries()
+# Nevt = 100
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
@@ -113,8 +114,6 @@ for i in tqdm(range(Nevt)):
         itg.m = p4.M() * 1000.0
         itg.Q = q
         
-        get_x0 = lambda p4: 1000.*np.array([0., 0., 0., p4.Px(), p4.Py(), p4.Pz()])
-
         within_bounds = True
         if p4.Eta() < etamin or p4.Eta() > etamax:
             within_bounds = False
@@ -124,7 +123,8 @@ for i in tqdm(range(Nevt)):
             within_bounds = False
 
         if within_bounds:
-            traj,_ = itg.propagate(get_x0(p4))
+            x0 = 1000.*np.array([0., 0., 0., p4.Px(), p4.Py(), p4.Pz()])
+            traj,_ = itg.propagate(x0)
             idict = det.FindIntersection(traj)
             return idict
         else:
@@ -176,8 +176,13 @@ for i in tqdm(range(Nevt)):
             #     print "   SUCCESS"
 
 fout = r.TFile("output.root", "RECREATE")
+
+# skim tree, keeping only events with >=1 hit
 tout = tout.CopyTree("does_hit_m || does_hit_p")
+
+# compute hit efficiency and add to tree
 hit_eff = np.array([float(tout.GetEntries())/Nevt], dtype=float)
+print "Hit efficiency:", hit_eff[0]
 b = tout.Branch("hit_eff", hit_eff, "hit_eff/D")
 for i in range(tout.GetEntries()):
     b.GetEntry(i)
@@ -186,7 +191,6 @@ for i in range(tout.GetEntries()):
 tout.Write("Events", r.TObject.kWriteDelete)
 fout.Close()
 
-print "Hit efficiency:", hit_eff[0]
 
 # plt.figure(num=1, figsize=(15,7))
 # Drawing.Draw3Dtrajs(trajs, subplot=121)

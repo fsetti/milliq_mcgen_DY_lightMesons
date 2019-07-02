@@ -37,9 +37,9 @@ Output root tree has the following branches:
 * `decay_mode`: copy of the `decay_mode` argument to the program, defined above
 * `parent_p4`: four-momentum of parent of mCP's (e.g. the J/&psi; for B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>)
 * `parent_pdgId`: PDG ID of parent of mCP's
-* `p4_p`: four-momentum of positively-charged mCP
-* `p4_m`: four-momentum of negatively-charged mCP
-* `xsec`: the cross-section of the process, before mCP BR, inclusively in pT/eta
+* `p4_p`: four-momentum of positively-charged mCP (in GeV)
+* `p4_m`: four-momentum of negatively-charged mCP (in GeV)
+* `xsec`: the cross-section of the process, before mCP BR, inclusively in pT/eta (in pb)
 * `BR_q1`: the BR to mCPs for q(mCP)=1.
 * `filter_eff`: efficiency of any eta/phi cuts applied to the mCP's
 * `weight`: event weight, currently just equal to 1.0 for all events
