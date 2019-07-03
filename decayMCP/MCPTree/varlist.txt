@@ -2,7 +2,7 @@ MCPTree
 unsigned int, event
 LorentzPtEtaPhiMf, parent_p4
 int, parent_pdgId
-int, decay_flag
+int, decay_mode
 LorentzPtEtaPhiMf, p4_p
 LorentzPtEtaPhiMf, p4_m
 float, xsec

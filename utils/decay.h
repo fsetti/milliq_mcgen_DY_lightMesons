@@ -63,7 +63,7 @@ Do2BodyDecay(ROOT::Math::LorentzVector<T> p4_mother, double m1, double m2, doubl
     ROOT::Math::LorentzVector<T> q1 = TLVtoLV<T>(p1);
     ROOT::Math::LorentzVector<T> q2 = TLVtoLV<T>(p2);
     // return std::pair<ROOT::Math::LorentzVector<T>, ROOT::Math::LorentzVector<T> >(q1, q2);
-    return std::pair(q1, q2);
+    return std::pair<ROOT::Math::LorentzVector<T>, ROOT::Math::LorentzVector<T> >(q1, q2);
 }
 
 template <class T>

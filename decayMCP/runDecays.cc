@@ -5,18 +5,14 @@
 
 #include "TFile.h"
 #include "TRandom.h"
-#include "TH1D.h"
 
-#include "runDecays.h"
+#include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
-#include "../utils/decay.h"
-#include "../utils/branching_ratios.h"
 
-const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
-const float MCP_ETAMIN = 0.16 - 0.1;
-const float MCP_ETAMAX = 0.16 + 0.1;
-const float MCP_PHIMIN = -0.1;
-const float MCP_PHIMAX = 0.6;
+const float MCP_ETAMIN = 0.16 - 0.06;
+const float MCP_ETAMAX = 0.16 + 0.06;
+const float MCP_PHIMIN = -0.02;
+const float MCP_PHIMAX = 0.5;
 
 // check if an mCP 4-vector is within pre-defined eta/phi bounds
 // note that the phi selection gets inverted based on mCP charge sign,
@@ -37,214 +33,76 @@ bool WithinBounds(LorentzVector p4, int q){
             p4.phi() <= -MCP_PHIMIN;        
 }
 
-string DecayGen::GetDecayString(int decay_mode){
-    if(decay_mode == 1)       return "B -> J/psi X, J/psi -> mCP mCP";
-    else if(decay_mode == 2)  return "B -> psi(2S) X, psi(2S) -> mCP mCP";
-    else if(decay_mode == 3)  return "rho -> mCP mCP";
-    else if(decay_mode == 4)  return "omega -> mCP mCP";
-    else if(decay_mode == 5)  return "phi -> mCP mCP";
-    else if(decay_mode == 6)  return "pi0 -> mCP mCP gamma";
-    else if(decay_mode == 7)  return "eta -> mCP mCP gamma";
-    else if(decay_mode == 8)  return "eta' -> mCP mCP gamma";
-    else if(decay_mode == 9)  return "omega -> mCP mCP pi0";
-    else if(decay_mode == 10) return "eta' -> mCP mCP omega";
-    else if(decay_mode == 11) return "J/psi -> mCP mCP";
-    else if(decay_mode == 12) return "psi(2S) -> mCP mCP";
-    else if(decay_mode == 13) return "Y(1S) -> mCP mCP";
-    else if(decay_mode == 14) return "Y(2S) -> mCP mCP";
-    else if(decay_mode == 15) return "Y(3S) -> mCP mCP";
-    else return "BAD DECAY MODE";
-}
-
-int DecayGen::Initialize(int decay_mode, float m_mCP){
-    this->decay_mode = decay_mode;
-    decay_string = GetDecayString(decay_mode);
-    this->m_mCP = m_mCP;
-    m_X = 9999;  // mass of X in dalitz decay A -> B+B-X;
-
-    if(decay_mode >= 1 && decay_mode <= 2){
-        // psi's produced from B's
-        if(decay_mode == 1){
-            // B -> psi X, psi -> mCP mCP
-            finfo = new TFile("../oniaFromB/psi.root");
-            xsec_inclusive = 1.0167e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
-            parent_pdgId = 443;
-            m_parent = 3.0969;
-        }else if(decay_mode == 2){
-            // B -> psi X, psi -> mCP mCP
-            finfo = new TFile("../oniaFromB/psiprime.root");
-            xsec_inclusive = 2.6408e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
-            parent_pdgId = 100443;
-            m_parent = 3.6861;
-        }
-        h1 = (TH1D*)finfo->Get("central");
-        h2 = (TH1D*)finfo->Get("up");
-        h3 = (TH1D*)finfo->Get("down");
-        etamin = -1;
-        etamax = 1;
-        decay_type = TWOBODY;
-        BR = br_onia(m_mCP, parent_pdgId);
-    }else if(decay_mode >= 3 && decay_mode <= 10){
-        // direct production of pi, rho, omega, phi, eta, etaprime
-        finfo = new TFile("../mesonPt/pt_dists.root");
-        if(decay_mode == 3){
-            // rho -> mCP mCP
-            h1 = (TH1D*)finfo->Get("h_rho");
-            parent_pdgId = 113;
-            m_parent = 0.7743;
-        }
-        if(decay_mode == 4 || decay_mode == 9){
-            // omega -> mCP mCP or omega -> mCP mCP pi0
-            h1 = (TH1D*)finfo->Get("h_omega");
-            parent_pdgId = 223;
-            m_parent = 0.7827;
-            if(decay_mode == 9) m_X = 0.1350;
-        }
-        if(decay_mode == 5){
-            // phi -> mCP mCP
-            h1 = (TH1D*)finfo->Get("h_phi");
-            parent_pdgId = 333;
-            m_parent = 1.0195;
-        }
-        if(decay_mode == 6){
-            // pi0 -> mCP mCP gamma
-            h1 = (TH1D*)finfo->Get("h_pi0");
-            parent_pdgId = 111;
-            m_parent = 0.1350;
-            m_X = 0.0;
-        }
-        if(decay_mode == 7){
-            // eta -> mCP mCP gamma
-            h1 = (TH1D*)finfo->Get("h_eta");
-            parent_pdgId = 221;
-            m_parent = 0.5479;
-            m_X = 0.0;
-        }
-        if(decay_mode == 8 || decay_mode == 10){
-            // eta' -> mCP mCP gamma or eta' -> mCP mCP omega
-            h1 = (TH1D*)finfo->Get("h_etap");
-            parent_pdgId = 331;
-            m_parent = 0.9578;
-            m_X = 0.0;
-            if(decay_mode == 10) m_X = 0.7827;
-        }
-        etamin = -1;
-        etamax = 1;
-        // bins in this histogram are "particles per minbias event per 50 MeV bin"
-        // so the integral is "particles per minbias event"
-        // scale by the minbias xsec to get the xsec for producing this particle type
-        xsec_inclusive = h1->Integral() * MINBIAS_XSEC;
-        if(decay_mode >= 3 && decay_mode <= 5){
-            // direct 2-body decay
-            decay_type = TWOBODY;
-            BR = br_onia(m_mCP, parent_pdgId);
-        }else{
-            // Dalitz decay
-            decay_type = DALITZ;
-            BR = br_dalitz(m_mCP, parent_pdgId, m_X);
-        }
-    }else if(decay_mode >= 11 && decay_mode <= 15){
-        // direct onia (ccbar and bbbar) production
-        if(decay_mode == 11){
-            // direct J/psi
-            finfo = new TFile("../oniaDirect/CMS-13-TeV/theory/CMS-Jpsi-tot-0-12-Tev-13-CMS-1.root");
-            parent_pdgId = 443;
-            m_parent = 3.0969;
-        }else if(decay_mode == 12){
-            // direct psi(2S)
-            finfo = new TFile("../oniaDirect/CMS-13-TeV/theory/CMS-Psi2S-tot-0-12-Tev-13-CMS-1.root");
-            parent_pdgId = 100443;
-            m_parent = 3.6861;
-        }else if(decay_mode == 13){
-            // direct Y(1S)
-            finfo = new TFile("../oniaDirect/upsilon/ups1S_combined.root");
-            parent_pdgId = 553;
-            m_parent = 9.4603;
-        }else if(decay_mode == 14){
-            // direct Y(2S)
-            finfo = new TFile("../oniaDirect/upsilon/ups2S_combined.root");
-            parent_pdgId = 100553;
-            m_parent = 10.023;
-        }else if(decay_mode == 15){
-            // direct Y(3S)
-            finfo = new TFile("../oniaDirect/upsilon/ups3S_combined.root");
-            parent_pdgId = 200553;
-            m_parent = 10.355;
-        }
-        etamin = -1.2;
-        etamax = 1.2;
-        h1 = (TH1D*)finfo->Get("central");
-        h2 = (TH1D*)finfo->Get("up");
-        h3 = (TH1D*)finfo->Get("down");
-        // bins in this histogram are dsigma/dpt, in units of nb/GeV
-        // So sum bin contents, multiply by bin width, and *1000 to convert to pb
-        xsec_inclusive = h1->Integral("width") * 1000; // nb to pb
-        decay_type = TWOBODY;
-        BR = br_onia(m_mCP, parent_pdgId);        
-    }else{
-        return -1;
-    }
-    
-    return 0;
-}
-
-int DecayGen::DoDecay(MCPTree& tree){
-
-    if(decay_mode < 0){
-        std::cout << "ERROR: must initialize DecayGen first!" << std::endl;
-        return -1;
-    }
-
-    float pt = h1->GetRandom();
-    if((decay_mode >= 1 && decay_mode <= 2) || (decay_mode >= 11 && decay_mode <= 15)){
-        int ibin = h1->GetXaxis()->FindBin(pt);
-        tree.weight_up = h2->GetBinContent(ibin) / h1->GetBinContent(ibin);
-        tree.weight_dn = h3->GetBinContent(ibin) / h1->GetBinContent(ibin);        
-    }
-    float eta = gRandom->Uniform(etamin, etamax);
-    float phi = gRandom->Uniform(-M_PI, M_PI);        
-    *tree.parent_p4 = LorentzVector(pt, eta, phi, m_parent);        
-    if(decay_type == TWOBODY){
-        std::tie(*tree.p4_p,*tree.p4_m) = Do2BodyDecay(*tree.parent_p4, m_mCP, m_mCP);
-    }else{
-        LorentzVector dummy;
-        std::tie(dummy,*tree.p4_p,*tree.p4_m) = DoDalitz(*tree.parent_p4, m_mCP, m_X);
-    }
-
-    return 0;
-
-}
-
 int main(int argc, char **argv){
 
-    if(argc < 5){
-        std::cout << "usage: runDecays <decay_mode> <m_mCP> <n_events> <outfile>" << std::endl;
-        std::cout << "--DECAY MODES--" << std::endl;
-        for(int i=1; i<=15; i++)
-            std::cout << "  " << i << ": " << DecayGen::GetDecayString(i) << std::endl;
-        return 1;
+    char opt;
+    bool help = false;
+    int decay_mode = -1;
+    float m_mCP = 0.001;
+    int n_events = 1000, evt_offset = 0;
+    string output_name = "";
+    while((opt = getopt(argc, argv, ":hd:o:m:n:e:")) != -1) {
+        switch(opt){
+        case 'h':
+            help = true;
+            break;
+        case 'd':
+            decay_mode = atoi(optarg);
+            break;
+        case 'o':
+            output_name = string(optarg);
+            break;
+        case 'm':
+            m_mCP = atof(optarg);
+            break;
+        case 'n':
+            n_events = atoi(optarg);
+            break;
+        case 'e':
+            evt_offset = atoi(optarg);
+            break;
+        case '?':
+            std::cout << "\nWARNING: unrecognized option " << argv[optind-1] << std::endl;
+            break;
+        case ':':
+            std::cout << "\nERROR: option " << argv[optind-1] << " requires a value\n";
+            help = true;
+            break;
+        }
     }
 
-    int decay_mode = atoi(argv[1]);
-    float m_mCP = atof(argv[2]);
-    int n_events = atoi(argv[3]);    
+    if(help || decay_mode < 0 || output_name=="" || m_mCP < 0 || n_events <= 0 || evt_offset < 0){
+        std::cout << "\nusage:\n";
+        std::cout << "    " << argv[0] << " -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0] \n\n";
+        std::cout << "--- DECAY MODES ---" << std::endl;
+        for(int i=1; i<=15; i++)
+            std::cout << "  " << i << ": " << DecayGen::GetDecayString(i) << std::endl;
+        std::cout << "\n";
+        return 1;
+    }    
 
     DecayGen dg;
     MCPTree outtree;
+
+    gRandom->SetSeed(0);
     
     if(dg.Initialize(decay_mode, m_mCP)){
         std::cout << "Invalid decay mode!\n";
         return 1;
     }
-    if(!dg.finfo or dg.finfo->IsZombie()){
-        std::cout << "Couldn't find decay info file!\n";
+    if(!dg.h1){
+        std::cout << "Couldn't find decay info file, or histogram within file!\n";
+        return 1;
+    }
+    if(dg.BR < 0){
+        std::cout << "Illegal decay! See above error message\n";
         return 1;
     }
     
-    TFile *fout = new TFile(argv[4], "RECREATE");
+    TFile *fout = new TFile(output_name.c_str(), "RECREATE");
     outtree.Init();
 
-    outtree.decay_flag = decay_mode;
+    outtree.decay_mode = decay_mode;
     outtree.BR_q1 = dg.BR;
     outtree.weight = 1.0;
     outtree.weight_up = 1.0;
@@ -279,7 +137,7 @@ int main(int argc, char **argv){
     unsigned long n_attempts = 0;
     for(uint i=0; i<n_events; i++){
         outtree.progress(i, n_events, 200);
-        outtree.event = i;
+        outtree.event = i + evt_offset;
         do{            
             dg.DoDecay(outtree);
             n_attempts++;
