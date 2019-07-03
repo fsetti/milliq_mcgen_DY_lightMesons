@@ -16,13 +16,13 @@ This is slow! (tested at 1.5 Hz). To run over more than a few thousand events wi
 need to submit jobs to the grid.
 
 **Coordinates:** coordinates used for the position/momentum of hit are *not* in CMS coordinates.
-x and y are parallel to the Milliqan detector face (x horizontal, y vertical), and z is perpendicular
-(positive z points *into* the detector, in the same direction as traveling particles).
+x and y are parallel to the Milliqan detector face (x in the phi-hat direction, y in the eta-hat direction), 
+and z is perpendicular (positive z points *into* the detector, in the same direction as traveling particles).
 x and y are centered on the center of the detector face, while z is centered at the CMS origin
 (so if the detector is 33m away from the IP, the center of the detector face is (0,0,33)).
 
 **List of branches added to the tree** (note that `*` can be either `p` or `m`, indicating
-whether the branch is for the positively or negatively charged mCP).
+whether the branch is for the positively or negatively charged mCP):
 * `sim_q`: the charge of the simulated mCP's
 * `does_hit_*`: boolean indicating whether or not mCP hits detector
 * `hit_*_xyz`: a TVector3 of hit position, in coordinates described above (in meters)

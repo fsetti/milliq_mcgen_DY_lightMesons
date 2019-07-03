@@ -29,7 +29,7 @@ float br_onia(float mass, int parent_pdgId){
         BRe = 7.93e-3;
     }else if(parent_pdgId == 553){
         mp =  9460.3;
-        BRe = 2.48e-3;
+        BRe = 2.38e-2;
     }else if(parent_pdgId == 100553){
         mp = 10023.3;
         BRe = 1.91e-2;
