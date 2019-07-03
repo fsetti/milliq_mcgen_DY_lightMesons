@@ -98,6 +98,6 @@ leg.AddEntry(gs[2], "B#rightarrow#psi#scale[0.7]{(2S)}X, #psi#scale[0.7]{(2S)}#r
 leg.AddEntry(hdummy, "", 'l')
 leg.Draw()
 
-c.SaveAs("~/public_html/milliqan/mcp_xsec.pdf")
-c.SaveAs("~/public_html/milliqan/mcp_xsec.png")
+c.SaveAs("~/public_html/milliqan/mcp-xsec.pdf")
+c.SaveAs("~/public_html/milliqan/mcp-xsec.png")
 
