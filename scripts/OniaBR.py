@@ -13,6 +13,7 @@
 # Written in python3 should work also in python2
 #
 # Claudio 11 June 2019
+#          3 July 2019  Fixed BR for Ups(1S)->ee 
 #
 #
 from __future__ import print_function  # python2 compatibility (hopefully?)
@@ -57,7 +58,7 @@ BRphi   = 2.97e-4
 BRomega = 7.36e-5
 BRpsi   = 5.96e-2
 BRpsi2S = 7.93e-3
-BRups1S = 2.48e-3
+BRups1S = 2.38e-2
 BRups2S = 1.91e-2
 BRups3S = 2.18e-2
 BRups4S = 1.57e-5
