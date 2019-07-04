@@ -38,9 +38,10 @@ Except for Drell-Yan (DY), this is done in a few steps
 \section{Special (simplest) case: Drell-Yan}
 The Drell-Yan process $pp \to \zeta^+ \zeta^-$ is generated with
 the external model interface in MadGraph.  Note: we cannot use
-the SM $pp \to \ell^+ \ell^-$ because the couplings of the $Z$ to
-$\zeta$'s and leptons are different, since in our model $\zeta$'s
-are weak isoaspin singlet.
+SM $pp \to \ell^+ \ell^-$ with a diferent lepton mass
+because the couplings of the $Z$ to
+$\zeta$'s and leptons are different
+(in our model $\zeta$'s are weak isospin singlets\cite{Holdom}).
 
 \noindent {\bf Status of this: this was done by Itay in MadGraph4,
   Golf is porting it to Madgraph5, but he has some bugs to fix.}
@@ -48,6 +49,7 @@ are weak isoaspin singlet.
 
 
 \section{List of non-DY processes}
+\label{sec:list}
 
 The main processes for  $A \to e^+ e^- X$ at the LHC are:
 \begin{itemize}
@@ -55,8 +57,8 @@ The main processes for  $A \to e^+ e^- X$ at the LHC are:
     \item $\eta \to e^+ e^- \gamma$   (BR=0.7\%, Dalitz decay)
     \item $\eta' \to e^+ e^- \gamma$   (BR=5e-4, Dalitz decay)
     \item $\omega \to \pi^0 e^+ e^-$  (BR=8e-4, Dalitz decay)
-    \item $\eta' \to \omega e^+ e^-$ (BR=2e-4, Dalitz Decay)
-    \item $\eta' \to \pi^+ \pi^- e^+ e^- \gamma$ (BR=2e-3, sort of Dalitz, skip for now)
+    \item $\eta' \to \omega e^+ e^-$ (BR=2e-4, Dalitz decay)
+    \item $\eta' \to \pi^+ \pi^- e^+ e^-$ (BR=2e-3, skip, see comment in Section~\ref{sec:bottom-line})
     \item $V \to e^+ e^-$ ($V$ = onia, $\phi$, $\rho$, $\omega$)
 \end{itemize}
 
@@ -406,9 +408,20 @@ to bottom right, for $|\eta| < 1$.}
 
 
 \section{Putting cross-sections and BR together}
+\label{sec:bottom-line}
 
-Thh total cross-section for millicharged particle production (excluding
-DY) os shown in Fig.~\ref{fig:total-rates}.
+The total cross-section for millicharged particle production (excluding
+DY) is shown in Fig.~\ref{fig:total-rates}.  Note that the considered
+contributions from $\eta'$ are negligible. As mentioned in
+Section~\ref{sec:list}, we are skipping $\eta' \to \pi^+ \pi^- \zeta^+ \zeta^-$.
+However since for $\zeta = e$ the branching ratio of this process is four times
+that of $\eta' \to e^+ e^- \gamma$ (Dalitz decay), one may worry that this
+process could actually be important.  However, for reasonable $\zeta$
+masses, say above 100 MeV, this process is suppressed
+with respect to Dalitz decay, e.g., from the PDG,
+BR($\eta' \to \mu^+ \mu^- \gamma$) $\approx$ 1e-4 while
+BR($\eta' \to \pi^+ \pi^- \mu^+ \mu^-$) $<$ 3e-5.  So we can ignore it.
+
 
 \begin{figure}
   \begin{center}
@@ -479,6 +492,8 @@ The procedure is the following:
 
 \begin{thebibliography}{1}
 
+\bibitem{Holdom}  B. Holdom, Phys.Lett. B166, 196 (1986).
+  
 \bibitem{landsberg}  L. G. Landsberg, Phys. Rep. 128, 301 (1985). 
 
 \bibitem{bib:ulrik}
