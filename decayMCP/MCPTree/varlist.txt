@@ -1,5 +1,6 @@
 MCPTree
 unsigned int, event
+unsigned int, n_events_total
 LorentzPtEtaPhiMf, parent_p4
 int, parent_pdgId
 int, decay_mode

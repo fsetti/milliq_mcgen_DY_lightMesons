@@ -9,10 +9,10 @@
 #include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
 
-const float MCP_ETAMIN = 0.16 - 0.06;
-const float MCP_ETAMAX = 0.16 + 0.06;
+const float MCP_ETAMIN = 0.16 - 0.08;
+const float MCP_ETAMAX = 0.16 + 0.08;
 const float MCP_PHIMIN = -0.02;
-const float MCP_PHIMAX = 0.5;
+const float MCP_PHIMAX = 1.0;
 
 // check if an mCP 4-vector is within pre-defined eta/phi bounds
 // note that the phi selection gets inverted based on mCP charge sign,
@@ -40,8 +40,9 @@ int main(int argc, char **argv){
     int decay_mode = -1;
     float m_mCP = 0.001;
     int n_events = 1000, evt_offset = 0;
+    uint n_events_total = 0;
     string output_name = "";
-    while((opt = getopt(argc, argv, ":hd:o:m:n:e:")) != -1) {
+    while((opt = getopt(argc, argv, ":hd:o:m:n:N:e:")) != -1) {
         switch(opt){
         case 'h':
             help = true;
@@ -58,6 +59,9 @@ int main(int argc, char **argv){
         case 'n':
             n_events = atoi(optarg);
             break;
+        case 'N':
+            n_events_total = atoi(optarg);
+            break;
         case 'e':
             evt_offset = atoi(optarg);
             break;
@@ -71,9 +75,12 @@ int main(int argc, char **argv){
         }
     }
 
-    if(help || decay_mode < 0 || output_name=="" || m_mCP < 0 || n_events <= 0 || evt_offset < 0){
+    if(n_events_total == 0)
+        n_events_total = n_events;
+
+    if(help || decay_mode < 0 || output_name=="" || m_mCP < 0 || n_events <= 0 || n_events_total < n_events || evt_offset < 0){
         std::cout << "\nusage:\n";
-        std::cout << "    " << argv[0] << " -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0] \n\n";
+        std::cout << "    " << argv[0] << " -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-N n_events_total=n_events] [-e evtnum_offset=0] \n\n";
         std::cout << "--- DECAY MODES ---" << std::endl;
         for(int i=1; i<=15; i++)
             std::cout << "  " << i << ": " << DecayGen::GetDecayString(i) << std::endl;
@@ -102,6 +109,7 @@ int main(int argc, char **argv){
     TFile *fout = new TFile(output_name.c_str(), "RECREATE");
     outtree.Init();
 
+    outtree.n_events_total = n_events_total;
     outtree.decay_mode = decay_mode;
     outtree.BR_q1 = dg.BR;
     outtree.weight = 1.0;

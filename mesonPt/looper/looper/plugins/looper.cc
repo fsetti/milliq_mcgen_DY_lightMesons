@@ -23,6 +23,7 @@
 
 // ROOT includes
 #include <TH1D.h>
+#include <TH2D.h>
 #include <TFile.h>
 
 // user include files
@@ -63,6 +64,7 @@ class looper : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
     TFile *fout;
     TH1D *h_nevents, *h_etaall;
     TH1D *h_pi0, *h_pi, *h_omega, *h_rho, *h_phi, *h_eta, *h_etap;
+    TH2D *h_pteta;
     // TTree *tree;
 
       // ----------member data ---------------------------
@@ -102,9 +104,10 @@ looper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     h_nevents->Fill(1);
     for(uint i=0; i<genParts->size(); i++){
         const reco::GenParticle& gp = genParts->at(i);
-        if(fabs(gp.eta()) > 1)
+        if(fabs(gp.eta()) > 2)
             continue;
 
+        h_pteta->Fill(gp.pt(), gp.eta());
         h_etaall->Fill(gp.eta());
 
         if(gp.status()==1 && abs(gp.pdgId()) == 211)
@@ -144,6 +147,8 @@ looper::beginJob()
     h_phi = new TH1D("h_phi",";p_{T} [GeV]",2000,0,100);
     h_eta = new TH1D("h_eta",";p_{T} [GeV]",2000,0,100);
     h_etap = new TH1D("h_etap",";p_{T} [GeV]",2000,0,100);
+
+    h_pteta = new TH2D("h_pteta", ";p_{T} [GeV];#eta", 500, 0, 50, 80, -2, 2);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -153,6 +158,7 @@ looper::endJob()
     fout->cd();
     h_nevents->Write();
     h_etaall->Write();
+    h_pteta->Write();
     h_pi->Write();
     h_pi0->Write();
     h_rho->Write();
@@ -164,6 +170,7 @@ looper::endJob()
 
     delete h_nevents;
     delete h_etaall;
+    delete h_pteta;
     delete h_pi;
     delete h_pi0;
     delete h_rho;

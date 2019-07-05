@@ -22,6 +22,7 @@ class MCPTree {
   public:
 
     unsigned int       event;
+    unsigned int       n_events_total;
     LorentzPtEtaPhiMf* parent_p4 = 0;
     int                parent_pdgId;
     int                decay_mode;
@@ -49,6 +50,7 @@ class MCPTree {
     std::vector<double> deq;
 
     TBranch *b_event = 0;
+    TBranch *b_n_events_total = 0;
     TBranch *b_parent_p4 = 0;
     TBranch *b_parent_pdgId = 0;
     TBranch *b_decay_mode = 0;

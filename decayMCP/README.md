@@ -2,7 +2,8 @@
 
 Usage: 
 ```
-./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-e evtnum_offset=0]
+./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] \
+               [-N n_events_total=n_events] [-e evtnum_offset=0]
 ```
 
 `decay_mode` is an integer specifiying which mode you want to generate. Currently supported:
@@ -28,12 +29,17 @@ Usage:
 
 `n_events` is the number of events to generate.
 
+`n_events_total` is a constant copied into the tree directly, and is meant to represent the total number of events generated in a given sample
+(for the case where one sample is split over many files). This makes it easier to compute the per-event weight when looping over events later.
+
 `evtnum_offset` is the value at which to start numbering events (so if you're making multiple files, event numbers don't overlap).
 
 
 ### File format
 Output root tree has the following branches:
 * `event`: integer event number, starting from 0
+* `n_events_total`: total number of events in the sample. Defaults to the number of events in the given file, but can be overridden
+in the case that the sample is split over many files (see above)
 * `decay_mode`: copy of the `decay_mode` argument to the program, defined above
 * `parent_p4`: four-momentum of parent of mCP's (e.g. the J/&psi; for B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>)
 * `parent_pdgId`: PDG ID of parent of mCP's
@@ -48,7 +54,7 @@ Output root tree has the following branches:
 
 **note:** the proper per-event weight is given by:
 ```
-Q^2 * xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI(pb^-1) / NEVENTS
+Q^2 * xsec * BR_q1 * filter_eff * weight[_up/dn] * LUMI(pb^-1) / n_events_total
 ```
 
 **units:** throughout this program, all masses/momenta are in GeV, and cross sections in pb.
