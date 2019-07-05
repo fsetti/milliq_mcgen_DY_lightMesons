@@ -9,6 +9,9 @@
 # Usage fonll2Root XXXX
 #
 # Claudio June 16, 2019
+# Hacked it to label the plot vs pseudorapidity
+# if the file name contains the word "eta"
+#   4 July 2019
 #
 from ROOT import TH1D, TFile
 import math
@@ -81,9 +84,15 @@ ax.fill_between(pt, down, up, color="lightblue")
 
 ax.set_xlim(pt[0], pt[-1])
 ax.set_title(name)
-ax.set_yscale('log')
-ax.set_xlabel('Pt (Gev)')
-ax.set_ylabel('dsigma/dpt (pb/GeV)')
+if "eta" in name:
+    ax.set_xlabel('eta')
+    ax.set_ylabel('dsigma/deta (pb)')
+    ax.set_ylim(0, 1.2*np.max(up))
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+else:
+    ax.set_yscale('log')
+    ax.set_xlabel('Pt (Gev)')
+    ax.set_ylabel('dsigma/dpt (pb/GeV)')
 # ax.legend(loc='upper right')
 plt.xticks(np.arange(min(pt), max(pt)+1, 2.0))
 ax.tick_params("both", direction='in', length=10, right=True, top=True)
