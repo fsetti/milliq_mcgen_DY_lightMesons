@@ -216,9 +216,10 @@ saved as histograms in ROOT files (Drell Yan is an exception, as discussed previ
 given $P_T$.
 \item Pick azimuthal angles $\phi$ and pseudorapity $\eta$ in a
   limited 
-range, matched to the acceptance of milliqan.
-\item Decay the SM particles into milliCharged particles (this 
-step is described in a separate note).  
+  range, matched to the acceptance of milliqan.  The $\eta$
+  distribution is assumed to be flat, see comments in
+  Section{sec:bottom-line}.
+\item Decay the SM particles into milliCharged particles. 
 \item When possible, keep track of theoretical uncertainties.
 \item In general it is sufficient to generate SM particles at low 
 and moderate $P_T$ since that is where the cross-section is largest.
@@ -365,6 +366,8 @@ are integrated over $|\eta|<1.2$.}
 
 
 
+
+
 \subsection{$\pi^0$, $\eta$, $\eta'$, $\phi$, $\rho$, and $\omega$}
 \label{sec:mesons}
 
@@ -440,17 +443,71 @@ BR($\eta' \to \pi^+ \pi^- \mu^+ \mu^-$) $<$ 3e-5.  So we can safely ignore it.
   \begin{center}
   \includegraphics[width=0.8\linewidth]{../scripts/plot-xsecs/mcp-xsec.pdf}
   \caption{\protect Cross-section times branching ratios for various
-    decays into $\eta^+ \eta^-$ pairs, excluding DY.  The contribution from
+    decays into $\zeta^+ \zeta^-$ pairs, excluding DY.  Note: this is
+    the cross section for producing the mother particle times the
+    branching ratio for the mother particle to decay into $\zeta^+ \zeta^-$.
+    Multiply by two to get the $\zeta^{\pm}$ production cross section.
+    Also: the mother particle must be in $|\eta|<1$, but the
+    daughter $\zeta^{\pm}$ could have $|\eta|>1$.  On the other hand some
+    $\zeta$'s with $|\eta|<1$ can arise from mothers of $|\eta|>1$.
+    The contribution from
     direct charmonium is not complete yet, see Section~\ref{sec:psidirect}.}
 \label{fig:total-rates}
 \end{center}
   \end{figure}
 
+As mentioned in the caption of Figure~\ref{fig:total-rates} some
+of the $\zeta$'s in the central region (i.e.: potentially within
+the acceptance of milliQan) could result from decays of mother
+particles at higher $|\eta|$, especially in the cases where
+the mother particles has low momentum and the boost in the
+decay is small.
+Particle production is
+nearly flat in rapidity, see
+Figures~\ref{fig:eta-upsilon},~\ref{fig:eta-psi}
+for some examples.
+The event generation will then
+assume a flat pseudorapidity distribution.
+At the analysis level one will be able to keep track of the
+contributions from high $|\eta|$ mothers, and assign a systematic
+if necessary.
+
+\begin{figure}
+  \begin{center}
+\includegraphics[width=0.5\linewidth]{plots/LHCb-eta.pdf}
+\caption{\protect $\Upsilon(1S)$ spectra in different rapidity
+  ranges from LHCb~\cite{Aaij:2018pfp}.}
+    \label{fig:eta-upsilon}
+\end{center}
+  \end{figure}
+
+
+
+\begin{figure}
+\begin{adjustwidth}{-3cm}{-3cm}
+\centering
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psi-eta.pdf}
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psi-y.pdf}
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psiprime-eta.pdf}
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psiprime-y.pdf}
+\end{adjustwidth}
+\caption{\protect Pseudorapidity and rapidity distributions
+  from $\psi$ (left) and $\psi(2S)$ (right)
+  from b-decays\cite{Cacciari:2012ny,Cacciari:2015fta}.
+  These are for $P_T < 10$ GeV, i.e., in the low boost regime.
+Note that in this $P_T$ range the theoretical uncertainties are large.}
+  \label{fig:eta-psi}
+\end{figure}
+
+
+
+
+
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-
+\clearpage
 \section{Generation of the decays}
 
 We provide functions that take as input the lab frame 4-vector of either pseudoscalar
