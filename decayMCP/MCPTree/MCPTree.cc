@@ -18,22 +18,23 @@ void MCPTree::Init(TTree *t){
         // and then create the branches.
         this->t = new TTree("Events","");
 
-        this->parent_p4    = new LorentzPtEtaPhiMf;
-        this->p4_p         = new LorentzPtEtaPhiMf;
-        this->p4_m         = new LorentzPtEtaPhiMf;
+        this->parent_p4      = new LorentzPtEtaPhiMf;
+        this->p4_p           = new LorentzPtEtaPhiMf;
+        this->p4_m           = new LorentzPtEtaPhiMf;
 
-        b_event        = this->t->Branch("event", &event, "event/i");
-        b_parent_p4    = this->t->Branch("parent_p4", &parent_p4);
-        b_parent_pdgId = this->t->Branch("parent_pdgId", &parent_pdgId, "parent_pdgId/I");
-        b_decay_mode   = this->t->Branch("decay_mode", &decay_mode, "decay_mode/I");
-        b_p4_p         = this->t->Branch("p4_p", &p4_p);
-        b_p4_m         = this->t->Branch("p4_m", &p4_m);
-        b_xsec         = this->t->Branch("xsec", &xsec, "xsec/F");
-        b_BR_q1        = this->t->Branch("BR_q1", &BR_q1, "BR_q1/F");
-        b_filter_eff   = this->t->Branch("filter_eff", &filter_eff, "filter_eff/F");
-        b_weight       = this->t->Branch("weight", &weight, "weight/F");
-        b_weight_up    = this->t->Branch("weight_up", &weight_up, "weight_up/F");
-        b_weight_dn    = this->t->Branch("weight_dn", &weight_dn, "weight_dn/F");
+        b_event          = this->t->Branch("event", &event, "event/i");
+        b_n_events_total = this->t->Branch("n_events_total", &n_events_total, "n_events_total/i");
+        b_parent_p4      = this->t->Branch("parent_p4", &parent_p4);
+        b_parent_pdgId   = this->t->Branch("parent_pdgId", &parent_pdgId, "parent_pdgId/I");
+        b_decay_mode     = this->t->Branch("decay_mode", &decay_mode, "decay_mode/I");
+        b_p4_p           = this->t->Branch("p4_p", &p4_p);
+        b_p4_m           = this->t->Branch("p4_m", &p4_m);
+        b_xsec           = this->t->Branch("xsec", &xsec, "xsec/F");
+        b_BR_q1          = this->t->Branch("BR_q1", &BR_q1, "BR_q1/F");
+        b_filter_eff     = this->t->Branch("filter_eff", &filter_eff, "filter_eff/F");
+        b_weight         = this->t->Branch("weight", &weight, "weight/F");
+        b_weight_up      = this->t->Branch("weight_up", &weight_up, "weight_up/F");
+        b_weight_dn      = this->t->Branch("weight_dn", &weight_dn, "weight_dn/F");
 
         Reset();
     }else{
@@ -42,6 +43,7 @@ void MCPTree::Init(TTree *t){
         //this->t->SetMakeClass(1);
 
         this->t->SetBranchAddress("event", &event, &b_event);
+        this->t->SetBranchAddress("n_events_total", &n_events_total, &b_n_events_total);
         this->t->SetBranchAddress("parent_p4", &parent_p4, &b_parent_p4);
         this->t->SetBranchAddress("parent_pdgId", &parent_pdgId, &b_parent_pdgId);
         this->t->SetBranchAddress("decay_mode", &decay_mode, &b_decay_mode);
@@ -64,6 +66,7 @@ void MCPTree::Fill(){
 
 void MCPTree::Reset(){
     event = -999;
+    n_events_total = -999;
     *parent_p4 = LorentzPtEtaPhiMf();
     parent_pdgId = -999;
     decay_mode = -999;
