@@ -11,6 +11,7 @@
 # Claudio June 16, 2019
 # Hacked it to label the plot vs pseudorapidity
 # if the file name contains the word "eta"
+# or rapidity if the file contains "y"
 #   4 July 2019
 #
 from ROOT import TH1D, TFile
@@ -87,6 +88,11 @@ ax.set_title(name)
 if "eta" in name:
     ax.set_xlabel('eta')
     ax.set_ylabel('dsigma/deta (pb)')
+    ax.set_ylim(0, 1.2*np.max(up))
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+elif "y" in name:
+    ax.set_xlabel('rapidity')
+    ax.set_ylabel('dsigma/dy (pb)')
     ax.set_ylim(0, 1.2*np.max(up))
     ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
 else:

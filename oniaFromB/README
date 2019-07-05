@@ -4,9 +4,9 @@ Tables of cross sections as a function of pt for B->psi B->psiprime
 http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html
 The kinematical cuts are documented in the files
 
-psi-eta.txt psiprime-eta.txt
-------------------------------
-Tables of cross sections as a function of eta for B->psi B->psiprime
+psi-eta.txt psiprime-eta.txt psi-y.txt psiprime-y.txt
+-------------------------------------------------------
+Tables of cross sections as a function of eta or y for B->psi B->psiprime
 The kinematical cuts are documented in the files (pt<10 is the key)
 
 fonll2root.py
