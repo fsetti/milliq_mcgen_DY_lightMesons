@@ -89,8 +89,8 @@ as\cite{landsberg, bib:ulrik}:
 
 \noindent where $m_A$ is the mass of $A$, $q^2$ is the mass-squared of the
 $e^+e^-$ pair, 
-and $F(q^2)$ is a form factor.  Notr the $1/q^2$ factor that results
-in a highly non-unifor invariant mass distribution sharply peaked at
+and $F(q^2)$ is a form factor.  Note the $1/q^2$ factor that results
+in a highly non-uniform invariant mass distribution sharply peaked at
 low
 values.
 The form factor is such that $F(0)=1$ and for pions is usually
@@ -196,7 +196,7 @@ When possible we compare with
     \label{V1}
     \end{equation}
 
-  \noindent where $x_\zeta = m_\ell/m_V$, and $m_\zeta$ is the mass of $\zeta$.
+  \noindent where $x_\zeta = m_\zeta/m_V$, and $m_\zeta$ is the mass of $\zeta$.
   
   As a sanity check, we use equation~\ref{V1} and BR($\psi(2S) \to ee$)=7.93e-3
   to predict
@@ -216,9 +216,10 @@ saved as histograms in ROOT files (Drell Yan is an exception, as discussed previ
 given $P_T$.
 \item Pick azimuthal angles $\phi$ and pseudorapity $\eta$ in a
   limited 
-range, matched to the acceptance of milliqan.
-\item Decay the SM particles into milliCharged particles (this 
-step is described in a separate note).  
+  range, matched to the acceptance of milliqan.  The $\eta$
+  distribution is assumed to be flat, see comments in
+  Section~\ref{sec:bottom-line}.
+\item Decay the SM particles into milliCharged particles. 
 \item When possible, keep track of theoretical uncertainties.
 \item In general it is sufficient to generate SM particles at low 
 and moderate $P_T$ since that is where the cross-section is largest.
@@ -276,7 +277,7 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
 \includegraphics[width=0.32\linewidth]{../oniaDirect/LHCB-13-TeV/ups3s-13to7eta20to25.pdf}
 \includegraphics[width=0.32\linewidth]{../oniaDirect/LHCB-13-TeV/ups3s-13to7eta20to25.pdf}
 \end{adjustwidth}
-\caption{\protect Ratio of 13 to 7 GeV $\Upsilon$ cross-section for $2.0 < |\eta| < 2.5$
+\caption{\protect Ratio of 13 to 7 GeV $\Upsilon$ cross-section for $2.0 < y < 2.5$
   from LHCb~\cite{Aaij:2018pfp}.  From left to right: 1S, 2S, 3S. 
   The quadratic fits are ours.}
 \label{fig:upsratio}
@@ -293,9 +294,9 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
   (1S, 2S, or 3S), and increase slowly to about 2
   at $P_T$ = 40 GeV.  The ratios have also been measured by
   LHCb~\cite{Aaij:2018pfp}
-  all the way down to zero $P_T$ for $2.0 < |\eta| < 2.5$, see Figure~\ref{fig:upsratio}.
+  all the way down to zero $P_T$ for $2.0 < y < 2.5$, see Figure~\ref{fig:upsratio}.
   The LHCb ratios in the 20-30 GeV region measured at slightly higher
-  $\eta$ are in agreement with the more central
+  $y$ are in agreement with the more central
   ratios measured by CMS.
 
 \begin{figure}
@@ -365,6 +366,8 @@ are integrated over $|\eta|<1.2$.}
 
 
 
+
+
 \subsection{$\pi^0$, $\eta$, $\eta'$, $\phi$, $\rho$, and $\omega$}
 \label{sec:mesons}
 
@@ -423,12 +426,16 @@ to bottom right, for $|\eta| < 1$.}
 \label{sec:bottom-line}
 
 The total cross section for milliCharged particle production (excluding
-DY) is shown in Fig.~\ref{fig:total-rates}.  Note that the considered
-contributions from $\eta'$ are negligible. As mentioned in
-Section~\ref{sec:list}, we are skipping $\eta' \to \pi^+ \pi^- \zeta^+ \zeta^-$.
-Since for $\zeta = e$ the branching ratio of this process is four
+DY) is shown in Fig.~\ref{fig:total-rates}.  
+% Note that the considered contributions from $\eta'$ are negligible. 
+As mentioned in
+Section~\ref{sec:list}, we are skipping $\eta' \to \pi^+ \pi^- \zeta^+
+\zeta^-$.
+Note that the other contributions from $\eta'$ in the plot are neglogible.
+Since for $\zeta = e$ the branching ratio of the skipped process is four
 times higher than
-that of $\eta' \to e^+ e^- \gamma$ (Dalitz decay), one worries that this
+that of $\eta' \to e^+ e^- \gamma$ (Dalitz decay), one worries that
+this
 process could actually be important.  However, for reasonable $\zeta$
 masses, say above 100 MeV, this process is suppressed by phase space
 with respect to Dalitz decay, e.g., from the PDG,
@@ -440,17 +447,71 @@ BR($\eta' \to \pi^+ \pi^- \mu^+ \mu^-$) $<$ 3e-5.  So we can safely ignore it.
   \begin{center}
   \includegraphics[width=0.8\linewidth]{../scripts/plot-xsecs/mcp-xsec.pdf}
   \caption{\protect Cross-section times branching ratios for various
-    decays into $\eta^+ \eta^-$ pairs, excluding DY.  The contribution from
+    decays into $\zeta^+ \zeta^-$ pairs, excluding DY.  Note: this is
+    the cross section for producing the mother particle times the
+    branching ratio for the mother particle to decay into $\zeta^+ \zeta^-$.
+    Multiply by two to get the $\zeta^{\pm}$ production cross section.
+    Also: the mother particle must be in $|\eta|<1$, but the
+    daughter $\zeta^{\pm}$ could have $|\eta|>1$.  On the other hand some
+    $\zeta$'s with $|\eta|<1$ can arise from mothers of $|\eta|>1$.
+    The contribution from
     direct charmonium is not complete yet, see Section~\ref{sec:psidirect}.}
 \label{fig:total-rates}
 \end{center}
   \end{figure}
 
+As mentioned in the caption of Figure~\ref{fig:total-rates} some
+of the $\zeta$'s in the central region (i.e.: potentially within
+the acceptance of milliQan) could result from decays of mother
+particles at higher $|\eta|$, especially in the cases where
+the mother particles have low momentum and the boost in the
+decay is small.
+Particle production is
+nearly flat in rapidity, see
+Figures~\ref{fig:eta-upsilon},~\ref{fig:eta-psi}
+for some examples.
+The event generation will then
+assume a flat pseudorapidity distribution.
+At the analysis level one will be able to keep track of the
+contributions from high $|\eta|$ mothers, and assign a systematic
+if necessary.
+
+\begin{figure}
+  \begin{center}
+\includegraphics[width=0.5\linewidth]{plots/LHCb-eta.pdf}
+\caption{\protect $\Upsilon(1S)$ spectra in different rapidity
+  ranges from LHCb~\cite{Aaij:2018pfp}.}
+    \label{fig:eta-upsilon}
+\end{center}
+  \end{figure}
+
+
+
+\begin{figure}
+\begin{adjustwidth}{-3cm}{-3cm}
+\centering
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psi-eta.pdf}
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psi-y.pdf}
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psiprime-eta.pdf}
+\includegraphics[width=0.22\linewidth]{../oniaFromB/psiprime-y.pdf}
+\end{adjustwidth}
+\caption{\protect Pseudorapidity and rapidity distributions
+  from $\psi$ (left) and $\psi(2S)$ (right)
+  from b-decays\cite{Cacciari:2012ny,Cacciari:2015fta}.
+  These are for $P_T < 10$ GeV, i.e., in the low boost regime.
+Note that in this $P_T$ range the theoretical uncertainties are large.}
+  \label{fig:eta-psi}
+\end{figure}
+
+
+
+
+
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
-
+\clearpage
 \section{Generation of the decays}
 
 We provide functions that take as input the lab frame 4-vector of either pseudoscalar
@@ -458,9 +519,9 @@ We provide functions that take as input the lab frame 4-vector of either pseudos
 We assume that the $V$'s are unpolarized.
 
 
-\subsection{Generation of Dalitz decays}
-The implementation goes as follows (this should also work for the Dalitz
-decay of the $\omega$ as long as the $\omega$ is unpolarized):
+\subsection{Generation of pseudoscalar Dalitz decays}
+The implementation goes as follows (this also works for the Dalitz
+decay of the $\omega$, whcih has J=1,  as long as it is unpolarized):
 \begin{itemize}
 \item Rotate the 4-vector of $P$ from the lab frame into frame
   $S_1$ such that $P$ is traveling in the $z$-direction.
