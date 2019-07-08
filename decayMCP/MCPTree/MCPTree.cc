@@ -35,6 +35,10 @@ void MCPTree::Init(TTree *t){
         b_weight         = this->t->Branch("weight", &weight, "weight/F");
         b_weight_up      = this->t->Branch("weight_up", &weight_up, "weight_up/F");
         b_weight_dn      = this->t->Branch("weight_dn", &weight_dn, "weight_dn/F");
+        b_mCP_etamin     = this->t->Branch("mCP_etamin", &mCP_etamin, "mCP_etamin/F");
+        b_mCP_etamax     = this->t->Branch("mCP_etamax", &mCP_etamax, "mCP_etamax/F");
+        b_mCP_phimin     = this->t->Branch("mCP_phimin", &mCP_phimin, "mCP_phimin/F");
+        b_mCP_phimax     = this->t->Branch("mCP_phimax", &mCP_phimax, "mCP_phimax/F");
 
         Reset();
     }else{
@@ -55,6 +59,10 @@ void MCPTree::Init(TTree *t){
         this->t->SetBranchAddress("weight", &weight, &b_weight);
         this->t->SetBranchAddress("weight_up", &weight_up, &b_weight_up);
         this->t->SetBranchAddress("weight_dn", &weight_dn, &b_weight_dn);
+        this->t->SetBranchAddress("mCP_etamin", &mCP_etamin, &b_mCP_etamin);
+        this->t->SetBranchAddress("mCP_etamax", &mCP_etamax, &b_mCP_etamax);
+        this->t->SetBranchAddress("mCP_phimin", &mCP_phimin, &b_mCP_phimin);
+        this->t->SetBranchAddress("mCP_phimax", &mCP_phimax, &b_mCP_phimax);
 
     }
     t_old = std::chrono::system_clock::now();
@@ -78,6 +86,10 @@ void MCPTree::Reset(){
     weight = -999;
     weight_up = -999;
     weight_dn = -999;
+    mCP_etamin = -999;
+    mCP_etamax = -999;
+    mCP_phimin = -999;
+    mCP_phimax = -999;
 
 }
 

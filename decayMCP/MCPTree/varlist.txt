@@ -12,3 +12,7 @@ float, filter_eff
 float, weight
 float, weight_up
 float, weight_dn
+float, mCP_etamin
+float, mCP_etamax
+float, mCP_phimin
+float, mCP_phimax

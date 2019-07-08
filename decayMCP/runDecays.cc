@@ -9,10 +9,10 @@
 #include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
 
-const float MCP_ETAMIN = 0.16 - 0.08;
-const float MCP_ETAMAX = 0.16 + 0.08;
-const float MCP_PHIMIN = -0.02;
-const float MCP_PHIMAX = 1.0;
+float MCP_ETAMIN = 0.16 - 0.08;
+float MCP_ETAMAX = 0.16 + 0.08;
+float MCP_PHIMIN = -0.03;
+float MCP_PHIMAX = 1.0;
 
 // check if an mCP 4-vector is within pre-defined eta/phi bounds
 // note that the phi selection gets inverted based on mCP charge sign,
@@ -88,6 +88,12 @@ int main(int argc, char **argv){
         return 1;
     }    
 
+    MCP_PHIMIN = -0.03;
+    MCP_PHIMAX = max(0.4, 0.35 - 0.85*log10(m_mCP));
+    float deta = m_mCP >= 0.999 ? 0.06 : 0.12;
+    MCP_ETAMIN = 0.16 - deta;
+    MCP_ETAMAX = 0.16 + deta;
+    
     DecayGen dg;
     MCPTree outtree;
 
@@ -117,6 +123,10 @@ int main(int argc, char **argv){
     outtree.weight_dn = 1.0;
     outtree.xsec = dg.xsec_inclusive;
     outtree.parent_pdgId = dg.parent_pdgId;
+    outtree.mCP_etamin = MCP_ETAMIN;
+    outtree.mCP_etamax = MCP_ETAMAX;
+    outtree.mCP_phimin = MCP_PHIMIN;
+    outtree.mCP_phimax = MCP_PHIMAX;
 
     std::cout << "\n";
     std::cout << "**********************************************" << std::endl;

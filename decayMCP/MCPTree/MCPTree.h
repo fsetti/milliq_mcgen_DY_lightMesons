@@ -34,6 +34,10 @@ class MCPTree {
     float              weight;
     float              weight_up;
     float              weight_dn;
+    float              mCP_etamin;
+    float              mCP_etamax;
+    float              mCP_phimin;
+    float              mCP_phimax;
 
     MCPTree(TTree *t=0);
     void Init(TTree *t=0);
@@ -62,6 +66,10 @@ class MCPTree {
     TBranch *b_weight = 0;
     TBranch *b_weight_up = 0;
     TBranch *b_weight_dn = 0;
+    TBranch *b_mCP_etamin = 0;
+    TBranch *b_mCP_etamax = 0;
+    TBranch *b_mCP_phimin = 0;
+    TBranch *b_mCP_phimax = 0;
 
 };
 

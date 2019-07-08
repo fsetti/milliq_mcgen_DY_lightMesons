@@ -1,12 +1,10 @@
 import sys
 from array import array
 import numpy as np
-# import matplotlib.pyplot as plt
 import ROOT as r
 from millisim.Environment import Environment
 from millisim.Integrator import Integrator
 from millisim.Detector import *
-# import millisim.Drawing as Drawing
 try:
     from tqdm import tqdm
     loaded_tqdm = True
@@ -17,6 +15,8 @@ except ImportError:
 if len(sys.argv) < 3:
     print "usage: {0} <Q> <input_file>".format(sys.argv[0])
     exit(1)
+
+DO_DRAW = False
    
 ## CONFIGURABLE PARAMS ##
 
@@ -25,6 +25,8 @@ dist_to_detector = 33.
 eta = 0.16
 det_width = 1.0  # in m
 det_height = 1.0 # in m
+# det_width = None
+# det_height = None
 rock_begins = dist_to_detector - 17.0
 
 dt = 0.1
@@ -32,10 +34,10 @@ max_nsteps = 5000
 
 # if outside of these bounds, don't bother simulating
 # the phi bounds are negated for negatively charged mCP's
-etamin = eta - 0.10
-etamax = eta + 0.10
-phimin = -0.1
-phimax = 0.6
+etamin = eta - 100
+etamax = eta + 100
+phimin = -100
+phimax = 100
 
 #########################
 
@@ -52,7 +54,7 @@ itg = Integrator(
     m = 1, # overwritten later
     dt = dt,
     nsteps = max_nsteps,
-    cutoff_dist = dist_to_detector + 1,
+    cutoff_dist = dist_to_detector + 2,
     cutoff_axis = 'R',
     use_var_dt = True,
     lowv_dx = 0.01,
@@ -73,8 +75,10 @@ det = PlaneDetector(
 r.gRandom.SetSeed(1)
 np.random.seed(1)
 
-fin = r.TFile(sys.argv[2])
+fin = r.TFile.Open(sys.argv[2])
 tin = fin.Get("Events")
+
+fout = r.TFile("output.root", "RECREATE")
 
 # copy tree and initialize new branches
 tout = tin.CopyTree("")
@@ -96,7 +100,7 @@ b_hit_m_p4 = tout.Branch("hit_m_p4", hit_m_p4)
 bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz, b_hit_m_p4]
 
 Nevt = tin.GetEntries()
-# Nevt = 100
+# Nevt = 1000
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
@@ -110,7 +114,7 @@ for i in tqdm(range(Nevt)):
     for b in bs:
         b.GetEntry(i)
 
-    def do_propagate(p4, q):
+    def do_propagate(p4, q, traj_array=None):
         itg.m = p4.M() * 1000.0
         itg.Q = q
         
@@ -125,13 +129,15 @@ for i in tqdm(range(Nevt)):
         if within_bounds:
             x0 = 1000.*np.array([0., 0., 0., p4.Px(), p4.Py(), p4.Pz()])
             traj,_ = itg.propagate(x0)
+            if traj_array is not None:
+                traj_array.append(traj)
             idict = det.FindIntersection(traj)
             return idict
         else:
             return None
 
-    idict_p = do_propagate(tin.p4_p, q)
-    idict_m = do_propagate(tin.p4_m, -q)
+    idict_p = do_propagate(tin.p4_p, q, trajs if DO_DRAW else None)
+    idict_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)
 
     if idict_p is not None:
         does_hit_p[0] = True
@@ -175,10 +181,8 @@ for i in tqdm(range(Nevt)):
             # else:
             #     print "   SUCCESS"
 
-fout = r.TFile("output.root", "RECREATE")
-
 # skim tree, keeping only events with >=1 hit
-tout = tout.CopyTree("does_hit_m || does_hit_p")
+tout = tout.CopyTree("(does_hit_m || does_hit_p) && Entry$ < {0}".format(Nevt))
 
 # compute hit efficiency and add to tree
 hit_eff = np.array([float(tout.GetEntries())/Nevt], dtype=float)
@@ -192,15 +196,22 @@ tout.Write("Events", r.TObject.kWriteDelete)
 fout.Close()
 
 
-# plt.figure(num=1, figsize=(15,7))
-# Drawing.Draw3Dtrajs(trajs, subplot=121)
-# # the four corners
-# c1,c2,c3,c4 = det.GetCorners()
-# Drawing.DrawLine(c1,c2,is3d=True)
-# Drawing.DrawLine(c2,c3,is3d=True)
-# Drawing.DrawLine(c3,c4,is3d=True)
-# Drawing.DrawLine(c4,c1,is3d=True)
+if DO_DRAW:
+    import matplotlib.pyplot as plt
+    from millisim.Drawing import *
+    plt.figure(num=1, figsize=(15,7))
+    Draw3Dtrajs(trajs, subplot=121)
+    # the four corners
+    if det.width is not None and det.height is not None:
+        c1,c2,c3,c4 = det.GetCorners()
+        DrawLine(c1,c2,is3d=True)
+        DrawLine(c2,c3,is3d=True)
+        DrawLine(c3,c4,is3d=True)
+        DrawLine(c4,c1,is3d=True)
+    for traj in trajs:
+        idict = det.FindIntersection(traj)
+        if idict is not None:
+            DrawLine(idict["x_int"], idict["x_int"], is3d=True, linestyle="None", marker='o', color='r')
+    DrawXYslice(trajs, subplot=122)
+    plt.show()
 
-# Drawing.DrawXYslice(trajs, subplot=122)
-
-# plt.show()
