@@ -19,6 +19,8 @@ def get_acceptance(ch):
     h = r.TH1D("h","",1,0,2)
     ch.Draw("filter_eff>>h","","goff")
     filter_eff = h.GetMean()
+    if ch.GetEntries()==0:
+        return 0.0, 0.0, 0.0
     ch.GetEntry(0)
     acc = float(n_acc) / ch.n_events_total
     err = np.sqrt(acc*(1-acc)/ch.n_events_total)
@@ -59,7 +61,6 @@ for mdir in glob.glob(os.path.join(basedir, "*")):
 
             rate, rerr = get_rate(ch,q)
             acc, aerr, N = get_acceptance(ch)
-            print acc, aerr, N
 
             rates[q][m][samp] = {
                 "rate": rate, 
@@ -87,12 +88,14 @@ for q in rates:
     masses = sorted(rates[q].keys())
     for m in masses:
         for s in rates[q][m].keys():
+            if rates[q][m][s]["rate"]==0:
+                continue
             if s not in grs[q]:
                 grs[q][s] = {}
                 grs[q][s]["rate"] = r.TGraphErrors()
                 grs[q][s]["acc"] = r.TGraphErrors()
                 grs[q][s]["rate"].SetName("rate_q{0}_{1}".format(str(q).replace(".","p"), s))
-                grs[q][s]["acc"].SetName("acc_q{0}_{1}".format(str(q).replace(".","p"), s))
+                grs[q][s]["acc"].SetName("acc_q{0}_{1}".format(str(q).replace(".","p"), s))                
             gr = grs[q][s]["rate"]
             N = gr.GetN()
             gr.SetPoint(N, m, rates[q][m][s]["rate"])

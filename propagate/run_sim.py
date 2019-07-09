@@ -30,7 +30,7 @@ det_height = 1.0 # in m
 rock_begins = dist_to_detector - 17.0
 
 dt = 0.1
-max_nsteps = 5000
+max_nsteps = 3300
 
 # if outside of these bounds, don't bother simulating
 # the phi bounds are negated for negatively charged mCP's
@@ -38,6 +38,10 @@ etamin = eta - 100
 etamax = eta + 100
 phimin = -100
 phimax = 100
+
+# pt cuts (if pt is less than pt_cut for a given mass, don't bother propagating)
+m_vals  = [0.01, 0.05, 0.1,  0.2, 0.3, 0.4, 0.5,  0.7, 1.0, 1.4, 1.4, 1.8, 2.0,  3.0, 4.0, 5.0]
+pt_cuts = [0.15, 0.20, 0.25, 0.3, 0.4, 0.5, 0.55, 0.7, 0.9, 1.1, 1.2, 1.3, 1.45, 1.9, 2.3, 2.7]
 
 #########################
 
@@ -57,7 +61,7 @@ itg = Integrator(
     cutoff_dist = dist_to_detector + 2,
     cutoff_axis = 'R',
     use_var_dt = True,
-    lowv_dx = 0.01,
+    lowv_dx = 0.03,
     multiple_scatter = 'pdg',
     do_energy_loss = True,
     randomize_charge_sign = False,
@@ -70,10 +74,6 @@ det = PlaneDetector(
     width = det_width,
     height = det_height,
 )
-
-# set the seeds to 1 so results are reproducible
-r.gRandom.SetSeed(1)
-np.random.seed(1)
 
 fin = r.TFile.Open(sys.argv[2])
 tin = fin.Get("Events")
@@ -100,19 +100,25 @@ b_hit_m_p4 = tout.Branch("hit_m_p4", hit_m_p4)
 bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz, b_hit_m_p4]
 
 Nevt = tin.GetEntries()
-# Nevt = 1000
+evt_start = 0
+# Nevt = 1
+# evt_start = 476
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
 n_hits = 0
-for i in tqdm(range(Nevt)):
-
+for i in tqdm(range(evt_start, evt_start+Nevt)):
+    
     if not loaded_tqdm and i%100 == 0:
         print "{0} / {1}".format(i, Nevt)
 
     tin.GetEntry(i)
     for b in bs:
         b.GetEntry(i)
+
+    # set the seeds to 1 so results are reproducible
+    r.gRandom.SetSeed(tin.event)
+    np.random.seed(tin.event)
 
     def do_propagate(p4, q, traj_array=None):
         itg.m = p4.M() * 1000.0
@@ -125,19 +131,23 @@ for i in tqdm(range(Nevt)):
             within_bounds = False
         if q<0 and (p4.Phi() < -phimax or p4.Phi() > -phimin):
             within_bounds = False
+        pt_cut = np.interp(p4.M(), m_vals, pt_cuts) * (q/0.1)**2
+        if p4.Pt() < pt_cut:
+            within_bounds = False
 
         if within_bounds:
             x0 = 1000.*np.array([0., 0., 0., p4.Px(), p4.Py(), p4.Pz()])
             traj,_ = itg.propagate(x0)
+            idict = det.FindIntersection(traj)
+            # if traj_array is not None and idict is not None:
             if traj_array is not None:
                 traj_array.append(traj)
-            idict = det.FindIntersection(traj)
             return idict
         else:
             return None
 
     idict_p = do_propagate(tin.p4_p, q, trajs if DO_DRAW else None)
-    idict_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)
+    idict_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)    
 
     if idict_p is not None:
         does_hit_p[0] = True
