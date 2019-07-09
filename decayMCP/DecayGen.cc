@@ -113,7 +113,7 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         // so the integral is "particles per minbias event"
         // scale by the minbias xsec to get the xsec for producing this particle type
         xsec_inclusive = h1->Integral() * MINBIAS_XSEC;
-        xsec_inclusive *= 2.0/1.0; // xsecs are given in range [-1,1]. Correct here for wider range, assuming flat eta distribution
+        xsec_inclusive *= 2.0/2.0; // xsecs are given in range [-2,2]. No need to correct
         if(decay_mode >= 3 && decay_mode <= 5){
             // direct 2-body decay
             decay_type = TWOBODY;
