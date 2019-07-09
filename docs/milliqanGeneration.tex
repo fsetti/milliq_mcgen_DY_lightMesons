@@ -41,7 +41,8 @@ the external model interface in MadGraph.  Note: we cannot use
 SM $pp \to \ell^+ \ell^-$ with a different lepton mass
 because the couplings of the $Z$ to
 $\zeta$'s and leptons are different
-(in our model $\zeta$'s are weak isospin singlets\cite{Holdom}).
+(in our model $\zeta$'s are weak isospin
+singlets\cite{Holdom}\cite{Haas:2014dda}).
 
 \noindent {\bf Status of this: this was done by Itay in MadGraph4,
   Golf is porting it to Madgraph5, but he has some bugs to fix.}
@@ -70,6 +71,19 @@ by rescaling $A \to e^+ e^- X$ by a factor of $Q^2$ times an
 additional mass-dependent factor.  In general this factor consists
 of a phase space piece $\sqrt{1 - (2m_\zeta/m_A)^2}$ plus an additional
 piece that arises from the matrix element.
+
+Note also that among these processes, the paper~\cite{Haas:2014dda} that
+proposed the milliqan experiment only included onia.  Furthermore
+it is not clear that it included the $B \to \psi$ process, it
+is not clear that it included $\psi(2S)$, $\Upsilon(2S)$,
+and $\Upsilon(3S)$, and it imposed requirements $P_T > 6.5$ GeV (2 GeV)
+on $J/\psi$ and $\Upsilon(1S)$, respectively.
+The Letter of Intent~\cite{Ball:2016zrp} also mentions
+$\Upsilon(2S)$ and $\Upsilon(3S)$, and it is possible that the latest
+NSF proposal included even more processes.  In any case: here we make an
+attempt to include as many processes as possible and to
+remove $P_T$ requirements.
+
 
 \section{Branching Ratios of non-DY processes (Q=1).}
 
@@ -566,7 +580,27 @@ The procedure is the following:
 
 \begin{thebibliography}{1}
 
+
 \bibitem{Holdom}  B. Holdom, Phys.Lett. B166, 196 (1986).
+  
+%\cite{Haas:2014dda}
+\bibitem{Haas:2014dda} 
+  A.~Haas, C.~S.~Hill, E.~Izaguirre and I.~Yavin,
+  %``Looking for milli-charged particles with a new experiment at the LHC,''
+  Phys.\ Lett.\ B {\bf 746}, 117 (2015)
+  doi:10.1016/j.physletb.2015.04.062
+  [arXiv:1410.6816 [hep-ph]].
+  %%CITATION = doi:10.1016/j.physletb.2015.04.062;%%
+  %39 citations counted in INSPIRE as of 09 Jul 2019
+
+%\cite{Ball:2016zrp}
+\bibitem{Ball:2016zrp} 
+  A.~Ball {\it et al.},
+  %``A Letter of Intent to Install a milli-charged Particle Detector at LHC P5,''
+  arXiv:1607.04669 [physics.ins-det].
+  %%CITATION = ARXIV:1607.04669;%%
+  %24 citations counted in INSPIRE as of 09 Jul 2019
+
   
 \bibitem{landsberg}  L. G. Landsberg, Phys. Rep. 128, 301 (1985). 
 
