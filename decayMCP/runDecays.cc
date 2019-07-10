@@ -36,13 +36,13 @@ bool WithinBounds(LorentzVector p4, int q){
 int main(int argc, char **argv){
 
     char opt;
-    bool help = false;
+    bool help = false, do_pairs = false;
     int decay_mode = -1;
     float m_mCP = 0.001;
     int n_events = 1000, evt_offset = 0;
     uint n_events_total = 0;
     string output_name = "";
-    while((opt = getopt(argc, argv, ":hd:o:m:n:N:e:")) != -1) {
+    while((opt = getopt(argc, argv, ":hd:o:m:n:N:e:p")) != -1) {
         switch(opt){
         case 'h':
             help = true;
@@ -65,6 +65,9 @@ int main(int argc, char **argv){
         case 'e':
             evt_offset = atoi(optarg);
             break;
+        case 'p':
+            do_pairs = true;
+            break;
         case '?':
             std::cout << "\nWARNING: unrecognized option " << argv[optind-1] << std::endl;
             break;
@@ -80,7 +83,7 @@ int main(int argc, char **argv){
 
     if(help || decay_mode < 0 || output_name=="" || m_mCP < 0 || n_events <= 0 || n_events_total < n_events || evt_offset < 0){
         std::cout << "\nusage:\n";
-        std::cout << "    " << argv[0] << " -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-N n_events_total=n_events] [-e evtnum_offset=0] \n\n";
+        std::cout << "    " << argv[0] << " -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] [-N n_events_total=n_events] [-e evtnum_offset=0] [-p]\n\n";
         std::cout << "--- DECAY MODES ---" << std::endl;
         for(int i=1; i<=15; i++)
             std::cout << "  " << i << ": " << DecayGen::GetDecayString(i) << std::endl;
@@ -156,10 +159,15 @@ int main(int argc, char **argv){
     for(uint i=0; i<n_events; i++){
         outtree.progress(i, n_events, 200);
         outtree.event = i + evt_offset;
-        do{            
+        bool is_good = false;
+        while(!is_good){
             dg.DoDecay(outtree);
             n_attempts++;
-        } while (!(WithinBounds(*outtree.p4_p, 1) || WithinBounds(*outtree.p4_m, -1)));
+            if(do_pairs)
+                is_good = WithinBounds(*outtree.p4_p, 1) && WithinBounds(*outtree.p4_m, -1);
+            else
+                is_good = WithinBounds(*outtree.p4_p, 1) || WithinBounds(*outtree.p4_m, -1);
+        }
         outtree.Fill();
     }
 

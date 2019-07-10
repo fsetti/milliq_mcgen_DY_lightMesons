@@ -1,7 +1,7 @@
 #! /bin/bash
 
 TAG=$1
-STAG=v1
+STAG=$2
 
 INDIR=/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_${TAG}
 mkdir -p logs
@@ -12,13 +12,16 @@ if [ ! -d $INDIR ]; then
 fi
 
 for MDIR in `ls -d $INDIR/m_*`; do
+    M=`basename $MDIR`
+    # if [ $M != m_0p02 ] && [ $M != m_0p03 ]; then
+    #     continue
+    # fi
     for SDIR in `ls -d $MDIR/*`; do
+        S=`basename $SDIR`
         if [ ! -d $SDIR/postsim_$STAG ]; then
             continue
         fi
         for QDIR in `ls -d ${SDIR}/postsim_${STAG}/q_*`; do
-            M=`basename $MDIR`
-            S=`basename $SDIR`
             Q=`basename $QDIR`
             OUTDIR=/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/${TAG}_${STAG}/$M/$Q
             mkdir -p $OUTDIR

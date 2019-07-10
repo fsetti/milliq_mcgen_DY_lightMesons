@@ -34,10 +34,10 @@ max_nsteps = 3300
 
 # if outside of these bounds, don't bother simulating
 # the phi bounds are negated for negatively charged mCP's
-etamin = eta - 100
-etamax = eta + 100
-phimin = -100
-phimax = 100
+etamin = eta - 0.12
+etamax = eta + 0.12
+phimin = -0.03
+phimax = 2.05
 
 # pt cuts (if pt is less than pt_cut for a given mass, don't bother propagating)
 m_vals  = [0.01, 0.05, 0.1,  0.2, 0.3, 0.4, 0.5,  0.7, 1.0, 1.4, 1.4, 1.8, 2.0,  3.0, 4.0, 5.0]
@@ -102,7 +102,7 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 Nevt = tin.GetEntries()
 evt_start = 0
 # Nevt = 1
-# evt_start = 476
+# evt_start = 5528
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []

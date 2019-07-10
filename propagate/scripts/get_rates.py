@@ -9,18 +9,17 @@ ntuple_tag = "v3"
 sim_tag = "v1"
 
 def get_rate(ch, q, lumi=1.0):
-
     h = r.TH1D("h","",1,0,2)
     ch.Draw("1>>h","(does_hit_p + does_hit_m)*({0}^2 * xsec * BR_q1 * filter_eff * weight * 1000*{1} / n_events_total)".format(q,lumi),"goff")
     return (h.GetBinContent(1), h.GetBinError(1))
 
 def get_acceptance(ch):
     n_acc = ch.GetEntries()
+    if n_acc == 0:
+        return 0.0, 0.0, 0.0
     h = r.TH1D("h","",1,0,2)
     ch.Draw("filter_eff>>h","","goff")
     filter_eff = h.GetMean()
-    if ch.GetEntries()==0:
-        return 0.0, 0.0, 0.0
     ch.GetEntry(0)
     acc = float(n_acc) / ch.n_events_total
     err = np.sqrt(acc*(1-acc)/ch.n_events_total)
