@@ -8,7 +8,7 @@
 
 #include "../../decayMCP/DecayGen.h"
 
-int main(){
+int main(int argc, char** argv){
 
     DecayGen dg;
     dg.BASE_DIR = "../..";
@@ -17,7 +17,7 @@ int main(){
     const float max_mass = 5.5;
     const int n_masses = 1000;
 
-    TFile fout = TFile("xsecs.root", "RECREATE");
+    TFile* fout = new TFile("xsecs.root", "RECREATE");
 
     TGraph *gt = new TGraph();
     gt->SetName("xsecs_total");
@@ -40,7 +40,7 @@ int main(){
                 break;
             }
             float xsec = dg.xsec_inclusive * dg.BR;
-            xsec /= (dg.etamax - dg.etamin) / 2; // normalize to eta in [-1,1]
+            xsec /= (dg.etamax - dg.etamin) / 4; // normalize to eta in [-2,2]
             g->SetPoint(g->GetN(), mass, xsec);
             
             // get current total xsec at this mass, and add the current xsec
@@ -52,13 +52,13 @@ int main(){
                 cur_xs = 0.0;
             gt->SetPoint(j, mass, cur_xs + xsec);
         }
-        fout.cd();
+        fout->cd();
         g->Write(g->GetName(), TObject::kWriteDelete);
     }
     // add final point at highest kinematic threshold (half of Ups(3S) mass) at "zero"
     gt->SetPoint(gt->GetN(), 5.1776, 0.001);
     gt->Write(gt->GetName(), TObject::kWriteDelete);
-    fout.Close();
+    fout->Close();
 
 
 }

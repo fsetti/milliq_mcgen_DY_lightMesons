@@ -15,7 +15,7 @@ c.SetLogy()
 hdummy = r.TH1F("hdummy","",100,1e-2,10)
 hdummy.SetLineColor(r.kWhite)
 hdummy.GetXaxis().SetRangeUser(1e-2,10)
-hdummy.GetYaxis().SetRangeUser(1.01,1e11)
+hdummy.GetYaxis().SetRangeUser(2.0e0,2.0e11)
 
 hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
 hdummy.GetXaxis().SetTitleSize(0.045)
@@ -70,7 +70,7 @@ text.DrawLatex(0.405, 0.919, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#mi
 
 text.SetTextAlign(32)
 text.DrawLatex(0.95, 0.65, "#bf{pp} (13 TeV)")
-text.DrawLatex(0.95, 0.60, "#eta(parent) #in [-1, 1]")
+text.DrawLatex(0.95, 0.60, "#eta(parent) #in [-2, 2]")
 
 leg = r.TLegend(0.35,0.7,0.96,0.892)
 leg.SetFillStyle(0)
