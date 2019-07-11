@@ -1,8 +1,8 @@
 import glob
 import os
 
-ntuple_tag = "v3"
-sim_tag = "v2"
+ntuple_tag = "v4"
+sim_tag = "v1"
 
 charges = [0.01, 0.1]
 

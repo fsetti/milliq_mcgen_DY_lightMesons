@@ -55,12 +55,7 @@ while True:
     for job,f in jobs:
         if os.path.exists(f):
             continue
-        isrunning = False
-        for r in running_files:
-            if f in running_files:
-                isrunning = True
-                break
-        if isrunning:
+        if f in running_files:
             continue
         n_resubmit += 1
         for line in job:
@@ -71,6 +66,6 @@ while True:
     if n_resubmit >0:
         os.system("condor_submit "+os.path.join(indir,"resubmit.cfg"))
 
-    towait = 10*60
+    towait = 30*60
     print "Waiting {0} minutes".format(towait/60.0)
     time.sleep(towait)

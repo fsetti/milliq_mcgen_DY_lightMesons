@@ -72,6 +72,16 @@ pdefs = {
         "bins" : (80,-4,4),
         "title" : ";hit thetay [deg]",
         },
+    "hit_x" : {
+        "dstr" : "hit_#_xyz.X()",
+        "bins" : (50,-1,1),
+        "title" : ";hit X [m]"
+        },
+    "hit_y" : {
+        "dstr" : "hit_#_xyz.Y()",
+        "bins" : (50,-1,1),
+        "title" : ";hit Y [m]"
+        },
 }
 
 basedir = "/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/{0}_{1}/".format(ntuple_tag, sim_tag)

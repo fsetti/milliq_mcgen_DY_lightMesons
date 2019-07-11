@@ -56,6 +56,16 @@ gt.SetLineStyle(2)
 gt.SetLineColor(r.kBlack)
 gt.Draw("SAME L")
 
+gdy = r.TGraph()
+with open("mCP_UFO_xsecs.txt") as fid:
+    for line in fid:
+        m,xs = map(float, line.strip().split())
+        gdy.SetPoint(gdy.GetN(), m, xs)
+gdy.SetLineWidth(4)
+gdy.SetLineStyle(1)
+gdy.SetLineColor(r.kRed)
+gdy.Draw("SAME L")
+
 line = r.TLine()
 line.SetLineWidth(gt.GetLineWidth())
 line.SetLineStyle(gt.GetLineStyle())

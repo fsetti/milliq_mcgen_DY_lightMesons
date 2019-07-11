@@ -8,6 +8,11 @@ r.gROOT.SetBatch(1)
 ntuple_tag = "v3"
 sim_tag = "v1"
 
+# lumi = 1.0 # in fb^-1
+# area = 1.0 # in m^2
+lumi = 30.0 # in fb^-1
+area = 0.0150 # in m^2
+
 def get_rate(ch, q, lumi=1.0):
     h = r.TH1D("h","",1,0,2)
     ch.Draw("1>>h","(does_hit_p + does_hit_m)*({0}^2 * xsec * BR_q1 * filter_eff * weight * 1000*{1} / n_events_total)".format(q,lumi),"goff")
@@ -58,7 +63,7 @@ for mdir in glob.glob(os.path.join(basedir, "*")):
             ch = r.TChain("Events")
             ch.Add(sfile)
 
-            rate, rerr = get_rate(ch,q)
+            rate, rerr = get_rate(ch,q,lumi=lumi*area)
             acc, aerr, N = get_acceptance(ch)
 
             rates[q][m][samp] = {

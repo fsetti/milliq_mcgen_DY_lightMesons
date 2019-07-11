@@ -9,6 +9,9 @@ ntuple_tag = "v3"
 qs = [0.1,0.01]
      
 fin = r.TFile("rates.root")
+#lumi = None
+lumi = 30
+area = 0.0150
 
 samp_names = {
     1:  "b_jpsi",
@@ -66,8 +69,14 @@ def make_plots(type_):
         hdummy.SetLineColor(r.kWhite)
         hdummy.GetXaxis().SetRangeUser(5e-3,10)
         if type_=="rate":
-            hdummy.GetYaxis().SetRangeUser(1e-1*q**2,1e12*q**2)
-            hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
+            mult = 1.0
+            if lumi is not None:
+                mult = lumi*area
+            hdummy.GetYaxis().SetRangeUser(1e-1*q**2*mult,1e12*q**2*mult)
+            if lumi is None:
+                hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
+            else:
+                hdummy.GetYaxis().SetTitle("Yield")
         elif type_=="acc":
             # hdummy.GetYaxis().SetRangeUser(1e-6, 1e-2)
             hdummy.GetYaxis().SetRangeUser(0, 2.7e-4)
@@ -111,7 +120,12 @@ def make_plots(type_):
 
         text.SetTextAlign(32)
         text.DrawLatex(0.92, 0.65, "#bf{pp} (13 TeV)")
-        text.DrawLatex(0.92, 0.61, "#eta(parent) #in [-2, 2]")
+        text.DrawLatex(0.92, 0.61, "q(mCP) = {0}".format(q))
+        text.DrawLatex(0.92, 0.57, "#eta(parent) #in [-2, 2]")
+
+        if lumi is not None:
+            text.SetTextAlign(31)
+            text.DrawLatex(0.96,0.96, "{0} fb^{{-1}} (13 TeV)".format(lumi))
 
         leg = r.TLegend(0.32,0.7,0.93,0.892)
         leg.SetFillStyle(0)
