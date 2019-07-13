@@ -30,7 +30,7 @@ det_height = 1.0 # in m
 rock_begins = dist_to_detector - 17.0
 
 dt = 0.1
-max_nsteps = 3700
+max_nsteps = 3800
 
 # if outside of these bounds, don't bother simulating
 # the phi bounds are negated for negatively charged mCP's
@@ -49,7 +49,8 @@ env = Environment(
     mat_setup = 'cms',
     bfield = 'cms',
     bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl",
-    rock_begins = rock_begins
+    rock_begins = rock_begins,
+    rock_ends = dist_to_detector - 0.10,
 )
 
 itg = Integrator(
@@ -134,7 +135,7 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 Nevt = tin.GetEntries()
 evt_start = 0
 # Nevt = 10
-# evt_start = 5528
+# evt_start = 3443
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
@@ -147,10 +148,6 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
     tin.GetEntry(i)
     for b in bs:
         b.GetEntry(i)
-
-    # set the seeds to 1 so results are reproducible
-    r.gRandom.SetSeed(tin.event)
-    np.random.seed(tin.event)
 
     def do_propagate(p4, q, traj_array=None):
         itg.m = p4.M() * 1000.0
@@ -167,11 +164,14 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
         if p4.Pt() < pt_cut:
             within_bounds = False
 
+        seed = 1 + tin.event + int(abs(q)*1000) + int(np.sign(q))
+        np.random.seed(seed)
         if within_bounds:
             x0 = 1000.*np.array([0., 0., 0., p4.Px(), p4.Py(), p4.Pz()])
-            traj,_ = itg.propagate(x0)
-            idict = det.FindIntersection(traj)
-            bars_intersects = mdet.FindEntriesExits(traj)
+            # traj,_ = itg.propagate(x0)
+            traj,_ = itg.propagate(x0, fast=True, fast_seed=seed)
+            idict = det.find_intersection(traj)
+            bars_intersects = mdet.find_entries_exits(traj)
             # if traj_array is not None and idict is not None:
             if traj_array is not None:
                 traj_array.append(traj)
@@ -258,16 +258,16 @@ if DO_DRAW:
     Draw3Dtrajs(trajs, subplot=121)
     # the four corners
     if det.width is not None and det.height is not None:
-        c1,c2,c3,c4 = det.GetCorners()
+        c1,c2,c3,c4 = det.get_corners()
         DrawLine(c1,c2,is3d=True,c='k')
         DrawLine(c2,c3,is3d=True,c='k')
         DrawLine(c3,c4,is3d=True,c='k')
         DrawLine(c4,c1,is3d=True,c='k')
 
-    mdet.draw(plt.gca(), c='0.75', draw_containing_box=False)
-    plt.gca().set_xlim(mdet.center_3d[0]-8, mdet.center_3d[0]+8)
-    plt.gca().set_ylim(mdet.center_3d[1]-8, mdet.center_3d[1]+8)
-    plt.gca().set_zlim(mdet.center_3d[2]-8, mdet.center_3d[2]+8)
+    mdet.draw(plt.gca(), c='0.65', draw_containing_box=False)
+    plt.gca().set_xlim(mdet.center_3d[0]-4, mdet.center_3d[0]+4)
+    plt.gca().set_ylim(mdet.center_3d[2]-4, mdet.center_3d[2]+4)
+    plt.gca().set_zlim(mdet.center_3d[1]-4, mdet.center_3d[1]+4)
 
     colors = ['r','g','b','c','m','y']
     hit_boxes = set()
@@ -275,7 +275,7 @@ if DO_DRAW:
         # idict = det.FindIntersection(traj)
         # if idict is not None:
         #     DrawLine(idict["x_int"], idict["x_int"], is3d=True, linestyle="None", marker='o', color='r')
-        isects = mdet.FindEntriesExits(traj)
+        isects = mdet.find_entries_exits(traj)
         for isect in isects:
             hit_boxes.add(isect[0])
             c = colors[i % len(colors)]
