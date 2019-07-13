@@ -6,12 +6,14 @@ r.gStyle.SetOptStat(0)
 r.gROOT.SetBatch(1)
 
 ntuple_tag = "v3"
-qs = [0.1,0.01]
+sim_tag = "v3"
+qs = [0.1,0.05,0.01]
      
 fin = r.TFile("rates.root")
-#lumi = None
+# lumi = None
 lumi = 30
-area = 0.0150
+area = None
+# area = 0.0150
 
 samp_names = {
     1:  "b_jpsi",
@@ -50,7 +52,7 @@ colors = {
     }
 
 def make_plots(type_):
-    if type_ not in ["rate","acc"]:
+    if type_ not in ["rate","line_rate","acc"]:
         raise Exception()
 
     for q in qs:
@@ -61,7 +63,7 @@ def make_plots(type_):
         c.SetLeftMargin(0.11)
         c.SetRightMargin(0.03)
         c.SetLogx()
-        if type_=="rate":
+        if type_ in ["rate","line_rate"]:
             c.SetLogy()
         c.SetTicky()
 
@@ -71,12 +73,26 @@ def make_plots(type_):
         if type_=="rate":
             mult = 1.0
             if lumi is not None:
-                mult = lumi*area
+                mult *= lumi
+            if area is not None:
+                mult *= area
             hdummy.GetYaxis().SetRangeUser(1e-1*q**2*mult,1e12*q**2*mult)
             if lumi is None:
-                hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
+                if area is None:
+                    hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
+                else:
+                    hdummy.GetYaxis().SetTitle("Incidence rate [hits / fb^{-1}]")
             else:
-                hdummy.GetYaxis().SetTitle("Yield")
+                if area is None:
+                    hdummy.GetYaxis().SetTitle("Yield (per m^{2})")
+                else:
+                    hdummy.GetYaxis().SetTitle("Yield")
+        elif type_=="line_rate":
+            mult = 1.0
+            if lumi is not None:
+                mult *= lumi
+            hdummy.GetYaxis().SetRangeUser(1e-3*q**2*mult, 1e10*q**2*mult)
+            hdummy.GetYaxis().SetTitle("Yield")
         elif type_=="acc":
             # hdummy.GetYaxis().SetRangeUser(1e-6, 1e-2)
             hdummy.GetYaxis().SetRangeUser(0, 2.7e-4)
@@ -116,12 +132,12 @@ def make_plots(type_):
         text.SetTextAlign(12)
         text.SetTextSize(0.032)
         line.DrawLineNDC(0.327, 0.916, 0.365, 0.916)
-        text.DrawLatex(0.375, 0.919, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} "+("acceptance" if type_=="acc" else type_))
+        what = "acceptance" if type_=="acc" else "rate" if lumi is None else "yield"
+        text.DrawLatex(0.375, 0.919, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} "+what)
 
         text.SetTextAlign(32)
-        text.DrawLatex(0.92, 0.65, "#bf{pp} (13 TeV)")
-        text.DrawLatex(0.92, 0.61, "q(mCP) = {0}".format(q))
-        text.DrawLatex(0.92, 0.57, "#eta(parent) #in [-2, 2]")
+        text.DrawLatex(0.92, 0.65, "Q(mCP) = {0}#it{{e}}".format(q))
+        text.DrawLatex(0.92, 0.61, "#eta(parent) #in [-2, 2]")
 
         if lumi is not None:
             text.SetTextAlign(31)
@@ -153,13 +169,106 @@ def make_plots(type_):
         leg.AddEntry(hdummy, "", 'l')
         leg.Draw()
 
-        outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/",type_,ntuple_tag)
+        outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/",type_,ntuple_tag+"_"+sim_tag)
         os.system("mkdir -p "+outdir)
         os.system("cp ~/scripts/index.php "+outdir)
         c.SaveAs(os.path.join(outdir, "q_"+str(q).replace(".","p")+".png"))
         c.SaveAs(os.path.join(outdir, "q_"+str(q).replace(".","p")+".pdf"))
 
 
+def make_charge_comparisons(type_):
+    if type_ not in ["rate","line_rate","acc","line_acc"]:
+        raise Exception()
+
+    c = r.TCanvas("c","c",800,600)
+    c.SetTopMargin(0.07)
+    c.SetBottomMargin(0.13)
+    c.SetLeftMargin(0.11)
+    c.SetRightMargin(0.03)
+    c.SetLogx()
+    if type_ in ["rate","line_rate"]:
+        c.SetLogy()
+    c.SetTicky()
+    c.SetGridx()
+    c.SetGridy()
+
+    hdummy = r.TH1F("hdummy","",100,5e-3,10)
+    hdummy.SetLineColor(r.kWhite)
+    hdummy.GetXaxis().SetRangeUser(5e-3,10)
+    if type_=="rate":
+        mult = 1.0
+        if lumi is not None:
+            mult *= lumi
+        if area is not None:
+            mult *= area
+        hdummy.GetYaxis().SetRangeUser(1e-5*mult, 1e8*mult)
+        if lumi is None:
+            if area is None:
+                hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
+            else:
+                hdummy.GetYaxis().SetTitle("Incidence rate [hits / fb^{-1}]")
+        else:
+            if area is None:
+                hdummy.GetYaxis().SetTitle("Yield (per m^{2})")
+            else:
+                hdummy.GetYaxis().SetTitle("Yield")
+    elif type_=="line_rate":
+        mult = 1.0
+        if lumi is not None:
+            mult *= lumi
+        hdummy.GetYaxis().SetRangeUser(1e-7*mult, 1e6*mult)
+        hdummy.GetYaxis().SetTitle("Yield")
+    elif type_=="acc":
+        hdummy.GetYaxis().SetRangeUser(0, 1.5e-4)
+        hdummy.GetYaxis().SetTitle("Acceptance (per m^{2})")
+    elif type_=="line_acc":
+        hdummy.GetYaxis().SetRangeUser(0, 1.0)
+        hdummy.GetYaxis().SetTitle("p(3 bars in line)")
+    hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
+    hdummy.GetXaxis().SetTitleSize(0.045)
+    hdummy.GetXaxis().SetTitleOffset(1.20)
+    hdummy.GetYaxis().SetTitleSize(0.045)
+    hdummy.GetYaxis().SetTitleOffset(1.16)
+    
+    hdummy.Draw()
+    
+    x = 0.65 if "rate" in type_ else 0.25
+    leg = r.TLegend(x,0.71,x+0.24,0.90)
+    # leg.SetFillStyle(0)
+    # leg.SetLineWidth(0)
+
+    cs = [r.kBlack, r.kAzure-2, r.kOrange-3]
+    for i,q in enumerate(qs):
+        gt = fin.Get("{0}_q{1}_{2}".format(type_, str(q).replace(".","p"), "total"))
+        gt.SetLineWidth(3)
+        gt.SetLineStyle(1)
+        gt.SetLineColor(cs[i])
+        gt.SetMarkerStyle(20)
+        gt.SetMarkerColor(cs[i])
+        gt.Draw("SAME LP")
+        leg.AddEntry(gt, "Q/#it{e} = "+str(q), 'pl')
+
+    leg.Draw()
+
+    if lumi is not None:
+        text = r.TLatex()
+        text.SetNDC(1)
+        text.SetTextFont(42)
+        text.SetTextSize(0.040)
+        text.SetTextAlign(31)
+        text.DrawLatex(0.94,0.94, "{0} fb^{{-1}} (13 TeV)".format(lumi))
+
+    outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/",type_,ntuple_tag+"_"+sim_tag)
+    os.system("mkdir -p "+outdir)
+    os.system("cp ~/scripts/index.php "+outdir)
+    c.SaveAs(os.path.join(outdir, "qcomp.png"))
+    c.SaveAs(os.path.join(outdir, "qcomp.pdf"))
+        
 
 make_plots("rate")
+make_plots("line_rate")
 make_plots("acc")
+make_charge_comparisons("rate")
+make_charge_comparisons("line_rate")
+make_charge_comparisons("acc")
+make_charge_comparisons("line_acc")
