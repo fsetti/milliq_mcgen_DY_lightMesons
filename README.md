@@ -11,7 +11,9 @@ A collection of tools for generating signal Monte Carlo for the Milliqan experim
 
 ### Contents of subdirectories:
 
-`decayMCP`: Main program to generate mCP decays
+`decayMCP`: Main program to generate mCP decays (non-Drell-Yan)
+
+`madgraphDY`: contains the MadGraph model and scripts to generate events for DY production of mCPs
 
 `docs`: Documentation
 
