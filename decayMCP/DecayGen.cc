@@ -151,15 +151,21 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
             parent_pdgId = 200553;
             m_parent = 10.355;
         }
-        etamin = -2.0;
         etamax = 2.0;
+        if(decay_mode >= 13 && decay_mode <= 15)
+            etamax = 3.0;
+        etamin = -etamax;
         h1 = (TH1D*)finfo->Get("central");
         h2 = (TH1D*)finfo->Get("up");
         h3 = (TH1D*)finfo->Get("down");
         // bins in this histogram are dsigma/dpt, in units of nb/GeV
         // So sum bin contents, multiply by bin width, and *1000 to convert to pb
         xsec_inclusive = h1->Integral("width") * 1000; // nb to pb
-        xsec_inclusive *= 2.0/1.2; // xsecs are given in eta range [-1.2,1.2]. Correct to use 2.0 for eta bounds
+        // upsilon xsecs are given multiplied by BR(mumu), so correct for that here
+        if(decay_mode == 13) xsec_inclusive /= 0.0248;
+        if(decay_mode == 14) xsec_inclusive /= 0.0193;
+        if(decay_mode == 15) xsec_inclusive /= 0.0218;
+        xsec_inclusive *= etamax/1.2; // xsecs are given in eta range [-1.2,1.2]. Correct to use 2.0 for eta bounds
         decay_type = TWOBODY;
         BR = br_onia(m_mCP, parent_pdgId);        
     }else{
