@@ -15,7 +15,7 @@ c.SetLogy()
 hdummy = r.TH1F("hdummy","",100,1e-2,10)
 hdummy.SetLineColor(r.kWhite)
 hdummy.GetXaxis().SetRangeUser(1e-2,10)
-hdummy.GetYaxis().SetRangeUser(2.0e0,2.0e11)
+hdummy.GetYaxis().SetRangeUser(1.0e2,5.0e10)
 
 hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
 hdummy.GetXaxis().SetTitleSize(0.045)
@@ -56,15 +56,15 @@ gt.SetLineStyle(2)
 gt.SetLineColor(r.kBlack)
 gt.Draw("SAME L")
 
-gdy = r.TGraph()
-with open("mCP_UFO_xsecs.txt") as fid:
-    for line in fid:
-        m,xs = map(float, line.strip().split())
-        gdy.SetPoint(gdy.GetN(), m, xs)
-gdy.SetLineWidth(4)
-gdy.SetLineStyle(1)
-gdy.SetLineColor(r.kRed)
-gdy.Draw("SAME L")
+# gdy = r.TGraph()
+# with open("mCP_UFO_xsecs.txt") as fid:
+#     for line in fid:
+#         m,xs = map(float, line.strip().split())
+#         gdy.SetPoint(gdy.GetN(), m, xs)
+# gdy.SetLineWidth(4)
+# gdy.SetLineStyle(1)
+# gdy.SetLineColor(r.kRed)
+# gdy.Draw("SAME L")
 
 line = r.TLine()
 line.SetLineWidth(gt.GetLineWidth())
