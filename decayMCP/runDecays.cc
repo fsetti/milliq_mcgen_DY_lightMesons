@@ -9,8 +9,8 @@
 #include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
 
-float MCP_ETAMIN = 0.16 - 0.08;
-float MCP_ETAMAX = 0.16 + 0.08;
+float MCP_ETAMIN = 0.11 - 0.08;
+float MCP_ETAMAX = 0.11 + 0.08;
 float MCP_PHIMIN = -0.03;
 float MCP_PHIMAX = 1.0;
 
@@ -92,10 +92,14 @@ int main(int argc, char **argv){
     }    
 
     MCP_PHIMIN = -0.03;
-    MCP_PHIMAX = max(0.4, 0.35 - 0.85*log10(m_mCP));
-    float deta = m_mCP >= 0.999 ? 0.06 : 0.12;
-    MCP_ETAMIN = 0.16 - deta;
-    MCP_ETAMAX = 0.16 + deta;
+    MCP_PHIMAX = 1.9/(1.0+exp(4.5*(log10(m_mCP)+0.75))) + 0.5;
+    if(m_mCP >= 0.99) MCP_PHIMAX = 0.45;
+    if(m_mCP >= 1.39) MCP_PHIMAX = 0.40;
+    if(m_mCP >= 1.79) MCP_PHIMAX = 0.35;
+    if(m_mCP >= 2.99) MCP_PHIMAX = 0.30;
+    float deta = m_mCP >= 0.999 ? 0.08 : m_mCP >= 0.29 ? 0.12 : 0.18;
+    MCP_ETAMIN = 0.11 - deta;
+    MCP_ETAMAX = 0.11 + deta;
     
     DecayGen dg;
     MCPTree outtree;
@@ -106,7 +110,7 @@ int main(int argc, char **argv){
         std::cout << "Invalid decay mode!\n";
         return 1;
     }
-    if(!dg.h1){
+    if(!dg.h_cn){
         std::cout << "Couldn't find decay info file, or histogram within file!\n";
         return 1;
     }
