@@ -40,7 +40,7 @@ phimin = -0.03
 phimax = 2.05
 
 # pt cuts (if pt is less than pt_cut for a given mass, don't bother propagating)
-m_vals  = [0.01, 0.05, 0.1,  0.2, 0.3, 0.4, 0.5,  0.7, 1.0, 1.4, 1.4, 1.8, 2.0,  3.0, 4.0, 5.0]
+m_vals  = [0.01, 0.05, 0.1,  0.2, 0.3, 0.4, 0.5,  0.7, 1.0, 1.4, 1.6, 1.8, 2.0,  3.0, 4.0, 5.0]
 pt_cuts = [0.15, 0.20, 0.25, 0.3, 0.4, 0.5, 0.55, 0.7, 0.9, 1.1, 1.2, 1.3, 1.45, 1.9, 2.3, 2.7]
 
 #########################
@@ -134,8 +134,8 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 
 Nevt = tin.GetEntries()
 evt_start = 0
-# Nevt = 10
-# evt_start = 3443
+# Nevt = 1
+# evt_start = 16713
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
@@ -160,7 +160,7 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
             within_bounds = False
         if q<0 and (p4.Phi() < -phimax or p4.Phi() > -phimin):
             within_bounds = False
-        pt_cut = np.interp(p4.M(), m_vals, pt_cuts) * (q/0.1)**2
+        pt_cut = np.interp(p4.M(), m_vals, pt_cuts) * min(abs(q/0.1),1.0)**2
         if p4.Pt() < pt_cut:
             within_bounds = False
 
@@ -169,12 +169,12 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
         if within_bounds:
             x0 = 1000.*np.array([0., 0., 0., p4.Px(), p4.Py(), p4.Pz()])
             # traj,_ = itg.propagate(x0)
-            traj,_ = itg.propagate(x0, fast=True, fast_seed=seed)
+            traj,tvec = itg.propagate(x0, fast=True, fast_seed=seed)
             idict = det.find_intersection(traj)
             bars_intersects = mdet.find_entries_exits(traj)
             # if traj_array is not None and idict is not None:
             if traj_array is not None:
-                traj_array.append(traj)
+                traj_array.append((tvec,traj))
             return idict, bars_intersects
         else:
             return None, None
@@ -255,7 +255,8 @@ if DO_DRAW:
     import matplotlib.pyplot as plt
     from millisim.Drawing import *
     plt.figure(num=1, figsize=(15,7))
-    Draw3Dtrajs(trajs, subplot=121)
+
+    Draw3Dtrajs([traj[1] for traj in trajs], subplot=121)
     # the four corners
     if det.width is not None and det.height is not None:
         c1,c2,c3,c4 = det.get_corners()
@@ -271,7 +272,7 @@ if DO_DRAW:
 
     colors = ['r','g','b','c','m','y']
     hit_boxes = set()
-    for i,traj in enumerate(trajs):
+    for i,(tvec,traj) in enumerate(trajs):
         # idict = det.FindIntersection(traj)
         # if idict is not None:
         #     DrawLine(idict["x_int"], idict["x_int"], is3d=True, linestyle="None", marker='o', color='r')
@@ -285,6 +286,12 @@ if DO_DRAW:
     for ilayer,irow,icol in hit_boxes:
         mdet.bars[ilayer][irow][icol].draw(plt.gca(), c='k')
 
-    DrawXYslice(trajs, subplot=122)
+    DrawXYslice([traj[1] for traj in trajs], subplot=122)
+
+    plt.figure(num=2, figsize=(8,7))
+    for tvec, traj in trajs:
+        E = np.sqrt(np.linalg.norm(traj[3:,:], axis=0)**2+itg.m**2)
+        plt.plot(tvec,E)
+
     plt.show()
 
