@@ -41,7 +41,7 @@ phimax = 2.05
 
 # pt cuts (if pt is less than pt_cut for a given mass, don't bother propagating)
 m_vals  = [0.01, 0.05, 0.1,  0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 1.4, 1.6, 1.8, 2.0, 3.0, 4.0, 5.0, 7.0]
-pt_cuts = [0.10, 0.15, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8 1.0, 1.2, 1.2, 1.4, 1.8, 2.2, 2.5, 3.0]
+pt_cuts = [0.10, 0.15, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.2, 1.4, 1.8, 2.2, 2.5, 3.0]
 
 #########################
 
@@ -112,9 +112,13 @@ hit_m_p4 = r.TLorentzVector()
 hit_p_nbars = np.zeros(1, dtype=int)
 hit_p_nlayers = np.zeros(1, dtype=int)
 hit_p_line = np.zeros(1, dtype=bool)
+hit_p_bar_idxs = np.zeros(mdet.nbars, dtype=np.uint16)
+hit_p_bar_dists = np.zeros(mdet.nbars, dtype=np.float32)
 hit_m_nbars = np.zeros(1, dtype=int)
 hit_m_nlayers = np.zeros(1, dtype=int)
 hit_m_line = np.zeros(1, dtype=bool)
+hit_m_bar_idxs = np.zeros(mdet.nbars, dtype=np.uint16)
+hit_m_bar_dists = np.zeros(mdet.nbars, dtype=np.float32)
 b_sim_q = tout.Branch("sim_q", sim_q, "sim_q/D")
 b_does_hit_p = tout.Branch("does_hit_p", does_hit_p, "does_hit_p/O")
 b_hit_p_xyz = tout.Branch("hit_p_xyz", hit_p_xyz)
@@ -125,17 +129,22 @@ b_hit_m_p4 = tout.Branch("hit_m_p4", hit_m_p4)
 b_hit_p_nbars = tout.Branch("hit_p_nbars", hit_p_nbars, "hit_p_nbars/I")
 b_hit_p_nlayers = tout.Branch("hit_p_nlayers", hit_p_nlayers, "hit_p_nlayers/I")
 b_hit_p_line = tout.Branch("hit_p_line", hit_p_line, "hit_p_line/O")
+b_hit_p_bar_idxs = tout.Branch("hit_p_bar_idxs", hit_p_bar_idxs, "hit_p_bar_idxs[hit_p_nbars]/s")
+b_hit_p_bar_dists = tout.Branch("hit_p_bar_dists", hit_p_bar_dists, "hit_p_bar_dists[hit_p_nbars]/F")
 b_hit_m_nbars = tout.Branch("hit_m_nbars", hit_m_nbars, "hit_m_nbars/I")
 b_hit_m_nlayers = tout.Branch("hit_m_nlayers", hit_m_nlayers, "hit_m_nlayers/I")
 b_hit_m_line = tout.Branch("hit_m_line", hit_m_line, "hit_m_line/O")
+b_hit_m_bar_idxs = tout.Branch("hit_m_bar_idxs", hit_m_bar_idxs, "hit_m_bar_idxs[hit_m_nbars]/s")
+b_hit_m_bar_dists = tout.Branch("hit_m_bar_dists", hit_m_bar_dists, "hit_m_bar_dists[hit_m_nbars]/F")
 
 bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz, b_hit_m_p4,
-      b_hit_p_nbars,b_hit_p_nlayers,b_hit_p_line,b_hit_m_nbars,b_hit_m_nlayers,b_hit_m_line]
+      b_hit_p_nbars, b_hit_p_nlayers, b_hit_p_line, b_hit_p_bar_idxs, b_hit_p_bar_dists,
+      b_hit_m_nbars, b_hit_m_nlayers, b_hit_m_line, b_hit_m_bar_idxs, b_hit_m_bar_dists]
 
 Nevt = tin.GetEntries()
 evt_start = 0
 # Nevt = 1
-# evt_start = 16713
+# evt_start = 63676
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
@@ -193,6 +202,9 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
         hit_p_nbars[0] = len(bars_p)
         hit_p_nlayers[0] = len(set([i[0][0] for i in bars_p]))
         hit_p_line[0] = mdet.hits_straight_line(bars_p)
+        for i,binfo in enumerate(bars_p):
+            hit_p_bar_idxs[i] = mdet.lrc_to_idx(*binfo[0])
+            hit_p_bar_dists[i] = np.linalg.norm(binfo[2]-binfo[1])
     else:
         does_hit_p[0] = False
         hit_p_xyz.SetXYZ(0,0,0)
@@ -212,6 +224,9 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
         hit_m_nbars[0] = len(bars_m)
         hit_m_nlayers[0] = len(set([i[0][0] for i in bars_m]))
         hit_m_line[0] = mdet.hits_straight_line(bars_m)
+        for i,binfo in enumerate(bars_m):
+            hit_m_bar_idxs[i] = mdet.lrc_to_idx(*binfo[0])
+            hit_m_bar_dists[i] = np.linalg.norm(binfo[2]-binfo[1])
     else:
         does_hit_m[0] = False
         hit_m_xyz.SetXYZ(0,0,0)
@@ -266,9 +281,11 @@ if DO_DRAW:
         DrawLine(c4,c1,is3d=True,c='k')
 
     mdet.draw(plt.gca(), c='0.65', draw_containing_box=False)
-    plt.gca().set_xlim(mdet.center_3d[0]-4, mdet.center_3d[0]+4)
-    plt.gca().set_ylim(mdet.center_3d[2]-4, mdet.center_3d[2]+4)
-    plt.gca().set_zlim(mdet.center_3d[1]-4, mdet.center_3d[1]+4)
+    plt.gca().set_xlim(mdet.center_3d[0]-1, mdet.center_3d[0]+1)
+    plt.gca().set_ylim(mdet.center_3d[2]-1, mdet.center_3d[2]+1)
+    plt.gca().set_zlim(mdet.center_3d[1]-1, mdet.center_3d[1]+1)
+    plt.gca().invert_yaxis()
+    plt.gca().view_init(21,-166)
 
     colors = ['r','g','b','c','m','y']
     hit_boxes = set()
@@ -278,6 +295,7 @@ if DO_DRAW:
         #     DrawLine(idict["x_int"], idict["x_int"], is3d=True, linestyle="None", marker='o', color='r')
         isects = mdet.find_entries_exits(traj)
         for isect in isects:
+            print "HIT", isect[0], mdet.lrc_to_idx(*isect[0])
             hit_boxes.add(isect[0])
             c = colors[i % len(colors)]
             DrawLine(isect[1], isect[1], is3d=True, linestyle='None', marker='o', mfc=c, mec='k')
@@ -288,10 +306,10 @@ if DO_DRAW:
 
     DrawXYslice([traj[1] for traj in trajs], subplot=122)
 
-    plt.figure(num=2, figsize=(8,7))
-    for tvec, traj in trajs:
-        E = np.sqrt(np.linalg.norm(traj[3:,:], axis=0)**2+itg.m**2)
-        plt.plot(tvec,E)
+    # plt.figure(num=2, figsize=(8,7))
+    # for tvec, traj in trajs:
+    #     E = np.sqrt(np.linalg.norm(traj[3:,:], axis=0)**2+itg.m**2)
+    #     plt.plot(tvec,E)
 
     plt.show()
 
