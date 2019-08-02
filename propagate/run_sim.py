@@ -5,6 +5,7 @@ import ROOT as r
 from millisim.Environment import Environment
 from millisim.Integrator import Integrator
 from millisim.Detector import *
+from configs import *
 try:
     from tqdm import tqdm
     loaded_tqdm = True
@@ -12,54 +13,32 @@ except ImportError:
     tqdm = lambda x:x
     loaded_tqdm = False
  
-if len(sys.argv) < 3:
-    print "usage: {0} <Q> <input_file>".format(sys.argv[0])
+if len(sys.argv) < 4:
+    print "usage: {0} <cfg_name> <Q> <input_file>".format(sys.argv[0])
     exit(1)
 
 DO_DRAW = False
    
-## CONFIGURABLE PARAMS ##
-
-q = float(sys.argv[1])
-dist_to_detector = 33.
-eta = 0.11
-det_width = 1.0  # in m
-det_height = 1.0 # in m
-# det_width = None
-# det_height = None
-rock_begins = dist_to_detector - 17.0
-
-dt = 0.1
-max_nsteps = 3800
-
-# if outside of these bounds, don't bother simulating
-# the phi bounds are negated for negatively charged mCP's
-etamin = eta - 0.12
-etamax = eta + 0.12
-phimin = -0.03
-phimax = 2.05
-
-# pt cuts (if pt is less than pt_cut for a given mass, don't bother propagating)
-m_vals  = [0.01, 0.05, 0.1,  0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 1.4, 1.6, 1.8, 2.0, 3.0, 4.0, 5.0, 7.0]
-pt_cuts = [0.10, 0.15, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0, 1.2, 1.2, 1.4, 1.8, 2.2, 2.5, 3.0]
+cfg = Config(sys.argv[1])
+q = float(sys.argv[2])
 
 #########################
 
 env = Environment(
-    mat_setup = 'cms',
-    bfield = 'cms',
-    bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl",
-    rock_begins = rock_begins,
-    rock_ends = dist_to_detector - 0.10,
+    mat_setup = cfg.mat_setup,
+    bfield = cfg.bfield,
+    bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl" if cfg.bfield=='cms' else None,
+    rock_begins = cfg.rock_begins,
+    rock_ends = cfg.dist_to_detector - 0.10,
 )
 
 itg = Integrator(
     environ = env,
     Q = q,
     m = 1, # overwritten later
-    dt = dt,
-    nsteps = max_nsteps,
-    cutoff_dist = dist_to_detector + 5,
+    dt = cfg.dt,
+    nsteps = cfg.max_nsteps,
+    cutoff_dist = cfg.dist_to_detector + 5,
     cutoff_axis = 'R',
     use_var_dt = True,
     lowv_dx = 0.03,
@@ -69,16 +48,16 @@ itg = Integrator(
     )
 
 det = PlaneDetector(
-    dist_to_origin = dist_to_detector,
-    eta = eta,
+    dist_to_origin = cfg.dist_to_detector,
+    eta = cfg.eta,
     phi = 0.0,
-    width = det_width,
-    height = det_height,
+    width = cfg.det_width,
+    height = cfg.det_height,
 )
 
 mdet = MilliqanDetector(
-    dist_to_origin = dist_to_detector,
-    eta = eta,
+    dist_to_origin = cfg.dist_to_detector,
+    eta = cfg.eta,
     phi = 0.0,
     nrows = 3,
     ncols = 2,
@@ -95,7 +74,7 @@ mdet = MilliqanDetector(
     layer_gap = 0.20,
 )
 
-fin = r.TFile.Open(sys.argv[2])
+fin = r.TFile.Open(sys.argv[3])
 tin = fin.Get("Events")
 
 fout = r.TFile("output.root", "RECREATE")
@@ -144,7 +123,7 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 Nevt = tin.GetEntries()
 evt_start = 0
 # Nevt = 1
-# evt_start = 63676
+# evt_start = 42
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 
 trajs = []
@@ -163,15 +142,16 @@ for i in tqdm(range(evt_start, evt_start+Nevt)):
         itg.Q = q
         
         within_bounds = True
-        if p4.Eta() < etamin or p4.Eta() > etamax:
+        if p4.Eta() < cfg.etamin or p4.Eta() > cfg.etamax:
             within_bounds = False
-        if q>0 and (p4.Phi() < phimin or p4.Phi() > phimax):
+        if q>0 and (p4.Phi() < cfg.phimin or p4.Phi() > cfg.phimax):
             within_bounds = False
-        if q<0 and (p4.Phi() < -phimax or p4.Phi() > -phimin):
+        if q<0 and (p4.Phi() < -cfg.phimax or p4.Phi() > -cfg.phimin):
             within_bounds = False
-        pt_cut = np.interp(p4.M(), m_vals, pt_cuts) * min(abs(q/0.1),1.0)**2
-        if p4.Pt() < pt_cut:
-            within_bounds = False
+        if cfg.pt_cuts is not None:
+            pt_cut = np.interp(p4.M(), cfg.m_vals, cfg.pt_cuts) * min(abs(q/0.1),1.0)**2
+            if p4.Pt() < pt_cut:
+                within_bounds = False
 
         seed = 1 + tin.event + int(abs(q)*1000) + int(np.sign(q))
         np.random.seed(seed)
