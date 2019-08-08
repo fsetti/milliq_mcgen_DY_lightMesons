@@ -1,0 +1,27 @@
+Jpsi_fine-0-10.txt and Psi2S_fine-0-10.txt
+------------------------------------------
+Cross sections from theorists for direct charmonium at low pt
+
+makeCurve.py
+------------
+Takes the low pt cross sections (see item above) plus the
+high pt cross sections (in the parent directory) and makes
+(a) a pretty plot as pdf
+(b) another text file for low pt in the format needed by
+    ../theory2Root.py
+
+psiDirect_fullRange.pdf and psiprimeDirect_fullRange.pdf
+-------------------------------------------------------
+Item (a) output from makeCurve.py
+
+cc_Jpsi_fine-0-10.txt and cc_Psi2S_fine-0-10.txt
+------------------------------------------------
+Item (b) output from makeCurve.py
+
+cc_Jpsi_fine-0-10.root and cc_Psi2S_fine-0-10.root
+--------------------------------------------------
+root histograms versions of txt files above
+Obtained with
+../theory2Root.py cc_Jpsi_fine-0-10.root
+../theory2Root.py cc_Psi2S_fine-0-10.root
+
