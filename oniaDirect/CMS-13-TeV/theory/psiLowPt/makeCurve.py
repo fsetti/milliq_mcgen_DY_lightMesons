@@ -4,7 +4,7 @@
 # of the j/psi or psiprime curve
 # 
 # Usage: makeCurve XX
-# where XX = "psi" or "jpsi"
+# where XX = "psi" or "psiprime"
 #
 import math
 import numpy as np
@@ -29,7 +29,7 @@ if which_ccbar == "psi":
     txtFile  = "../CMS_Jpsi_tot_0_1.2_Tev_13_CMS_1.txt"
     fineFile = "Jpsi_fine-0-10.txt"
     figFile  = "psiDirect_fullRange.pdf"
-elif which_ccbar == "jpsi":
+elif which_ccbar == "psiprime":
     txtFile  = "../CMS_Psi2S_tot_0_1.2_Tev_13_CMS_1.txt"
     fineFile = "Psi2S_fine-0-10.txt"
     figFile  = "psiprimeDirect_fullRange.pdf"
@@ -112,11 +112,13 @@ else:
 # (a) it includes a central value
 # (b) the values are "fudges" for abs(eta) to be consistent with high pt
 # (c) stops at 5 GeV where the high pt stuff takes over
-# 
-outfile = "cc_" + fineFile
-print("Writing out ", outfile)
-f = open(outfile, "w+")
-for p,d,u,c in zip(pt, down, up, central):
-    if p>4.999: break
-    f.write("{%f, %f, %f, %f}\n" % (p,d,c,u))
-f.close()
+#
+blah = input("Enter y if you want to make a text file  ")
+if blah == 'y':
+    outfile = "cc_" + fineFile
+    print("Writing out ", outfile)
+    f = open(outfile, "w+")
+    for p,d,u,c in zip(pt, down, up, central):
+        if p>4.999: break
+        f.write("{%f, %f, %f, %f}\n" % (p,d,c,u))
+        f.close()
