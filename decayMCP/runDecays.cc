@@ -91,6 +91,10 @@ int main(int argc, char **argv){
         return 1;
     }    
 
+    // MILLIQAN
+    //   eta = 0.11, theta ~84 degrees
+    //   33 m from IP
+    //   17 m of rock shielding
     MCP_PHIMIN = -0.03;
     MCP_PHIMAX = 1.9/(1.0+exp(4.5*(log10(m_mCP)+0.75))) + 0.5;
     if(m_mCP >= 0.99) MCP_PHIMAX = 0.45;
@@ -100,6 +104,30 @@ int main(int argc, char **argv){
     float deta = m_mCP >= 0.999 ? 0.08 : m_mCP >= 0.29 ? 0.12 : 0.18;
     MCP_ETAMIN = 0.11 - deta;
     MCP_ETAMAX = 0.11 + deta;
+
+    // // MAPP theta=25
+    // //   eta = 1.51, theta = 25
+    // //   33 m from IP, 26 m of rock shielding
+    // MCP_PHIMIN = -0.05;
+    // MCP_PHIMAX = 0.05;
+    // MCP_ETAMIN = 1.51 - 0.10;
+    // MCP_ETAMAX = 1.51 + 0.10;
+
+    // // MAPP theta=10
+    // //   eta = 2.44, theta = 10
+    // //   45 m from IP, 32 m of rock shielding
+    // MCP_PHIMIN = -0.10;
+    // MCP_PHIMAX = 0.10;
+    // MCP_ETAMIN = 2.44 - 0.20;
+    // MCP_ETAMAX = 2.44 + 0.20;
+
+    // // MAPP theta=5
+    // //   eta = 3.13, theta = 5
+    // //   55 m from IP, 10 m of rock shielding
+    // MCP_PHIMIN = -0.20;
+    // MCP_PHIMAX = 0.20;
+    // MCP_ETAMIN = 3.13 - 0.30;
+    // MCP_ETAMAX = 3.13 + 0.30;
     
     DecayGen dg;
     MCPTree outtree;

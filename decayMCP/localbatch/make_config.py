@@ -5,19 +5,21 @@ import subprocess
 import numpy as np
 import ROOT as r
 
+# outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_mapp_theta5_v1"
 outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_v7"
 
-masses = [0.010, 0.020, 0.030, 0.050, 0.100, 0.200, 0.300, 0.400, 0.500, 0.700, 1.000, 1.400, 1.600, 1.800, 2.000, 3.000, 4.000, 5.000, 7.000]
-# masses = [0.400] 
-N_target_events = 2e6
-min_events = 10000
-round_to = 10000
-nevts_per_job = 10000  
+masses = [0.010, 0.020, 0.030, 0.050, 0.100, 0.200, 0.300, 0.400, 0.500, 0.700, 1.000, 1.400, 1.600, 1.800, 2.000, 3.000, 4.000, 5.000]
+N_target_events = 5e7
+min_events = 500000
+round_to = 500000
+nevts_per_job = 500000  
+# N_target_events = 5e6
+# min_events = 100000
+# round_to = 100000
+# nevts_per_job = 100000  
 assert round_to % nevts_per_job == 0
 
-MAXLOCALJOBS = 20;
-
-xsec_file = r.TFile("../scripts/plot-xsecs/xsecs.root")
+xsec_file = r.TFile("../../scripts/plot-xsecs/xsecs.root")
 
 def get_xsec(decay_mode, m):
     if decay_mode == 0:
@@ -86,6 +88,26 @@ for m in masses:
         os.system("rm blah.json")
         
 
+fout = open("config.cmd",'w')
+fout.write("""
+universe=Vanilla
+when_to_transfer_output = ON_EXIT
+#the actual executable to run is not transfered by its name.
+#In fact, some sites may do weird things like renaming it and such.
+transfer_input_files=input.tar.xz
++DESIRED_Sites="T2_US_UCSD"
++Owner = undefined
+log=logs/submit_logs/submit.log
+output=logs/job_logs/1e.$(Cluster).$(Process).out
+error =logs/job_logs/1e.$(Cluster).$(Process).err
+notification=Never
+x509userproxy=/tmp/x509up_u31592
+
+executable=wrapper.sh
+transfer_executable=True
+
+""")
+
 print "# SAMPLES:", len(points)
 cmds = []
 for p in points:
@@ -93,39 +115,6 @@ for p in points:
     for j in range(njobs):
         localname = "output_{0}_{1}_{2}.root".format(p["decay_mode"],p["mass"],j+1)
         final_name = os.path.join(p["outdir"], "output_{0}.root".format(j+1))
-        cmd = "nice -n 19 ./runDecays -d {0} -o {1} -m {2} -n {3} -N {4} -e {5} &> /dev/null; hdfs dfs -copyFromLocal -f {1} {6} &> /dev/null; rm {1};".format(
-            p["decay_mode"],
-            localname,
-            p["mass"],
-            nevts_per_job,
-            p["n_events"],
-            nevts_per_job * j,
-            final_name.replace("/hadoop","")
-            )
-        cmds.append(cmd)
-
-print "# JOBS:", len(cmds)
-
-ps = []
-done = 0
-current = 0
-lasttime = 0
-while done < len(cmds):
-    done = 0
-    running = len(ps)
-    for i in range(len(ps)):
-        res = ps[i].poll()
-        if res is not None:
-            done += 1
-            running -= 1
-    for cmd in cmds[current:current+MAXLOCALJOBS-running]:
-        ps.append(subprocess.Popen(cmd, shell=True))
-        running += 1
-        current += 1
-    if done < len(cmds):
-        thistime = time.time()
-        if thistime > lasttime + 20:
-            lasttime = thistime
-            print "{0}/{1} jobs done. {2} currently running. Checking again in 20 seconds...".format(done, len(cmds), running)
-        time.sleep(1)
-
+        fout.write("arguments={0} {1} {2} {3} {4} {5}\n".format(j+1, p["decay_mode"], p["mass"], nevts_per_job, p["n_events"], p["outdir"]))
+        fout.write("queue\n\n")
+fout.close()

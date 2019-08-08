@@ -1,10 +1,12 @@
 import glob
 import os
 
-ntuple_tag = "v4"
+ntuple_tag = "v7"
 sim_tag = "v1"
+config = "MQ"
 
-charges = [0.01, 0.1]
+charges = [0.01, 0.02, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
+# charges = [0.01,0.05,0.07,0.1]
 
 indir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_{0}".format(ntuple_tag)
 
@@ -18,8 +20,8 @@ when_to_transfer_output = ON_EXIT
 #the actual executable to run is not transfered by its name.
 #In fact, some sites may do weird things like renaming it and such.
 transfer_input_files=wrapper.sh, input.tar.xz
-+DESIRED_Sites="T2_US_UCSD"
-+remote_DESIRED_Sites="T2_US_UCSD"
++DESIRED_Sites="T2_US_UCSD,T2_US_Caltech,T3_US_UCR,T2_US_MIT,T2_US_Vanderbilt,T2_US_Wisconsin,T3_US_Baylor,T3_US_Colorado,T3_US_NotreDame,T3_US_Rice,T3_US_Rutgers,T3_US_UMD,T3_US_Vanderbilt_EC2,T3_US_OSU"
+#+remote_DESIRED_Sites="T2_US_UCSD"
 +Owner = undefined
 log=/data/tmp/bemarsh/condor_submit_logs/milliq_mcgen_{0}_{1}/condor_12_01_16.log
 output=/data/tmp/bemarsh/condor_job_logs/milliq_mcgen_{0}_{1}/1e.$(Cluster).$(Process).out
@@ -48,7 +50,7 @@ for massdir in glob.glob(os.path.join(indir, "m_*")):
             for fin in glob.glob(os.path.join(sampdir, "*.root")):
                 idx = fin.split("_")[-1].split(".")[0]
                 fin = fin.replace("/hadoop/cms","root://redirector.t2.ucsd.edu/")
-                fout.write("\narguments={0} {1} {2} {3}\n".format(idx, fin, q, outdir))
+                fout.write("\narguments={0} {1} {2} {3} {4}\n".format(idx, fin, config, q, outdir))
                 fout.write("queue\n")
             fout.close()
 
