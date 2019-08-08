@@ -6,22 +6,24 @@
 
 FILEID=$1
 INPUT=$2
-CHARGE=$3
-COPYDIR=$4
+CONFIG=$3
+CHARGE=$4
+COPYDIR=$5
 
 echo "[wrapper] FILEID    = " ${FILEID}
 echo "[wrapper] INPUT     = " ${INPUT}
+echo "[wrapper] CONFIG    = " ${CONFIG}
 echo "[wrapper] CHARGE    = " ${CHARGE}
 echo "[wrapper] COPYDIR   = " ${COPYDIR}
 
 #
 # set up environment
 #
-CMSSW_VERSION=CMSSW_8_0_5
+CMSSW_VERSION=CMSSW_9_4_14
 
 ###version using cvmfs install of CMSSW
 echo "[wrapper] setting env"
-export SCRAM_ARCH=slc6_amd64_gcc530
+export SCRAM_ARCH=slc6_amd64_gcc630
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 OLDDIR=`pwd`
 cd /cvmfs/cms.cern.ch/$SCRAM_ARCH/cms/cmssw/$CMSSW_VERSION/src
@@ -55,7 +57,7 @@ PYTHONPATH=./MilliqanSim:${PYTHONPATH}
 #
 echo "[wrapper] running: python -u run_sim.py ${CHARGE} ${INPUT}"
 
-python -u run_sim.py ${CHARGE} ${INPUT}
+python -u run_sim.py ${CONFIG} ${CHARGE} ${INPUT}
 
 #
 # do something with output

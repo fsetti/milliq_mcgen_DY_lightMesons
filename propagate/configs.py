@@ -42,8 +42,8 @@ class Config:
             self.max_nsteps = 5200
             self.etamin = self.eta - 0.20
             self.etamax = self.eta + 0.20
-            self.phimin = -0.05
-            self.phimax = 0.05
+            self.phimin = -0.10
+            self.phimax = 0.10
             self.m_vals = None
             self.pt_cuts = None
 
@@ -51,13 +51,13 @@ class Config:
             self.mat_setup = 'justrock'
             self.bfield = 'none'
             self.dist_to_detector = 55.
-            self.eta = 1.51
+            self.eta = 3.13
             self.rock_begins = self.dist_to_detector - 10.
             self.max_nsteps = 6400
             self.etamin = self.eta - 0.30
             self.etamax = self.eta + 0.30
-            self.phimin = -0.05
-            self.phimax = 0.05
+            self.phimin = -0.20
+            self.phimax = 0.20
             self.m_vals = None
             self.pt_cuts = None
 
