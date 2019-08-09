@@ -128,12 +128,14 @@ print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 trajs = []
 n_hits = 0
 it = range(evt_start, evt_start+Nevt)
+using_tqdm = False
 if "redirect" not in sys.argv[3]:
     # condor jobs have "redirect" in file name (xrootd). Don't use tqdm for these since it blows up logs
     it = tqdm(it)
+    using_tqdm = True
 for i in it:
     
-    if not loaded_tqdm and i%100 == 0:
+    if (not loaded_tqdm or not using_tqdm) and i%10000 == 0:
         print "{0} / {1}".format(i, Nevt)
 
     tin.GetEntry(i)

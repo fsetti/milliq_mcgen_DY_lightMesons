@@ -94,12 +94,12 @@ leg.AddEntry(gs[13], "#varUpsilon#scale[0.7]{(1S)}#rightarrow#zeta#zeta", 'l')
 
 leg.AddEntry(gs[7], "#eta#rightarrow#zeta#zeta#gamma", 'l')
 leg.AddEntry(gs[8], "#eta'#rightarrow#zeta#zeta#gamma", 'l')
-leg.AddEntry(gs[12], "#psi#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
+leg.AddEntry(gs[1], "B#rightarrowJ/#psiX, J/#psi#rightarrow#zeta#zeta", 'l')
 leg.AddEntry(gs[14], "#varUpsilon#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
 
 leg.AddEntry(gs[9], "#omega#rightarrow#zeta#zeta#pi^{0}", 'l')
 leg.AddEntry(gs[5], "#phi#rightarrow#zeta#zeta", 'l')
-leg.AddEntry(gs[1], "B#rightarrowJ/#psiX, J/#psi#rightarrow#zeta#zeta", 'l')
+leg.AddEntry(gs[12], "#psi#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
 leg.AddEntry(gs[15], "#varUpsilon#scale[0.7]{(3S)}#rightarrow#zeta#zeta", 'l')
 
 leg.AddEntry(gs[4], "#omega#rightarrow#zeta#zeta", 'l')
