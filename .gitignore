@@ -6,3 +6,5 @@ runDecays
 test.root
 output.root
 *.xz
+*.aux
+*.out
