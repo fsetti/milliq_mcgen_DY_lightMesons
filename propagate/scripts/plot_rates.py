@@ -5,11 +5,15 @@ import ROOT as r
 r.gStyle.SetOptStat(0)
 r.gROOT.SetBatch(1)
 
-ntuple_tag = "v3"
-sim_tag = "v3"
-qs = [0.1,0.05,0.01]
+# ntuple_tag = "mapp_theta5_v1"
+ntuple_tag = "v7"
+sim_tag = "v1"
+extra_tag = ""
+# extra_tag = "_upsFix"
+qs = [0.1,0.07,0.05,0.02,0.01]
+# qs = [0.3,0.2,0.1,0.05,0.01]
      
-fin = r.TFile("rates.root")
+fin = r.TFile("rate_files/{0}_{1}.root".format(ntuple_tag,sim_tag))
 # lumi = None
 lumi = 30
 area = None
@@ -31,6 +35,7 @@ samp_names = {
     13: "ups1S",
     14: "ups2S",
     15: "ups3S",
+    16:  "dy",
     }
 
 colors = {
@@ -49,10 +54,11 @@ colors = {
     13: r.kMagenta,
     14: r.kMagenta+2,
     15: r.kMagenta+3,
+    16:  r.kYellow+2,
     }
 
 def make_plots(type_):
-    if type_ not in ["rate","line_rate","acc"]:
+    if type_ not in ["rate","line_rate","acc","line_acc"]:
         raise Exception()
 
     for q in qs:
@@ -95,8 +101,11 @@ def make_plots(type_):
             hdummy.GetYaxis().SetTitle("Yield")
         elif type_=="acc":
             # hdummy.GetYaxis().SetRangeUser(1e-6, 1e-2)
-            hdummy.GetYaxis().SetRangeUser(0, 2.7e-4)
+            hdummy.GetYaxis().SetRangeUser(0, 2.3e-4)
             hdummy.GetYaxis().SetTitle("Acceptance (per m^{2})")
+        elif type_=="line_acc":
+            hdummy.GetYaxis().SetRangeUser(0, 1.8)
+            hdummy.GetYaxis().SetTitle("p(3 bars in line)")
         hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
         hdummy.GetXaxis().SetTitleSize(0.045)
         hdummy.GetXaxis().SetTitleOffset(1.20)
@@ -106,11 +115,13 @@ def make_plots(type_):
         hdummy.Draw()
 
         gs = {}
-        for i in range(1,16):
+        for i in sorted(samp_names.keys()):
             gs[i] = fin.Get("{0}_q{1}_{2}".format(type_, str(q).replace(".","p"), samp_names[i]))
-            gs[i].SetLineWidth(1 if type_=="acc" else 2)
+            if not gs[i]:
+                continue
+            gs[i].SetLineWidth(1 if "acc" in type_ else 2)
             gs[i].SetLineColor(colors[i])
-            gs[i].SetMarkerStyle(1 if type_=="acc" else 20)
+            gs[i].SetMarkerStyle(1 if "acc" in type_ else 20)
             gs[i].SetMarkerColor(colors[i])
             gs[i].Draw("SAME LP")
 
@@ -132,14 +143,14 @@ def make_plots(type_):
         text.SetTextAlign(12)
         text.SetTextSize(0.032)
         line.DrawLineNDC(0.327, 0.916, 0.365, 0.916)
-        what = "acceptance" if type_=="acc" else "rate" if lumi is None else "yield"
+        what = "acceptance" if "acc" in type_ else "rate" if lumi is None else "yield"
         text.DrawLatex(0.375, 0.919, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} "+what)
 
         text.SetTextAlign(32)
-        text.DrawLatex(0.92, 0.65, "Q(mCP) = {0}#it{{e}}".format(q))
-        text.DrawLatex(0.92, 0.61, "#eta(parent) #in [-2, 2]")
+        text.DrawLatex(0.92, 0.65, "Q(mCP) = {0}#kern[0.3]{{#it{{e}}}}".format(q))
+        # text.DrawLatex(0.92, 0.61, "#eta(parent) #in [-2, 2]")
 
-        if lumi is not None:
+        if lumi is not None and "acc" not in type_:
             text.SetTextAlign(31)
             text.DrawLatex(0.96,0.96, "{0} fb^{{-1}} (13 TeV)".format(lumi))
 
@@ -166,10 +177,11 @@ def make_plots(type_):
         leg.AddEntry(gs[4], "#omega#rightarrow#zeta#zeta", 'l')
         leg.AddEntry(gs[10], "#eta'#rightarrow#zeta#zeta#omega", 'l')
         leg.AddEntry(gs[2], "B#rightarrow#psi#scale[0.7]{(2S)}X, #psi#scale[0.7]{(2S)}#rightarrow#zeta#zeta", 'l')
-        leg.AddEntry(hdummy, "", 'l')
+        leg.AddEntry(gs[16], "Drell-Yan", 'l')
+        # leg.AddEntry(hdummy, "", 'l')
         leg.Draw()
 
-        outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/",type_,ntuple_tag+"_"+sim_tag)
+        outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/",type_,ntuple_tag+"_"+sim_tag+extra_tag)
         os.system("mkdir -p "+outdir)
         os.system("cp ~/scripts/index.php "+outdir)
         c.SaveAs(os.path.join(outdir, "q_"+str(q).replace(".","p")+".png"))
@@ -177,7 +189,7 @@ def make_plots(type_):
 
 
 def make_charge_comparisons(type_):
-    if type_ not in ["rate","line_rate","acc","line_acc"]:
+    if type_ not in ["rate","line_rate","threeLayer_rate","acc","line_acc"]:
         raise Exception()
 
     c = r.TCanvas("c","c",800,600)
@@ -186,22 +198,22 @@ def make_charge_comparisons(type_):
     c.SetLeftMargin(0.11)
     c.SetRightMargin(0.03)
     c.SetLogx()
-    if type_ in ["rate","line_rate"]:
+    if type_ in ["rate","line_rate","threeLayer_rate"]:
         c.SetLogy()
     c.SetTicky()
     c.SetGridx()
     c.SetGridy()
 
-    hdummy = r.TH1F("hdummy","",100,5e-3,10)
+    hdummy = r.TH1F("hdummy","",100,5e-3,16)
     hdummy.SetLineColor(r.kWhite)
-    hdummy.GetXaxis().SetRangeUser(5e-3,10)
+    hdummy.GetXaxis().SetRangeUser(5e-3,16)
     if type_=="rate":
         mult = 1.0
         if lumi is not None:
             mult *= lumi
         if area is not None:
             mult *= area
-        hdummy.GetYaxis().SetRangeUser(1e-5*mult, 1e8*mult)
+        hdummy.GetYaxis().SetRangeUser(1e-3*mult, 2e7*mult)
         if lumi is None:
             if area is None:
                 hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
@@ -212,11 +224,11 @@ def make_charge_comparisons(type_):
                 hdummy.GetYaxis().SetTitle("Yield (per m^{2})")
             else:
                 hdummy.GetYaxis().SetTitle("Yield")
-    elif type_=="line_rate":
+    elif type_=="line_rate" or type_=="threeLayer_rate":
         mult = 1.0
         if lumi is not None:
             mult *= lumi
-        hdummy.GetYaxis().SetRangeUser(1e-7*mult, 1e6*mult)
+        hdummy.GetYaxis().SetRangeUser(1e-5*mult, 2e5*mult)
         hdummy.GetYaxis().SetTitle("Yield")
     elif type_=="acc":
         hdummy.GetYaxis().SetRangeUser(0, 1.5e-4)
@@ -233,11 +245,13 @@ def make_charge_comparisons(type_):
     hdummy.Draw()
     
     x = 0.65 if "rate" in type_ else 0.25
-    leg = r.TLegend(x,0.71,x+0.24,0.90)
+    y = 0.90
+    leg = r.TLegend(x,y-0.05*len(qs),x+0.21,y)
     # leg.SetFillStyle(0)
     # leg.SetLineWidth(0)
 
-    cs = [r.kBlack, r.kAzure-2, r.kOrange-3]
+    # cs = [r.kBlack, r.kGreen+2, r.kAzure-2, r.kOrange-3, r.kRed+1]
+    cs = [r.kBlack, r.kAzure-2, r.kOrange-3, r.kGreen+2, r.kRed+1]
     for i,q in enumerate(qs):
         gt = fin.Get("{0}_q{1}_{2}".format(type_, str(q).replace(".","p"), "total"))
         gt.SetLineWidth(3)
@@ -250,7 +264,7 @@ def make_charge_comparisons(type_):
 
     leg.Draw()
 
-    if lumi is not None:
+    if lumi is not None and "acc" not in type_:
         text = r.TLatex()
         text.SetNDC(1)
         text.SetTextFont(42)
@@ -258,7 +272,7 @@ def make_charge_comparisons(type_):
         text.SetTextAlign(31)
         text.DrawLatex(0.94,0.94, "{0} fb^{{-1}} (13 TeV)".format(lumi))
 
-    outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/",type_,ntuple_tag+"_"+sim_tag)
+    outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/",type_,ntuple_tag+"_"+sim_tag+extra_tag)
     os.system("mkdir -p "+outdir)
     os.system("cp ~/scripts/index.php "+outdir)
     c.SaveAs(os.path.join(outdir, "qcomp.png"))
@@ -268,7 +282,9 @@ def make_charge_comparisons(type_):
 make_plots("rate")
 make_plots("line_rate")
 make_plots("acc")
+make_plots("line_acc")
 make_charge_comparisons("rate")
 make_charge_comparisons("line_rate")
+make_charge_comparisons("threeLayer_rate")
 make_charge_comparisons("acc")
 make_charge_comparisons("line_acc")

@@ -5,7 +5,7 @@ from math import pi
 r.gStyle.SetOptStat(0)
 r.gROOT.SetBatch(1)
 
-ntuple_tag = "v3"
+ntuple_tag = "v6"
 sim_tag = "v1"
 
 ms = [0.01, 0.1, 0.4, 1.0, 3.0]
@@ -87,7 +87,7 @@ pdefs = {
 basedir = "/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/{0}_{1}/".format(ntuple_tag, sim_tag)
 for q in qs:
     qstr = "q_"+str(q).replace(".","p")
-    outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/kinematics/{0}_{1}/{2}".format(ntuple_tag, sim_tag, qstr))
+    outdir = os.path.join("~/public_html/milliqan/milliq_mcgen/plots/kinematics/{0}_{1}/{2}".format(ntuple_tag, sim_tag, qstr))
     os.system("mkdir -p "+outdir)
     os.system("cp ~/scripts/index.php "+outdir)
 

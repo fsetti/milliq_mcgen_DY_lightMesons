@@ -18,15 +18,21 @@ for MDIR in `ls -d $INDIR/m_*`; do
     # fi
     for SDIR in `ls -d $MDIR/*`; do
         S=`basename $SDIR`
+        # if [ $S != dy ]; then
+        #     continue
+        # fi
         if [ ! -d $SDIR/postsim_$STAG ]; then
             continue
         fi
         for QDIR in `ls -d ${SDIR}/postsim_${STAG}/q_*`; do
             Q=`basename $QDIR`
+            # if [ $Q != q_0p14 ]; then
+                # continue
+            # fi
             OUTDIR=/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/${TAG}_${STAG}/$M/$Q
             mkdir -p $OUTDIR
-            echo nohup nice -n19 copyTree.py "\"$QDIR/*.root\"" $OUTDIR/$S.root
-            nohup nice -n19 copyTree.py "$QDIR/*.root" $OUTDIR/$S.root &> logs/log_${M}_${Q}_${S}.txt &
+            echo nohup nice -n19 copyTree.py "\"$QDIR/*.root\" $OUTDIR/$S.root &> logs/log_${M}_${Q}_${S}.txt"
+            # nohup nice -n19 copyTree.py "$QDIR/*.root" $OUTDIR/$S.root &> logs/log_${M}_${Q}_${S}.txt &
         done
     done
     # wait

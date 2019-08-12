@@ -123,7 +123,7 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 Nevt = tin.GetEntries()
 evt_start = 0
 # Nevt = 1
-# evt_start = 42
+# evt_start = 105691
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 trajs = []
 n_hits = 0
@@ -256,7 +256,7 @@ if DO_DRAW:
     from millisim.Drawing import *
     plt.figure(num=1, figsize=(15,7))
 
-    Draw3Dtrajs([traj[1] for traj in trajs], subplot=121)
+    Draw3Dtrajs([traj[1][:,-500:] for traj in trajs], subplot=121)
     # the four corners
     if det.width is not None and det.height is not None:
         c1,c2,c3,c4 = det.get_corners()
