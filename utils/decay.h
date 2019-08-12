@@ -46,11 +46,13 @@ DoDalitz(TLorentzVector p4_mother, double me, double mX, bool useVDM=true);
 
 template <class T>
 TLorentzVector LVtoTLV(ROOT::Math::LorentzVector<T> p){
-    return TLorentzVector(p.x(), p.y(), p.z(), p.t());
+    TLorentzVector t = TLorentzVector();
+    t.SetXYZM(p.x(), p.y(), p.z(), p.M());
+    return t;
 }
 
 template <class T>
-ROOT::Math::LorentzVector<T> TLVtoLV(TLorentzVector p){
+ROOT::Math::LorentzVector<T> TLVtoLV(TLorentzVector p){    
     return ROOT::Math::LorentzVector<T>(p.Pt(), p.Eta(), p.Phi(), p.M());
 }
 

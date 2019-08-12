@@ -25,7 +25,7 @@ Do2BodyDecay(TLorentzVector p4_mother, double m1, double m2, double cosTheta, do
     // returns a pair of four-momenta p1,p2 of the daughters d1,d2
 
     if(m1+m2 > p4_mother.M()){
-        std::cout << "ERROR: illegal 2-body decay! m1 + m2 > M" << std::endl;
+        std::cout << "ERROR: illegal 2-body decay! m1 + m2 > M (" << m1 << ", " << m2 << ", " << p4_mother.M() << ")\n";
         throw std::exception();
     }    
     
