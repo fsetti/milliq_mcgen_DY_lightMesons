@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage[margin=1.0in]{geometry}
 \usepackage{hyperref}
 \usepackage{amsmath}
 %\usepackage{amsmath}
@@ -44,8 +45,21 @@ $\zeta$'s and leptons are different
 (in our model $\zeta$'s are weak isospin
 singlets\cite{Holdom}\cite{Haas:2014dda}).
 
-\noindent {\bf Status of this: this was done by Itay, it has 
-now been reproduced by Nick and Bennet, needs to be documented.}
+Technically, this is done in Madgraph by simply modifying the mass and couplings
+of the SM electron. The couplings are $\varepsilon e$ and $-\varepsilon e\tan\theta_W$ to
+the $\gamma$ and $Z_0$, respectively, where $\varepsilon = Q/e$.
+
+The $pp\to\zeta^+\zeta^-$ process is generated with up to 1 extra parton. This is not very 
+relevant at lower masses since a large majority of events don't include an extra parton. At 
+higher masses, however, it can increase cross section by $O$(20-30\%). The Madgraph
+parameter \texttt{xqcut} is set to 0, but there still seems to be a 20 GeV cut on the $p_T$
+of the extra parton.
+
+We cannot find a parameter to control this, but there appears to be a $\zeta^+\zeta^-$ invariant
+mass cut of 2 GeV. Correspondingly, the cross section plateaus below $m_\zeta = 1$ GeV. This shouldn't
+matter, however, as production from J/$\psi$, $\phi$, $\omega$, $\rho$, etc. is expected do dominate
+at low masses.
+
 
 
 
@@ -155,7 +169,7 @@ with the electron and muon masses are in excellent agreement with the PDG.
 
 \begin{table}
   \begin{center}
-    { \small
+    { \footnotesize
   \begin{tabular}{|c|c|c|c|c|c|}
     \hline
     $m_\zeta$ (MeV) & $\pi^0 \to \zeta \zeta \gamma$ & $\eta \to \zeta \zeta \gamma$
@@ -285,7 +299,7 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
   are unreliable below 15 GeV.
 
 \begin{figure}
-\begin{adjustwidth}{-3cm}{-3cm}
+\begin{adjustwidth}{-2cm}{-2cm}
 \centering
 \includegraphics[width=0.32\linewidth]{../oniaDirect/LHCB-13-TeV/ups1s-13to7eta20to25.pdf}
 \includegraphics[width=0.32\linewidth]{../oniaDirect/LHCB-13-TeV/ups3s-13to7eta20to25.pdf}
@@ -314,7 +328,7 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
   ratios measured by CMS.
 
 \begin{figure}
-\begin{adjustwidth}{-3cm}{-3cm}
+\begin{adjustwidth}{-2cm}{-2cm}
 \centering
 \includegraphics[width=0.32\linewidth]{../oniaDirect/upsilon/upsilon-1s-atlas-cms-comparison.pdf}
 \includegraphics[width=0.32\linewidth]{../oniaDirect/upsilon/upsilon-2s-atlas-cms-comparison.pdf}
@@ -331,7 +345,7 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
 \end{figure}
 
 \begin{figure}
-\begin{adjustwidth}{-3cm}{-3cm}
+\begin{adjustwidth}{-2cm}{-2cm}
 \centering
 \includegraphics[width=0.32\linewidth]{../oniaDirect/upsilon/ups1s-full.pdf}
 \includegraphics[width=0.32\linewidth]{../oniaDirect/upsilon/ups2s-full.pdf}
@@ -389,8 +403,8 @@ at lower energy, see
 Figure~\ref{fig:sanity}, right\cite{Khachatryan:2010yr}.
 
 \begin{figure}
-\includegraphics[width=0.58\linewidth]{plots/fraction-from-b-theory.png}
-\includegraphics[width=0.38\linewidth, angle=90]{plots/bFraction-CMS-314nb-CDF.pdf}
+\includegraphics[width=0.53\linewidth]{plots/fraction-from-b-theory.png}
+\includegraphics[height=0.46\linewidth, angle=90]{plots/bFraction-CMS-314nb-CDF.pdf}
 \caption{Fraction of charmonium from b decays according to the calculations used in
   this note (left), and the corresponding measurement (J/$\psi$ only) at lower energy (right).
  The left plot is for $|\eta|<1.2$.}
