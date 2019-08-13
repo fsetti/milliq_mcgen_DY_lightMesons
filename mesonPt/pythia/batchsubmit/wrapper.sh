@@ -72,9 +72,9 @@ export PYTHIA8DATA=$XMLDIR
 #
 # run it
 #
-echo "[wrapper] running: ./main $MODE $NEVT"
+echo "[wrapper] running: ./main $MODE $NEVT $FILEID"
 
-./main $MODE $NEVT
+./main $MODE $NEVT $FILEID
 
 #
 # do something with output

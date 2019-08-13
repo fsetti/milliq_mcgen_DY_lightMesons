@@ -11,17 +11,20 @@ using namespace Pythia8;
 int main(int argc, char** argv) {
 
     if(argc < 3){
-        std::cout << "usage: " << argv[0] << " <mode> <n_events>\n";
+        std::cout << "usage: " << argv[0] << " <mode> <n_events> <seed=0>\n";
         return -1;
     }
 
     int mode = atoi(argv[1]);
     int nevt = atoi(argv[2]);
+    int seed = 0;
+    if(argc >= 4)
+        seed = atoi(argv[3]);
 
         // Generator. Process selection. LHC initialization. Histogram.
     Pythia pythia;
     pythia.readString("Random:setSeed = on");
-    pythia.readString("Random:seed = 0");
+    pythia.readString("Random:seed = "+std::to_string(seed));
     pythia.readString("Beams:eCM = 13000.");
     if(mode == 0){
         // MinBias
