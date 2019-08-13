@@ -10,21 +10,41 @@ using namespace Pythia8;
 
 int main(int argc, char** argv) {
 
-    if(argc < 2){
-        std::cout << "usage: " << argv[0] << " <n_events>\n";
+    if(argc < 3){
+        std::cout << "usage: " << argv[0] << " <mode> <n_events>\n";
         return -1;
     }
 
-    int nevt = atoi(argv[1]);
+    int mode = atoi(argv[1]);
+    int nevt = atoi(argv[2]);
 
         // Generator. Process selection. LHC initialization. Histogram.
     Pythia pythia;
     pythia.readString("Random:setSeed = on");
     pythia.readString("Random:seed = 0");
     pythia.readString("Beams:eCM = 13000.");
-    pythia.readString("SoftQCD:nonDiffractive = on");
-    pythia.readString("SoftQCD:singleDiffractive = on");
-    pythia.readString("SoftQCD:doubleDiffractive = on");
+    if(mode == 0){
+        // MinBias
+        pythia.readString("SoftQCD:nonDiffractive = on");
+        pythia.readString("SoftQCD:singleDiffractive = on");
+        pythia.readString("SoftQCD:doubleDiffractive = on");
+    }else{
+        // QCD pT binned
+        pythia.readString("HardQCD:all = on");
+        if(mode == 1) {
+            pythia.readString("PhaseSpace:pTHatMin = 15");
+            pythia.readString("PhaseSpace:pTHatMax = 30");
+        }else if(mode == 2) {
+            pythia.readString("PhaseSpace:pTHatMin = 30");
+            pythia.readString("PhaseSpace:pTHatMax = 50");
+        }else if(mode == 3) {
+            pythia.readString("PhaseSpace:pTHatMin = 50");
+            pythia.readString("PhaseSpace:pTHatMax = 80");
+        }else{
+            std::cout << "Invalid decay mode: " << mode << std::endl;
+            return -1;
+        }
+    }
 
     // pythia8 common settings from CMSSW
     pythia.readString("Tune:preferLHAPDF = 2");
@@ -47,6 +67,8 @@ int main(int argc, char** argv) {
     pythia.init();
 
     TFile *fout = new TFile("output.root","RECREATE");
+    TH1D *h_nevents = new TH1D("h_nevents", "", 1, 0, 2);
+    TH1D *h_etaall = new TH1D("h_etaall", ";#eta", 100, 3, 3);
     TH1D *h_pi = new TH1D("h_pi", ";p_{T} [GeV]",2000,0,100);
     TH1D *h_pi0 = new TH1D("h_pi0", ";p_{T} [GeV]",2000,0,100);
     TH1D *h_rho = new TH1D("h_rho", ";p_{T} [GeV]",2000,0,100);
@@ -58,10 +80,13 @@ int main(int argc, char** argv) {
     // Begin event loop. Generate event. Skip if error. List first one.
     for (int iEvent = 0; iEvent < nevt; ++iEvent) {
         if (!pythia.next()) continue;        
+        h_nevents->Fill(1);
         for (int i = 0; i < pythia.event.size(); ++i){
             Particle& p = pythia.event[i];
             if (fabs(p.p().eta()) < 2){
                 
+                h_etaall->Fill(p.p().eta());
+
                 if (abs(p.id()) == 211)
                     h_pi->Fill(p.p().pT());
                 if (abs(p.id()) == 111)
@@ -81,6 +106,8 @@ int main(int argc, char** argv) {
         }
     }
 
+    h_nevents->Write();
+    h_etaall->Write();
     h_pi->Write();
     h_pi0->Write();
     h_omega->Write();
