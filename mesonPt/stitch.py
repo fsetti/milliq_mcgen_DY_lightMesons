@@ -4,10 +4,10 @@ from math import log
 r.gStyle.SetOptStat(0)
 r.gROOT.SetBatch(1)
 
-plotdir = "/home/users/bemarsh/public_html/milliqan/milliq_mcgen/pionPt/v3_eta2/stitch"
+plotdir = "/home/users/bemarsh/public_html/milliqan/milliq_mcgen/pionPt/fromPythia_v1/stitch"
 os.system("mkdir -p "+plotdir)
 
-dname = "hadded/v3_eta2"
+dname = "hadded/fromPythia_v1"
 
 doPlot = True
 
