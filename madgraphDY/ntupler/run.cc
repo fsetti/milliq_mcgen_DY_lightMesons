@@ -141,13 +141,16 @@ int main(int argc, char **argv){
         std::cout << "Couldn't read xsec from file!\n";
         return 1;
     }
-    int npass=0, ntotal=0;
+    int npass=0, ntotal=0, ndyeta=0;
     while(fin >> px1 >> py1 >> pz1 >> E1 >> px2 >> py2 >> pz2 >> E2){
         outtree.event = npass + evt_offset;
         outtree.p4_p->SetPxPyPzE(px1, py1, pz1, E1);
         outtree.p4_m->SetPxPyPzE(px2, py2, pz2, E2);
         outtree.parent_p4->SetPxPyPzE(px1+px2, py1+py2, pz1+pz2, E1+E2);        
         ntotal++;
+        float etabound = 1.0;
+        if(fabs(outtree.p4_p->eta()) < etabound || fabs(outtree.p4_m->eta()) < etabound)
+            ndyeta++;
         if(WithinBounds(*outtree.p4_p, 1) || WithinBounds(*outtree.p4_m, -1)){
             outtree.Fill();
             npass++;
@@ -161,9 +164,12 @@ int main(int argc, char **argv){
     outtree.filter_eff = 1.0; // since n_events_total is set to the PRE-filter nevents, it is already accounted for
     outtree.tree()->SetBranchStatus("filter_eff", 1);
     TBranch *beff = outtree.tree()->GetBranch("filter_eff");
+    double dyetaeff = float(ndyeta) / ntotal;
+    TBranch *bdyeta = outtree.tree()->Branch("dyetaeff",&dyetaeff,"dyetaeff/D");
     for(uint i=0; i<npass; i++){
         outtree.tree()->GetEntry(i);
         beff->Fill();
+        bdyeta->Fill();
     }
     std::cout << "\n";
 

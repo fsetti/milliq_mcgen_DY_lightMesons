@@ -86,6 +86,7 @@ if __name__=="__main__":
             continue
         os.system("mkdir -p "+outdir)
         cmd = "nice -n19 ./ntupler/run -i {0} -o {1} -N {2} -e {3} &> {4}; hdfs dfs -copyFromLocal -f {1} {5}; rm {1}".format(
+        # cmd = "nice -n19 ./ntupler/run -i {0} -o {1} -N {2} -e {3} &> {4};".format(
             fout,
             fout.replace(".txt", ".root"),
             nchunks * minevt,
