@@ -38,28 +38,35 @@ Except for Drell-Yan (DY), this is done in a few steps
 
 \section{Special (simplest) case: Drell-Yan}
 The Drell-Yan process $pp \to \zeta^+ \zeta^-$ is generated with
-the external model interface in MadGraph.  Note: we cannot use
+the external model interface in MadGraph.  Note that we cannot use
 SM $pp \to \ell^+ \ell^-$ with a different lepton mass
 because the couplings of the $Z$ to
 $\zeta$'s and leptons are different
 (in our model $\zeta$'s are weak isospin
 singlets\cite{Holdom}\cite{Haas:2014dda}).
 
-Technically, this is done in Madgraph by simply modifying the mass and couplings
+Technically, this was achieved in MadGraph by simply modifying the mass and couplings
 of the SM electron. The couplings are $\varepsilon e$ and $-\varepsilon e\tan\theta_W$ to
 the $\gamma$ and $Z_0$, respectively, where $\varepsilon = Q/e$.
 
 The $pp\to\zeta^+\zeta^-$ process is generated with up to 1 extra parton. This is not very 
 relevant at lower masses since a large majority of events don't include an extra parton. At 
-higher masses, however, it can increase cross section by $O$(20-30\%). The Madgraph
+higher masses, however, it can increase cross section by $O$(20-30\%). The MadGraph
 parameter \texttt{xqcut} is set to 0, but there still seems to be a 20 GeV cut on the $p_T$
 of the extra parton.
 
-We cannot find a parameter to control this, but there appears to be a $\zeta^+\zeta^-$ invariant
+We can't find a parameter to control this, but there appears to be a $\zeta^+\zeta^-$ invariant
 mass cut of 2 GeV. Correspondingly, the cross section plateaus below $m_\zeta = 1$ GeV. This shouldn't
 matter, however, as production from J/$\psi$, $\phi$, $\omega$, $\rho$, etc. is expected do dominate
 at low masses.
 
+A plot of DY cross section as a function of mass is shown along with the other production modes
+in Fig. \ref{fig:total-rates}. Note that DY is handled specially here: while for the other modes
+we require the mother particle to have $|\eta|<2$, this does not make sense for DY (unless there
+is an extra parton produced, the $\eta$ of the ``mother'' is $\pm\infty$). Instead we have required
+at least one mCP to have $|\eta|<1$. This threshold was chosen so that the probability of
+an mCP pointing in the vicinity of the detector is similar between DY and the other modes, in order
+to facilitate comparison of cross sections.
 
 
 
@@ -90,13 +97,13 @@ Note also that among these processes, the paper~\cite{Haas:2014dda} that
 proposed the milliqan experiment only included onia.  Furthermore
 it is not clear that it included the $B \to \psi$ process, it
 is not clear that it included $\psi(2S)$, $\Upsilon(2S)$,
-and $\Upsilon(3S)$, and it imposed requirements $P_T > 6.5$ GeV (2 GeV)
+and $\Upsilon(3S)$, and it imposed requirements $p_T > 6.5$ GeV (2 GeV)
 on $J/\psi$ and $\Upsilon(1S)$, respectively.
 The Letter of Intent~\cite{Ball:2016zrp} also mentions
 $\Upsilon(2S)$ and $\Upsilon(3S)$, and it is possible that the latest
 NSF proposal included even more processes.  In any case: here we make an
 attempt to include as many processes as possible and to
-remove $P_T$ requirements.
+remove $p_T$ requirements.
 
 
 \section{Branching Ratios of non-DY processes (Q=1).}
@@ -237,11 +244,11 @@ When possible we compare with
 
   The key features of our approach are the following
 \begin{itemize}
-\item Use theory or published data, or some MC to generate $P_T$ distributions for SM
+\item Use theory or published data, or some MC to generate $p_T$ distributions for SM
   particles
 saved as histograms in ROOT files (Drell Yan is an exception, as discussed previously).
 \item Sample the ROOT histograms to generate SM particles of a 
-given $P_T$.
+given $p_T$.
 \item Pick azimuthal angles $\phi$ and pseudorapity $\eta$ in a
   limited 
   range, matched to the acceptance of milliqan.  The $\eta$
@@ -250,7 +257,7 @@ given $P_T$.
 \item Decay the SM particles into milliCharged particles. 
 \item When possible, keep track of theoretical uncertainties.
 \item In general it is sufficient to generate SM particles at low 
-and moderate $P_T$ since that is where the cross-section is largest.
+and moderate $p_T$ since that is where the cross-section is largest.
 \end{itemize}
 
 \subsection{J/$\psi$ and $\psi'$ from b-decays}
@@ -259,7 +266,7 @@ We use the tool available in \\
 \href{http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html}
 {http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html} \\
 to
-generate histograms of $P_T$ distributions (cross-sections) for charmonium from 
+generate histograms of $p_T$ distributions (cross-sections) for charmonium from 
 bottom decays, including theoretical 
 uncertainties\cite{Cacciari:2012ny,Cacciari:2015fta}.  
 See Figure~\ref{fig:bpsi} 
@@ -282,20 +289,20 @@ are integrated over $|\eta|<1.0$.}
 \subsubsection{Direct bottonium}
 \label{sec:upsilon}
 
-There have been many measurement of the $P_T$ spectra od $\Upsilon$ in $pp$ collisions
+There have been many measurement of the $p_T$ spectra od $\Upsilon$ in $pp$ collisions
 at the LHC by CMS~\cite{Khachatryan:2010zg, Chatrchyan:2013yna, Khachatryan:2015qpa, Sirunyan:2017qdw},
 Atlas~\cite{Aad:2011xv, Aad:2012dlq},
   and LHCb~\cite{Aaij:2018pfp, Aaij:2015awa, Aaij:2014nwa, Aaij:2013yaa, LHCb:2012aa}.
   The LHCb measurements are in the forward region.  The only measurement at 13 TeV
   in the central region is from CMS~\cite{Sirunyan:2017qdw}.  Unfortunately, it is limited
-  to $P_T >$ 20 GeV.
+  to $p_T >$ 20 GeV.
 
   Due to the lack of 13 TeV data, initially we planned to use theoretical predictions
   as a basis of the $\Upsilon$ event generation.
   We contacted the theorists~\cite{Han:2014kxa}
   that provided the state-of-the art calculations used to
   confront the data in Reference~\cite{Sirunyan:2017qdw}.  We
-  asked them to extend their predictions to lower $P_T$, unfortunately they claim that these
+  asked them to extend their predictions to lower $p_T$, unfortunately they claim that these
   are unreliable below 15 GeV.
 
 \begin{figure}
@@ -313,16 +320,16 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
 
 
   
-  As a result we decided to use 7 TeV data for $P_T <$ 20 GeV and the CMS
-  13 TeV data at higher $P_T$.  A key ingredient is the ratio of 13 and 7
+  As a result we decided to use 7 TeV data for $p_T <$ 20 GeV and the CMS
+  13 TeV data at higher $p_T$.  A key ingredient is the ratio of 13 and 7
   GeV $\Upsilon$ production cross-sections.  These have been measured
-  for $P_T > 20$ GeV and $|\eta| <$ 1.2 by CMS,
+  for $p_T > 20$ GeV and $|\eta| <$ 1.2 by CMS,
   see Figure 2 of Reference~\cite{Sirunyan:2017qdw}. The ratios
-  are about 1.7 at $P_T$ = 20 GeV, irrespective of $\Upsilon$ state
+  are about 1.7 at $p_T$ = 20 GeV, irrespective of $\Upsilon$ state
   (1S, 2S, or 3S), and increase slowly to about 2
-  at $P_T$ = 40 GeV.  The ratios have also been measured by
+  at $p_T$ = 40 GeV.  The ratios have also been measured by
   LHCb~\cite{Aaij:2018pfp}
-  all the way down to zero $P_T$ for $2.0 < y < 2.5$, see Figure~\ref{fig:upsratio}.
+  all the way down to zero $p_T$ for $2.0 < y < 2.5$, see Figure~\ref{fig:upsratio}.
   The LHCb ratios in the 20-30 GeV region measured at slightly higher
   $y$ are in agreement with the more central
   ratios measured by CMS.
@@ -339,7 +346,7 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
   the two spectra takes place.  From left to right: 1S, 2S, 3S.
   The dashed lines represent the central values, the solid
   lines cover the uncertainty range.  This is ${\cal B}(\Upsilon \to \mu\mu) \cdot
-  \rm{d}\sigma/\rm{d}P_T$ in nb/GeV integrated
+  \rm{d}\sigma/\rm{d}p_T$ in nb/GeV integrated
   over $|\eta| <$ 1.2.}
 \label{fig:checkMatch}
 \end{figure}
@@ -355,16 +362,16 @@ Atlas~\cite{Aad:2011xv, Aad:2012dlq},
   From left to right: 1S, 2S, 3S. 
 The dashed line represent the central value, the solid
   lines cover the uncertainty range.  This is ${\cal B}(\Upsilon \to \mu\mu) \cdot
-  \rm{d}\sigma/\rm{d}P_T$ in nb/GeV integrated
+  \rm{d}\sigma/\rm{d}p_T$ in nb/GeV integrated
   over $|\eta| <$ 1.2.}
 \label{fig:upsFinal}
 \end{figure}
 
   
 Consequently,  we rescale the {\bf measured} 7 GeV {\bf central} low
-$P_T$ $\Upsilon$ spectra to 13 TeV using the curves of
+$p_T$ $\Upsilon$ spectra to 13 TeV using the curves of
 Figure~\ref{fig:upsratio};  we combine these with the {\bf measured} 13 TeV 
-  {\bf central} high $P_T$ spectra to obtain an inclusive 13 TeV spectra.  The 7 TeV data
+  {\bf central} high $p_T$ spectra to obtain an inclusive 13 TeV spectra.  The 7 TeV data
   is from Atlas~\cite{Aad:2012dlq}, since it happens to be in a more
   convenient format than the equivalent CMS data.
 On the other hand the 13 TeV spectra are from
@@ -418,46 +425,52 @@ Figure~\ref{fig:sanity}, right\cite{Khachatryan:2010yr}.
 
 We generate these from Pythia.  The measurement of the 
 $\pi^{\pm}$
-$P_T$ spectrum from CMS\cite{Sirunyan:2017zmn} is in good agreement
+$p_T$ spectrum from CMS\cite{Sirunyan:2017zmn} is in good agreement
 with Pythia 8 Minimum Bias at low momentum.  This gives us some
 confidence in Pythia Min Bias, and consequently we use this MC for all
-mesons.  We do not attempt to use QCD $2 \to 2$ at very low $P_T$ since the 
+mesons.  We do not attempt to use QCD $2 \to 2$ at very low $p_T$ since the 
 process is infrared divergent.
 
 Pythia {\tt SoftQcd:nonDiffractive} includes all
 hard QCD processes\cite{wwwPythia} so in principle this is all that is
-needed.    However, we run out of statistics at high $P_T$.  So 
-at high $P_T$ we stitch together the Min Bias distributions with 
-distributions obtained from QCD $2 \to 2$ at moderate $P_T$.
+needed.    However, we run out of statistics at high $p_T$.  So 
+at high $p_T$ we stitch together the Min Bias distributions with 
+distributions obtained from QCD $2 \to 2$ at moderate $p_T$.
 
-Eventually we will generate Pythia events in ``standalone'' mode to
-be independent of CMS software.  For now we use existing CMS Monte
-Carlos
-for Min Bias and for QCD.  The CMS QCD samples are
-``$P_T$-binned'',
-(15-30 GeV, 30-50 GeV, and 50-80 GeV).  The Min Bias 
-cross-section 
-is taken to be 78.4 mb.  Then the stitching procedure is the following:
+%% Eventually we will generate Pythia events in ``standalone'' mode to
+%% be independent of CMS software.  For now we use existing CMS Monte
+%% Carlos for MinBias and for QCD.  
+
+This has been done both with CMS MC samples and with events generated
+from standalone Pythia, using the same public CUETP8M1 tune (\cite{CMS:tunes}, table 3).
+They have been verified to give equivalent results.
+
+The QCD samples are
+``$p_T$-binned'', using the \texttt{PhaseSpace:pTHat[Min/Max]} parameters in Pythia, 
+in bins 15-30 GeV, 30-50 GeV, and 50-80 GeV.  
+The MinBias cross-section is taken to be 69.8 mb (CMS-recommended value).  
+Then the stitching procedure is the following:
 \begin{itemize}
 \item The QCD samples are first normalized to their LO cross-sections.
-\item Next, we estimate a ``qcd-minbias scale factor'' by integrating
-  over some region where the ratio is roughly flat.
-\item The QCD samples are renormalized by this scale factor.
+\item Next, we estimate a ``QCD-MinBias scale factor'' by integrating
+  over some $p_T$ region where the MinBias/QCD ratio is roughly flat.
+\item The QCD samples are all renormalized by this scale factor.
 \item The samples are stitched together by visually picking the 
-$P_T$ where the curves cross each other.
+$p_T$ where the curves cross each other.
 \end{itemize}
-\noindent The resulting $P_T$ curves are shown in
+\noindent The resulting $p_T$ curves are shown in
 Figure~\ref{fig:mesons}.  It is not clear what kind of uncertainties
 we should assign.  Eventually we'll have to come up with something (50\%?).
 
 
 \begin{figure}
+  \centering
   \includegraphics[width=0.48\linewidth]{plots/h_pi0.pdf}
-  \includegraphics[width=0.48\linewidth]{plots/h_eta.pdf}
+  \includegraphics[width=0.48\linewidth]{plots/h_eta.pdf} \\
   \includegraphics[width=0.48\linewidth]{plots/h_etap.pdf}
-  \includegraphics[width=0.48\linewidth]{plots/h_phi.pdf}
+  \includegraphics[width=0.48\linewidth]{plots/h_phi.pdf} \\
   \includegraphics[width=0.48\linewidth]{plots/h_rho.pdf}
-  \includegraphics[width=0.48\linewidth]{plots/h_omega.pdf}
+  \includegraphics[width=0.48\linewidth]{plots/h_omega.pdf} \\
   \caption{\protect Transverse momentum distributions of 
 $\pi^0$, $\eta$, $\eta'$, $\phi$, $\rho$, and $\omega$, top left
 to bottom right, for $|\eta| < 1$.}
@@ -492,13 +505,19 @@ BR($\eta' \to \pi^+ \pi^- \mu^+ \mu^-$) $<$ 3e-5.  So we can safely ignore it.
   \begin{center}
   \includegraphics[width=0.8\linewidth]{../scripts/plot-xsecs/mcp-xsec.pdf}
   \caption{\protect Cross-section times branching ratios for various
-    decays into $\zeta^+ \zeta^-$ pairs, excluding DY.  Note: this is
+    decays into $\zeta^+ \zeta^-$ pairs.  Note: this is
     the cross section for producing the mother particle times the
     branching ratio for the mother particle to decay into $\zeta^+ \zeta^-$.
     Multiply by two to get the $\zeta^{\pm}$ production cross section.
-    Also: the mother particle must be in $|\eta|<2$, but the
+    For non-DY modes, the mother particle must be in $|\eta|<2$, but the
     daughter $\zeta^{\pm}$ could have $|\eta|>2$.  On the other hand some
-    $\zeta$'s with $|\eta|<2$ can arise from mothers of $|\eta|>2$.}
+    $\zeta$'s with $|\eta|<2$ can arise from mothers of $|\eta|>2$. For DY,
+    it doesn't make sense to use ``mother $\eta$'' (it's almost always $\pm\infty$), 
+    so the plotted cross section requires at least one mCP to have $|\eta|<1$. 
+    This was chosen so that the probability of an mCP pointing in the vicinity of 
+    the detector is similar to that from the other non-DY production modes, 
+    in order to facilitate comparison. The plateau in DY cross section below 
+    $m_\zeta=1~\text{GeV}$ is due to a 2 GeV $\zeta^+\zeta^-$ invariant mass cut in MadGraph.}
 \label{fig:total-rates}
 \end{center}
   \end{figure}
@@ -543,8 +562,8 @@ if necessary.
 \caption{\protect Pseudorapidity and rapidity distributions
   from $\psi$ (left) and $\psi(2S)$ (right)
   from b-decays\cite{Cacciari:2012ny,Cacciari:2015fta}.
-  These are for $P_T < 10$ GeV, i.e., in the low boost regime.
-Note that in this $P_T$ range the theoretical uncertainties are large.}
+  These are for $p_T < 10$ GeV, i.e., in the low boost regime.
+Note that in this $p_T$ range the theoretical uncertainties are large.}
   \label{fig:eta-psi}
 \end{figure}
 
@@ -837,6 +856,12 @@ Aloni, D., Efrati, A., Grossman, Y. et al. J. High Energ. Phys. (2017) 2017: 19.
   %%CITATION = doi:10.1103/PhysRevD.96.112003;%%
   %25 citations counted in INSPIRE as of 20 Jun 2019
 
+\bibitem{CMS:tunes}
+  A.~M.~Sirunyan {\it et al.} [CMS Collaboration],
+  %``Event generator tunes obtained from underlying event and multiparton scattering measurements,''
+  Eur. Phys. J. C (2016) 76: 155.
+  doi:10.1140/epjc/s10052-016-3988-x
+  [arXiv:1512.00815 [hep-ex]]
    
 \bibitem{wwwPythia}
 \href{http://home.thep.lu.se/\~torbjorn/pythia81php/Welcome.php}
