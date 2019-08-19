@@ -6,13 +6,15 @@ iseed = 0
 
 model = "mq5"
 carddir = "./runs/out_{model}_13tev_v1/".format(model=model)
-# carddir = "./runs/out_{model}_13tev_xsecscan/".format(model=model)
 nevents=1000000
 njobs_per_mass = 30
+# carddir = "./runs/out_{model}_13tev_xsecscan/".format(model=model)
+# nevents=10000
+# njobs_per_mass = 1
 # masses =  [0.1,0.28,0.43,0.6,0.78,1.0,1.25,1.52,1.84,2.2,2.6,3.04,3.54,4.1,4.71,5.4,6.15,6.98,7.9,8.9,10.0,11.2,12.5,14.0,15.5,17.2,19.1,21.1,23.3,25.6,28.2,30.9,33.9,37.1,40.5,44.2,48.2,52.5,57.1,62.1,67.4,73.0,79.1,85.6,92.6,100.]
 masses = [0.010, 0.020, 0.030, 0.050, 0.100, 0.200, 0.300, 0.400, 0.500, 0.700, 1.000, 1.400, 1.600, 1.800, 2.000, 3.000, 4.000, 5.000, 7.000, 10.000]
 # masses = [1.0, 1.4, 1.6, 1.8, 2.0, 3.0, 4.0, 5.0, 7.0, 10.0]
-# masses = [round(10**x,3) for x in np.linspace(-2, 1.6, 1201)]
+# masses = [round(10**x,3) for x in np.linspace(-2, 1.9, 1301)]
 
 def get_card_mq(
         model,

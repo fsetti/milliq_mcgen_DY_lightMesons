@@ -42,7 +42,7 @@ def simple_parse(fin, fout):
 
 if __name__=="__main__":
 
-    nchunks = 1 + reduce(max, [int(f.split("chunk")[1].split("/")[0]) for f in fs])
+    nchunks = 1 + max([int(f.split("chunk")[1].split("/")[0]) for f in fs])
 
     ps = []
     fouts = []

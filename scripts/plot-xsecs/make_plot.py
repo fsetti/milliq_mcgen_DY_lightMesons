@@ -16,10 +16,11 @@ c.SetLogx()
 c.SetLogy()
 
 xmax = 15 if DO_DY else 10
+ymin = 1.0e2 if DO_DY else 1.0e2
 hdummy = r.TH1F("hdummy","",100,1e-2,xmax)
 hdummy.SetLineColor(r.kWhite)
 hdummy.GetXaxis().SetRangeUser(1e-2,xmax)
-hdummy.GetYaxis().SetRangeUser(1.0e2,5.0e10)
+hdummy.GetYaxis().SetRangeUser(ymin,5.0e10)
 
 hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
 hdummy.GetXaxis().SetTitleSize(0.045)
@@ -69,7 +70,7 @@ if DO_DY:
         return avg / n
 
     gdy = r.TGraph()
-    x = np.loadtxt("dy/dy_xsecs_eta1.txt")
+    x = np.loadtxt("dy_xsecs_eta1.txt")
     m_dy = x[:,0]
     xs = x[:,1]
     eff = x[:,2]

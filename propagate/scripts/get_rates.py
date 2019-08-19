@@ -112,13 +112,6 @@ for mdir in glob.glob(os.path.join(basedir, "*")):
             # # for buggy xsecs
             xscorr = 1.0
 
-            # if samp == "ups1S":
-            #     xscorr = 1/0.0248
-            # if samp == "ups2S":
-            #     xscorr = 1/0.0193
-            # if samp == "ups3S":
-            #     xscorr = 1/0.0218
-
             ne = None
             if use_metadata:
                 ne = metadata[mname][samp]["n_events"]
