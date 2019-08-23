@@ -1,0 +1,27 @@
+Muon spectra from heavy flavor decays from
+http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html
+
+Main requirement is abs(eta)<1.
+For other details see the text files.
+
+For the total xsection, multiply by 2 (most likely, TBC)
+
+b-to-mu.txt .pdf .root
+----------------------
+pp -> b -> mu
+
+b-to-c-to-mu.txt .pdf .root
+---------------------------
+pp -> b -> c -> mu
+
+c-to-mu.txt .pdf .root
+----------------------
+pp -> c -> mu
+
+b-incl-to-mu.root
+-----------------
+Output of command
+hadd b-incl-to-mu.root b-to-mu.root b-to-c-to-mu.root
+This adds the uncertainties linearly, as they probably should,
+and is the root file to be used for the generation of all
+muons from b decays (including the cascade b->c->mu)
