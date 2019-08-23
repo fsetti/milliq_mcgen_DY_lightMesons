@@ -45,13 +45,13 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         if(decay_mode == 1){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile((BASE_DIR+"/oniaFromB/psi.root").c_str());
-            xsec_inclusive = 1.0167e6 * 1; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+            xsec_inclusive = 1.0167e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decay_mode == 2){
             // B -> psi X, psi -> mCP mCP
             finfo = new TFile((BASE_DIR+"/oniaFromB/psiprime.root").c_str());
-            xsec_inclusive = 2.6408e5 * 1; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+            xsec_inclusive = 2.6408e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }

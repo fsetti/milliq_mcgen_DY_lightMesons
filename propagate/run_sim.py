@@ -183,7 +183,7 @@ for i in it:
 
     if IS_MU:
         np.random.seed(tin.event)
-        q = -(2*np.random.randint(2) - 1)
+        q = 1.0 * (2*np.random.randint(2) - 1)
         sim_q[0] = q
 
     idict_p, bars_p = do_propagate(tin.p4_p, q, trajs if DO_DRAW else None)
