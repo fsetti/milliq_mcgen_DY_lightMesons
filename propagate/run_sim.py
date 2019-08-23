@@ -20,7 +20,12 @@ if len(sys.argv) < 4:
 DO_DRAW = False
    
 cfg = Config(sys.argv[1])
-q = float(sys.argv[2])
+IS_MU = False
+if sys.argv[2].lower() == "mu":
+    IS_MU = True
+    q = 1.0
+else:
+    q = float(sys.argv[2])
 
 #########################
 
@@ -123,7 +128,7 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 Nevt = tin.GetEntries()
 evt_start = 0
 # Nevt = 1
-# evt_start = 105691
+# evt_start = 41556
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 trajs = []
 n_hits = 0
@@ -145,7 +150,10 @@ for i in it:
     def do_propagate(p4, q, traj_array=None):
         itg.m = p4.M() * 1000.0
         itg.Q = q
-        
+ 
+        if IS_MU and q<0:
+            p4.SetPhi(-p4.phi())
+
         within_bounds = True
         if p4.Eta() < cfg.etamin or p4.Eta() > cfg.etamax:
             within_bounds = False
@@ -173,9 +181,17 @@ for i in it:
         else:
             return None, None
 
+    if IS_MU:
+        np.random.seed(tin.event)
+        q = -(2*np.random.randint(2) - 1)
+        sim_q[0] = q
+
     idict_p, bars_p = do_propagate(tin.p4_p, q, trajs if DO_DRAW else None)
-    idict_m, bars_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)    
-    
+    if not IS_MU:
+        idict_m, bars_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)    
+    else:
+        idict_m = None
+
     if idict_p is not None:
         does_hit_p[0] = True
         hit_p_xyz.SetXYZ(idict_p["v"], idict_p["w"], det.dist_to_origin)
@@ -235,6 +251,7 @@ for i in it:
             #     print "   FAILED"
             # else:
             #     print "   SUCCESS"
+
 
 # skim tree, keeping only events with >=1 hit
 tout = tout.CopyTree("(does_hit_m || does_hit_p) && Entry$ < {0}".format(Nevt))
