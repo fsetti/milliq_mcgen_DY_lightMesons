@@ -46,7 +46,7 @@ int init(int production_mode, MCPTree &outtree){
     outtree.xsec = h_pt->Integral() / 1000;
     // This includes eta [-0.025, 0.025];
     outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*0.025);
-    outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / 2*3.14159265;
+    outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
 
     for(int i=1; i<=h_pt->GetNbinsX(); i++)
         if(h_pt->GetBinContent(i) < 0)
