@@ -5,7 +5,7 @@ ntuple_tag = "v7"
 sim_tag = "v1"
 config = "MQ"
 
-charges = [0.01, 0.02, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
+charges = [0.005, 0.01, 0.02, 0.03, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
 # charges = [0.01,0.05,0.07,0.1]
 
 indir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_{0}".format(ntuple_tag)

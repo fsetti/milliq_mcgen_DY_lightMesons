@@ -22,31 +22,54 @@ float MUON_PHIMIN = 0.0;
 float MUON_PHIMAX = 0.3;
 float MUON_PTMIN = 16.0;
 
-TH1D* h_pt;
+TH1D *h_pt, *h_up, *h_dn;
 
 int init(int production_mode, MCPTree &outtree){
     TFile *f;
     
     if(production_mode == 1){
-        f = new TFile("data/QCD_CutPtSpect_v2.root");
-        h_pt = (TH1D*)f->Get("pt");
+        // f = new TFile("data/QCD_CutPtSpect_v2.root");
+        // h_pt = (TH1D*)f->Get("pt");
+
+        f = new TFile("data/bc-incl-to-mu.root");
+        h_pt = (TH1D*)f->Get("central");
+        h_up = (TH1D*)f->Get("up");
+        h_dn = (TH1D*)f->Get("down");
+
+        for(int i=1; i<=h_pt->GetNbinsX(); i++){
+            if(h_pt->GetXaxis()->GetBinUpEdge(i) <= MUON_PTMIN){
+                h_pt->SetBinContent(i, 0);
+                h_up->SetBinContent(i, 0);
+                h_dn->SetBinContent(i, 0);
+            }else
+                break;
+        }
+        outtree.xsec = h_pt->Integral("width") * 2;  // times 2 since it is single-b xsec, but produced as bbbar
+        // This includes eta [-1, 1];
+        outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*1.0);
+        outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
+
     }else if(production_mode == 2){
         f = new TFile("data/WJets_CutPtSpect_v2.root");
         h_pt = (TH1D*)f->Get("pt");
-
+        outtree.xsec = h_pt->Integral() / 1000;
+        // This includes eta [-0.025, 0.025];
+        outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*0.025);
+        outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
     }else if(production_mode == 3){
         f = new TFile("data/DY_CutPtSpect_v2.root");
         h_pt = (TH1D*)f->Get("pt");
-
+        outtree.xsec = h_pt->Integral() / 1000;
+        // This includes eta [-0.025, 0.025];
+        outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*0.025);
+        outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
     }else{
         return -1;
     }
 
     h_pt->SetDirectory(0);
-    outtree.xsec = h_pt->Integral() / 1000;
-    // This includes eta [-0.025, 0.025];
-    outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*0.025);
-    outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
+    h_up->SetDirectory(0);
+    h_dn->SetDirectory(0);
 
     for(int i=1; i<=h_pt->GetNbinsX(); i++)
         if(h_pt->GetBinContent(i) < 0)
@@ -161,6 +184,8 @@ int main(int argc, char **argv){
         outtree.p4_p->SetPt(pt);
         outtree.p4_p->SetEta(eta);
         outtree.p4_p->SetPhi(phi);
+        outtree.weight_up = h_up->GetBinContent(h_pt->FindBin(pt)) / h_pt->GetBinContent(h_pt->FindBin(pt));
+        outtree.weight_dn = h_dn->GetBinContent(h_pt->FindBin(pt)) / h_pt->GetBinContent(h_pt->FindBin(pt));
         outtree.Fill();
     }
 

@@ -10,7 +10,14 @@ found_header = False
 header = []
 jobs = []
 
-for f in glob.glob(os.path.join(indir,"*","*","*.cmd")):
+if "muon" in indir:
+    files = glob.glob(os.path.join(indir,"*.cmd"))
+else:
+    files = glob.glob(os.path.join(indir,"*","*","*.cmd"))
+
+for f in files:
+    if "resubmit" in f:
+        continue
     with open(f) as fid:
         within_job = False
         for line in fid:
@@ -23,7 +30,10 @@ for f in glob.glob(os.path.join(indir,"*","*","*.cmd")):
                 fout = os.path.realpath(os.path.join(outdir, "output_{0}.root".format(i)))
 
             if not found_header:
-                header.append(line)
+                header.append(line.replace(
+                        "+DESIRED_Sites=\"T2_US_UCSD,T2_US_Caltech,T3_US_UCR,T2_US_MIT,T2_US_Vanderbilt,T2_US_Wisconsin,T3_US_Baylor,T3_US_Colorado,T3_US_NotreDame,T3_US_Rice,T3_US_Rutgers,T3_US_UMD,T3_US_Vanderbilt_EC2,T3_US_OSU\"",
+                        "+DESIRED_Sites=\"T2_US_UCSD\""
+                        ))
             elif within_job:
                 job.append(line)
 

@@ -55,7 +55,7 @@ PYTHONPATH=./MilliqanSim:${PYTHONPATH}
 #
 # run it
 #
-echo "[wrapper] running: python -u run_sim.py ${CHARGE} ${INPUT}"
+echo "[wrapper] running: python -u run_sim.py ${CONFIG} ${CHARGE} ${INPUT}"
 
 python -u run_sim.py ${CONFIG} ${CHARGE} ${INPUT}
 

@@ -92,7 +92,8 @@ if __name__=="__main__":
             nchunks * minevt,
             chunk * minevt,
             fout.replace(".txt", ".log"),
-            outfile.replace("/hadoop",""),
+            # outfile.replace("/hadoop",""),
+            outfile,
             )
         fcmd.write(cmd + '\n')
     fcmd.close()
