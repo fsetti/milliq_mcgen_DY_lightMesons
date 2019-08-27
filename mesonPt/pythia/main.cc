@@ -78,8 +78,8 @@ int main(int argc, char** argv) {
     pythia.readString("Beams:setProductionScalesFromLHEF = off");
     pythia.readString("SLHA:keepSM = on");
     pythia.readString("SLHA:minMassSM = 1000.");
-    pythia.readString("ParticleDecays:limitTau0 = on");
-    pythia.readString("ParticleDecays:tau0Max = 10");
+    // pythia.readString("ParticleDecays:limitTau0 = on");
+    // pythia.readString("ParticleDecays:tau0Max = 10");
     pythia.readString("ParticleDecays:allowPhotonRadiation = on");
 
     // pythia8 CUEP8M1 settings
@@ -136,7 +136,8 @@ int main(int argc, char** argv) {
                     // std::cout << "Found mu! status = " << p.status() << "; mother id = " << pythia.event[p.mother1()].id() << std::endl;
                     if(!is_b(mid) && !is_c(mid)){
                         h_mu_nonbc->Fill(p.p().pT());
-                        h_mu_mother->Fill(abs(mid));
+                        if(p.p().pT() > 15)
+                            h_mu_mother->Fill(abs(mid));
                     }
                 }
             }            

@@ -16,13 +16,23 @@
   3. Drell-Yan
 *********************/
 
+const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
+
 float MUON_ETAMIN = 0.11 - 0.10;
 float MUON_ETAMAX = 0.11 + 0.10;
 float MUON_PHIMIN = 0.0;
 float MUON_PHIMAX = 0.3;
 float MUON_PTMIN = 16.0;
 
-TH1D *h_pt, *h_up, *h_dn;
+TH1D *h_pt=0, *h_up=0, *h_dn=0;
+
+string GetName(int mode){
+    if(mode == 1) return "QCD (bc)";
+    else if(mode == 2) return "W -> lv";
+    else if(mode == 3) return "Drell-Yan";
+    else if(mode == 4) return "QCD(non-bc)";
+    else return "UNKNOWN";
+}
 
 int init(int production_mode, MCPTree &outtree){
     TFile *f;
@@ -63,13 +73,33 @@ int init(int production_mode, MCPTree &outtree){
         // This includes eta [-0.025, 0.025];
         outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*0.025);
         outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
+    }else if(production_mode == 4){
+
+        f = new TFile("../mesonPt/pt_dists.root");
+        h_pt = (TH1D*)f->Get("h_mu_nonbc");
+        // zero out bins below pT threshold
+        for(int i=1; i<=h_pt->GetNbinsX(); i++){
+            if(h_pt->GetXaxis()->GetBinUpEdge(i) <= MUON_PTMIN)
+                h_pt->SetBinContent(i, 0);
+            else
+                break;
+        }
+        // bins in this histogram are "muons per minbias event per 50 MeV bin"
+        // so the integral is "muons per minbias event"
+        // scale by the minbias xsec to get the xsec for producing muons
+        outtree.xsec = h_pt->Integral() * MINBIAS_XSEC;
+        // xsecs stored for eta [-2,2], so multiply by 0.5 to get to [-1,1].
+        // Correction factor of 1.13 to account for non-uniformity in eta (from MC)
+        outtree.xsec *= 0.5 * 1.13;
+        outtree.xsec *= (MUON_ETAMAX - MUON_ETAMIN) / (2*1.0);
+        outtree.xsec *= (MUON_PHIMAX - MUON_PHIMIN) / (2*3.14159265);
     }else{
         return -1;
     }
 
     h_pt->SetDirectory(0);
-    h_up->SetDirectory(0);
-    h_dn->SetDirectory(0);
+    if(h_up) h_up->SetDirectory(0);
+    if(h_dn) h_dn->SetDirectory(0);
 
     for(int i=1; i<=h_pt->GetNbinsX(); i++)
         if(h_pt->GetBinContent(i) < 0)
@@ -158,7 +188,7 @@ int main(int argc, char **argv){
     std::cout << "**********************************************" << std::endl;
     std::cout << "*   Muon Generator   *" << std::endl;
     std::cout << "**********************************************" << std::endl;
-    std::cout << "  Doing decay mode: " << production_mode << std::endl;
+    std::cout << "  Doing decay mode: " << GetName(production_mode) << std::endl;
     std::cout << "         xsec (pb): " << outtree.xsec << std::endl;
     std::cout << "----------------------------------------------" << std::endl;
     std::cout << "       muon eta min: " << MUON_ETAMIN << std::endl;
@@ -183,9 +213,9 @@ int main(int argc, char **argv){
             pt = h_pt->GetRandom();
         outtree.p4_p->SetPt(pt);
         outtree.p4_p->SetEta(eta);
-        outtree.p4_p->SetPhi(phi);
-        outtree.weight_up = h_up->GetBinContent(h_pt->FindBin(pt)) / h_pt->GetBinContent(h_pt->FindBin(pt));
-        outtree.weight_dn = h_dn->GetBinContent(h_pt->FindBin(pt)) / h_pt->GetBinContent(h_pt->FindBin(pt));
+        outtree.p4_p->SetPhi(phi);        
+        if(h_up) outtree.weight_up = h_up->GetBinContent(h_pt->FindBin(pt)) / h_pt->GetBinContent(h_pt->FindBin(pt));
+        if(h_dn) outtree.weight_dn = h_dn->GetBinContent(h_pt->FindBin(pt)) / h_pt->GetBinContent(h_pt->FindBin(pt));
         outtree.Fill();
     }
 
