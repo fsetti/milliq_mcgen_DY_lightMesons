@@ -53,7 +53,7 @@ itg = Integrator(
     )
 
 det = PlaneDetector(
-    dist_to_origin = cfg.dist_to_detector,
+    dist_to_origin = cfg.dist_to_detector - (2.0 if IS_MU else 0.0),  # save 2m before detector if muons
     eta = cfg.eta,
     phi = 0.0,
     width = cfg.det_width,
@@ -127,8 +127,8 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 
 Nevt = tin.GetEntries()
 evt_start = 0
-# Nevt = 1
-# evt_start = 41556
+# Nevt = 100
+# evt_start = 0
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 trajs = []
 n_hits = 0
@@ -310,8 +310,9 @@ if DO_DRAW:
 
     # plt.figure(num=2, figsize=(8,7))
     # for tvec, traj in trajs:
+    #     R = np.linalg.norm(traj[:3,:], axis=0)
     #     E = np.sqrt(np.linalg.norm(traj[3:,:], axis=0)**2+itg.m**2)
-    #     plt.plot(tvec,E)
+    #     plt.plot(R,E)
 
     plt.show()
 

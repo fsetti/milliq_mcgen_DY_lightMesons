@@ -73,9 +73,9 @@ def make_plots(type_):
             c.SetLogy()
         c.SetTicky()
 
-        hdummy = r.TH1F("hdummy"+str(q),"",100,5e-3,10)
+        hdummy = r.TH1F("hdummy"+str(q),"",100,5e-3,16)
         hdummy.SetLineColor(r.kWhite)
-        hdummy.GetXaxis().SetRangeUser(5e-3,10)
+        hdummy.GetXaxis().SetRangeUser(5e-3,16)
         if type_=="rate":
             mult = 1.0
             if lumi is not None:
@@ -250,8 +250,8 @@ def make_charge_comparisons(type_):
     # leg.SetFillStyle(0)
     # leg.SetLineWidth(0)
 
-    # cs = [r.kBlack, r.kGreen+2, r.kAzure-2, r.kOrange-3, r.kRed+1]
     cs = [r.kBlack, r.kAzure-2, r.kOrange-3, r.kGreen+2, r.kRed+1]
+    # cs = [r.kBlack, r.kAzure-2, r.kViolet-2, r.kOrange-3, r.kGreen+2, r.kRed+1, r.kAzure-9]
     for i,q in enumerate(qs):
         gt = fin.Get("{0}_q{1}_{2}".format(type_, str(q).replace(".","p"), "total"))
         gt.SetLineWidth(3)
@@ -260,7 +260,7 @@ def make_charge_comparisons(type_):
         gt.SetMarkerStyle(20)
         gt.SetMarkerColor(cs[i])
         gt.Draw("SAME LP")
-        leg.AddEntry(gt, "Q/#it{e} = "+str(q), 'pl')
+        leg.AddEntry(gt, "Q /#it{e} = "+str(q), 'pl')
 
     leg.Draw()
 

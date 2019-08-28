@@ -30,6 +30,9 @@ for MDIR in `ls -d $INDIR/m_*`; do
                 # continue
             # fi
             OUTDIR=/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/${TAG}_${STAG}/$M/$Q
+            if [ -e ${OUTDIR}/${S}.root ]; then
+                continue
+            fi
             mkdir -p $OUTDIR
             echo nohup nice -n19 copyTree.py "\"$QDIR/*.root\" $OUTDIR/$S.root &> logs/log_${M}_${Q}_${S}.txt"
             # nohup nice -n19 copyTree.py "$QDIR/*.root" $OUTDIR/$S.root &> logs/log_${M}_${Q}_${S}.txt &
