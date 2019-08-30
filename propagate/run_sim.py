@@ -34,7 +34,7 @@ env = Environment(
     bfield = cfg.bfield,
     bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl" if cfg.bfield=='cms' else None,
     rock_begins = cfg.rock_begins,
-    rock_ends = cfg.dist_to_detector - 0.10,
+    rock_ends = cfg.dist_to_detector - 0.20,
 )
 
 itg = Integrator(
@@ -53,7 +53,7 @@ itg = Integrator(
     )
 
 det = PlaneDetector(
-    dist_to_origin = cfg.dist_to_detector - (2.0 if IS_MU else 0.0),  # save 2m before detector if muons
+    dist_to_origin = cfg.dist_to_detector - (0.1 if IS_MU else 0.1),  # save 2m before detector if muons
     eta = cfg.eta,
     phi = 0.0,
     width = cfg.det_width,
@@ -74,10 +74,20 @@ mdet = MilliqanDetector(
     # layer_gap = 1.0,
     bar_width = 0.05,
     bar_height = 0.05,
-    bar_length = 0.86,
+    bar_length = 0.80,
     bar_gap = 0.01,
     layer_gap = 0.20,
 )
+
+slabs = []
+for i in range(4):
+    slabs.append(PlaneDetector(
+            dist_to_origin = cfg.dist_to_detector - 0.5*mdet.layer_gap + i*(mdet.bar_length + mdet.layer_gap),
+            eta = cfg.eta,
+            phi = 0.0,
+            width = 0.20,
+            height = 0.30,
+            ))
 
 fin = r.TFile.Open(sys.argv[3])
 tin = fin.Get("Events")
@@ -98,11 +108,13 @@ hit_p_nlayers = np.zeros(1, dtype=int)
 hit_p_line = np.zeros(1, dtype=bool)
 hit_p_bar_idxs = np.zeros(mdet.nbars, dtype=np.uint16)
 hit_p_bar_dists = np.zeros(mdet.nbars, dtype=np.float32)
+hit_p_slabs = np.zeros(1, dtype=int)
 hit_m_nbars = np.zeros(1, dtype=int)
 hit_m_nlayers = np.zeros(1, dtype=int)
 hit_m_line = np.zeros(1, dtype=bool)
 hit_m_bar_idxs = np.zeros(mdet.nbars, dtype=np.uint16)
 hit_m_bar_dists = np.zeros(mdet.nbars, dtype=np.float32)
+hit_m_slabs = np.zeros(1, dtype=int)
 b_sim_q = tout.Branch("sim_q", sim_q, "sim_q/D")
 b_does_hit_p = tout.Branch("does_hit_p", does_hit_p, "does_hit_p/O")
 b_hit_p_xyz = tout.Branch("hit_p_xyz", hit_p_xyz)
@@ -115,20 +127,23 @@ b_hit_p_nlayers = tout.Branch("hit_p_nlayers", hit_p_nlayers, "hit_p_nlayers/I")
 b_hit_p_line = tout.Branch("hit_p_line", hit_p_line, "hit_p_line/O")
 b_hit_p_bar_idxs = tout.Branch("hit_p_bar_idxs", hit_p_bar_idxs, "hit_p_bar_idxs[hit_p_nbars]/s")
 b_hit_p_bar_dists = tout.Branch("hit_p_bar_dists", hit_p_bar_dists, "hit_p_bar_dists[hit_p_nbars]/F")
+b_hit_p_slabs = tout.Branch("hit_p_slabs", hit_p_slabs, "hit_p_slabs/I")
 b_hit_m_nbars = tout.Branch("hit_m_nbars", hit_m_nbars, "hit_m_nbars/I")
 b_hit_m_nlayers = tout.Branch("hit_m_nlayers", hit_m_nlayers, "hit_m_nlayers/I")
 b_hit_m_line = tout.Branch("hit_m_line", hit_m_line, "hit_m_line/O")
 b_hit_m_bar_idxs = tout.Branch("hit_m_bar_idxs", hit_m_bar_idxs, "hit_m_bar_idxs[hit_m_nbars]/s")
 b_hit_m_bar_dists = tout.Branch("hit_m_bar_dists", hit_m_bar_dists, "hit_m_bar_dists[hit_m_nbars]/F")
+b_hit_m_slabs = tout.Branch("hit_m_slabs", hit_m_slabs, "hit_m_slabs/I")
 
 bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz, b_hit_m_p4,
       b_hit_p_nbars, b_hit_p_nlayers, b_hit_p_line, b_hit_p_bar_idxs, b_hit_p_bar_dists,
-      b_hit_m_nbars, b_hit_m_nlayers, b_hit_m_line, b_hit_m_bar_idxs, b_hit_m_bar_dists]
+      b_hit_m_nbars, b_hit_m_nlayers, b_hit_m_line, b_hit_m_bar_idxs, b_hit_m_bar_dists,
+      b_hit_p_slabs, b_hit_m_slabs]
 
 Nevt = tin.GetEntries()
 evt_start = 0
-# Nevt = 100
-# evt_start = 0
+# nevt = 1
+# evt_start = 2874
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 trajs = []
 n_hits = 0
@@ -174,10 +189,11 @@ for i in it:
             traj,tvec = itg.propagate(x0, fast=True, fast_seed=seed)
             idict = det.find_intersection(traj)
             bars_intersects = mdet.find_entries_exits(traj)
+            slabs_intersects = [slab.find_intersection(traj) for slab in slabs]
             # if traj_array is not None and idict is not None:
             if traj_array is not None:
                 traj_array.append((tvec,traj))
-            return idict, bars_intersects
+            return idict, slabs_intersects, bars_intersects
         else:
             return None, None
 
@@ -186,26 +202,33 @@ for i in it:
         q = 1.0 * (2*np.random.randint(2) - 1)
         sim_q[0] = q
 
-    idict_p, bars_p = do_propagate(tin.p4_p, q, trajs if DO_DRAW else None)
+    idict_p, slabs_p, bars_p = do_propagate(tin.p4_p, q, trajs if DO_DRAW else None)
     if not IS_MU:
-        idict_m, bars_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)    
+        idict_m, slabs_m, bars_m = do_propagate(tin.p4_m, -q, trajs if DO_DRAW else None)    
     else:
         idict_m = None
+
+    def get_projected_p4(p):
+        px = np.dot(p, det.unit_v) / 1000.
+        py = np.dot(p, det.unit_w) / 1000.
+        pz = np.dot(p, det.norm) / 1000.
+        E = np.sqrt(np.linalg.norm(p)**2 + itg.m**2) / 1000.
+        return px,py,pz,E
 
     if idict_p is not None:
         does_hit_p[0] = True
         hit_p_xyz.SetXYZ(idict_p["v"], idict_p["w"], det.dist_to_origin)
-        px = np.dot(idict_p["p_int"], det.unit_v) / 1000.
-        py = np.dot(idict_p["p_int"], det.unit_w) / 1000.
-        pz = np.dot(idict_p["p_int"], det.norm) / 1000.
-        E = np.sqrt(np.linalg.norm(idict_p["p_int"])**2 + itg.m**2) / 1000.
-        hit_p_p4.SetPxPyPzE(px,py,pz,E)
+        hit_p_p4.SetPxPyPzE(*get_projected_p4(idict_p["p_int"]))
         hit_p_nbars[0] = len(bars_p)
         hit_p_nlayers[0] = len(set([i[0][0] for i in bars_p]))
         hit_p_line[0] = mdet.hits_straight_line(bars_p)
         for i,binfo in enumerate(bars_p):
             hit_p_bar_idxs[i] = mdet.lrc_to_idx(*binfo[0])
             hit_p_bar_dists[i] = np.linalg.norm(binfo[2]-binfo[1])
+        hit_p_slabs[0] = 0    
+        for i,isect in enumerate(slabs_p):
+            if isect is not None:
+                hit_p_slabs[0] |= (1<<i)
     else:
         does_hit_p[0] = False
         hit_p_xyz.SetXYZ(0,0,0)
@@ -213,21 +236,22 @@ for i in it:
         hit_p_nbars[0] = 0
         hit_p_nlayers[0] = 0
         hit_p_line[0] = False
+        hit_p_slabs[0] = 0    
 
     if idict_m is not None:
         does_hit_m[0] = True
         hit_m_xyz.SetXYZ(idict_m["v"], idict_m["w"], det.dist_to_origin)
-        px = np.dot(idict_m["p_int"], det.unit_v) / 1000.
-        py = np.dot(idict_m["p_int"], det.unit_w) / 1000.
-        pz = np.dot(idict_m["p_int"], det.norm) / 1000.
-        E = np.sqrt(np.linalg.norm(idict_m["p_int"])**2 + itg.m**2) / 1000.
-        hit_m_p4.SetPxPyPzE(px,py,pz,E)
+        hit_m_p4.SetPxPyPzE(*get_projected_p4(idict_m["p_int"]))
         hit_m_nbars[0] = len(bars_m)
         hit_m_nlayers[0] = len(set([i[0][0] for i in bars_m]))
         hit_m_line[0] = mdet.hits_straight_line(bars_m)
         for i,binfo in enumerate(bars_m):
             hit_m_bar_idxs[i] = mdet.lrc_to_idx(*binfo[0])
             hit_m_bar_dists[i] = np.linalg.norm(binfo[2]-binfo[1])
+        hit_m_slabs[0] = 0    
+        for i,isect in enumerate(slabs_m):
+            if isect is not None:
+                hit_m_slabs[0] |= (1<<i)
     else:
         does_hit_m[0] = False
         hit_m_xyz.SetXYZ(0,0,0)
@@ -235,6 +259,7 @@ for i in it:
         hit_m_nbars[0] = 0
         hit_m_nlayers[0] = 0
         hit_m_line[0] = False
+        hit_m_slabs[0] = 0    
 
     for b in bs:
         ret = b.Fill()
@@ -274,15 +299,12 @@ if DO_DRAW:
     plt.figure(num=1, figsize=(15,7))
 
     Draw3Dtrajs([traj[1][:,-500:] for traj in trajs], subplot=121)
-    # the four corners
-    if det.width is not None and det.height is not None:
-        c1,c2,c3,c4 = det.get_corners()
-        DrawLine(c1,c2,is3d=True,c='k')
-        DrawLine(c2,c3,is3d=True,c='k')
-        DrawLine(c3,c4,is3d=True,c='k')
-        DrawLine(c4,c1,is3d=True,c='k')
-
+    
+    det.draw(plt.gca())
+    for slab in slabs:
+        slab.draw(plt.gca(), color='b')
     mdet.draw(plt.gca(), c='0.65', draw_containing_box=False)
+
     plt.gca().set_xlim(mdet.center_3d[0]-1, mdet.center_3d[0]+1)
     plt.gca().set_ylim(mdet.center_3d[2]-1, mdet.center_3d[2]+1)
     plt.gca().set_zlim(mdet.center_3d[1]-1, mdet.center_3d[1]+1)
@@ -301,7 +323,14 @@ if DO_DRAW:
             hit_boxes.add(isect[0])
             c = colors[i % len(colors)]
             DrawLine(isect[1], isect[1], is3d=True, linestyle='None', marker='o', mfc=c, mec='k')
-            DrawLine(isect[2], isect[2], is3d=True, linestyle='None', marker='o', mfc='w', mec=c)
+            DrawLine(isect[2], isect[2], is3d=True, linestyle='None', marker='o', mfc='w', mec=c)        
+        for slab in slabs:
+            isect = slab.find_intersection(traj)
+            if isect is None:
+                continue
+            p = slab.transform_from_detcoords(isect["v"], isect["w"])
+            DrawLine(p, p, is3d=True, linestyle='None', marker='o', mfc='b', mec='k')
+
 
     for ilayer,irow,icol in hit_boxes:
         mdet.bars[ilayer][irow][icol].draw(plt.gca(), c='k')
