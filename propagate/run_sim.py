@@ -1,5 +1,5 @@
 import sys
-from array import array
+import argparse
 import numpy as np
 import ROOT as r
 from millisim.Environment import Environment
@@ -12,20 +12,24 @@ try:
 except ImportError:
     tqdm = lambda x:x
     loaded_tqdm = False
- 
-if len(sys.argv) < 4:
-    print "usage: {0} <cfg_name> <Q> <input_file>".format(sys.argv[0])
-    exit(1)
 
 DO_DRAW = False
+
+parser = argparse.ArgumentParser(description="Propagate mCPs or muons to the milliqan detector, starting from root files of four-vectors")
+parser.add_argument('input_file', help='input ROOT file containing the four-vectors to propagate')
+parser.add_argument('-q', '--charge', dest='charge', default="0.1", help="charge of the mCP, or \"mu\" to run in muon mode")
+parser.add_argument('-c', '--config', dest='config', default='MQ', help="configuration to use. Default is \"MQ\" for standard Milliqan")
+parser.add_argument('-d', '--density_mult', dest='density_mult', default=1.0, type=float, help="uniformly scale the density of all materials by this number")
+args = parser.parse_args()
    
-cfg = Config(sys.argv[1])
+cfg = Config(args.config)
 IS_MU = False
-if sys.argv[2].lower() == "mu":
+if args.charge.lower() == "mu":
     IS_MU = True
     q = 1.0
 else:
-    q = float(sys.argv[2])
+    q = float(args.charge)
+density_mult = args.density_mult
 
 #########################
 
@@ -35,12 +39,13 @@ env = Environment(
     bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl" if cfg.bfield=='cms' else None,
     rock_begins = cfg.rock_begins,
     rock_ends = cfg.dist_to_detector - 0.20,
+    density_mult = density_mult,
 )
 
 itg = Integrator(
     environ = env,
     Q = q,
-    m = 1, # overwritten later
+    m = 1, # overwritten later based on mass of four vector
     dt = cfg.dt,
     nsteps = cfg.max_nsteps,
     cutoff_dist = cfg.dist_to_detector + 5,
@@ -89,7 +94,7 @@ for i in range(4):
             height = 0.30,
             ))
 
-fin = r.TFile.Open(sys.argv[3])
+fin = r.TFile.Open(args.input_file)
 tin = fin.Get("Events")
 
 fout = r.TFile("output.root", "RECREATE")
@@ -142,8 +147,8 @@ bs = [b_sim_q, b_does_hit_p, b_hit_p_xyz, b_hit_p_p4, b_does_hit_m, b_hit_m_xyz,
 
 Nevt = tin.GetEntries()
 evt_start = 0
-# nevt = 1
-# evt_start = 2874
+# Nevt = 1
+# evt_start = 48538
 print "Simulating {0} events, 2 trajectories per event".format(Nevt)
 trajs = []
 n_hits = 0
@@ -337,11 +342,11 @@ if DO_DRAW:
 
     DrawXYslice([traj[1] for traj in trajs], subplot=122)
 
-    # plt.figure(num=2, figsize=(8,7))
-    # for tvec, traj in trajs:
-    #     R = np.linalg.norm(traj[:3,:], axis=0)
-    #     E = np.sqrt(np.linalg.norm(traj[3:,:], axis=0)**2+itg.m**2)
-    #     plt.plot(R,E)
+    plt.figure(num=2, figsize=(8,7))
+    for tvec, traj in trajs:
+        R = np.linalg.norm(traj[:3,:], axis=0)
+        E = np.sqrt(np.linalg.norm(traj[3:,:], axis=0)**2+itg.m**2)
+        plt.plot(R,E)
 
     plt.show()
 

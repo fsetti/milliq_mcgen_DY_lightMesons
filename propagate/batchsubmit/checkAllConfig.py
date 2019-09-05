@@ -25,7 +25,7 @@ for f in files:
                 job = []
                 within_job = True
                 found_header = True            
-                outdir = line.split()[4]
+                outdir = line.split()[5]
                 i = line.split()[0].split("=")[1]
                 fout = os.path.realpath(os.path.join(outdir, "output_{0}.root".format(i)))
 

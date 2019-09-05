@@ -8,12 +8,14 @@ FILEID=$1
 INPUT=$2
 CONFIG=$3
 CHARGE=$4
-COPYDIR=$5
+DENSITY=$5
+COPYDIR=$6
 
 echo "[wrapper] FILEID    = " ${FILEID}
 echo "[wrapper] INPUT     = " ${INPUT}
 echo "[wrapper] CONFIG    = " ${CONFIG}
 echo "[wrapper] CHARGE    = " ${CHARGE}
+echo "[wrapper] DENSITY   = " ${DENSITY}
 echo "[wrapper] COPYDIR   = " ${COPYDIR}
 
 #
@@ -55,9 +57,9 @@ PYTHONPATH=./MilliqanSim:${PYTHONPATH}
 #
 # run it
 #
-echo "[wrapper] running: python -u run_sim.py ${CONFIG} ${CHARGE} ${INPUT}"
+echo "[wrapper] running: python -u run_sim.py --config ${CONFIG} --charge ${CHARGE} -d ${DENSITY} ${INPUT}"
 
-python -u run_sim.py ${CONFIG} ${CHARGE} ${INPUT}
+python -u run_sim.py --config ${CONFIG} --charge ${CHARGE} -d ${DENSITY} ${INPUT}
 
 #
 # do something with output
