@@ -142,7 +142,7 @@ For definitions of all terms and parameters, see \cite{PDG_matter}. All material
 \section{Putting it all together}
 At each timestep, the following steps are taken:
 \begin{enumerate}
-\item Evaluate $d\vec{x}/dt$ and $d\vec{p}/dt$ using using the current position/momentum $\vec{x}_x/\vec{p}_i$ inserted into Eqs. \ref{eq:dxdt} and \ref{eq:dpdt_mod} (actually,
+\item Evaluate $d\vec{x}/dt$ and $d\vec{p}/dt$ using using the current position/momentum $\vec{x}_i/\vec{p}_i$ inserted into Eqs. \ref{eq:dxdt} and \ref{eq:dpdt_mod} (actually,
 evaluate four times as per the Runge-Kutta method). Use the Runge-Kutta method to compute $\Delta\vec{x}_{\text{B},i}$ and $\Delta\vec{p}_{\text{B},i}$ for the timestep.
 \item Look up the material at $\vec{x}_i$, and plug the material constants into Eq. \ref{eq:thrms}. Then use Eq. \ref{eq:msc} to compute a transverse displacement
 and angular deflection (independently for both transverse directions). Combine to get $\Delta\vec{x}_{\text{MS},i}$ and $\Delta\vec{p}_{\text{MS},i}$ due to multiple scattering.
