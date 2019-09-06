@@ -21,8 +21,8 @@ const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
 float MUON_ETAMIN = 0.11 - 0.10;
 float MUON_ETAMAX = 0.11 + 0.10;
 float MUON_PHIMIN = 0.0;
-float MUON_PHIMAX = 0.3;
-float MUON_PTMIN = 16.0;
+float MUON_PHIMAX = 0.33;
+float MUON_PTMIN = 13.0;
 
 TH1D *h_pt=0, *h_up=0, *h_dn=0;
 

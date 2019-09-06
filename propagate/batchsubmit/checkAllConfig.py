@@ -40,6 +40,8 @@ for f in files:
             if line.startswith("queue"):
                 jobs.append((job,fout))
 
+header.append("+SingularityImage=\"/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel6\"\n")
+
 while True:
     cmd = "condor_q {0} -nobatch -wide".format("bemarsh")
     # if "uaf-1." in socket.gethostname():
@@ -85,6 +87,6 @@ while True:
 
     print "Found {0} redundant jobs".format(n_redundant)
 
-    towait = 30*60
+    towait = 5*60
     print "Waiting {0} minutes".format(towait/60.0)
     time.sleep(towait)

@@ -20,6 +20,7 @@ parser.add_argument('input_file', help='input ROOT file containing the four-vect
 parser.add_argument('-q', '--charge', dest='charge', default="0.1", help="charge of the mCP, or \"mu\" to run in muon mode")
 parser.add_argument('-c', '--config', dest='config', default='MQ', help="configuration to use. Default is \"MQ\" for standard Milliqan")
 parser.add_argument('-d', '--density_mult', dest='density_mult', default=1.0, type=float, help="uniformly scale the density of all materials by this number")
+parser.add_argument('-s', '--save_dist', dest='save_dist', default=0.1, type=float, help="distance before detector face to save four-vectors (default 0.1m)")
 args = parser.parse_args()
    
 cfg = Config(args.config)
@@ -29,7 +30,6 @@ if args.charge.lower() == "mu":
     q = 1.0
 else:
     q = float(args.charge)
-density_mult = args.density_mult
 
 #########################
 
@@ -39,7 +39,7 @@ env = Environment(
     bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl" if cfg.bfield=='cms' else None,
     rock_begins = cfg.rock_begins,
     rock_ends = cfg.dist_to_detector - 0.20,
-    density_mult = density_mult,
+    density_mult = args.density_mult,
 )
 
 itg = Integrator(
@@ -58,7 +58,7 @@ itg = Integrator(
     )
 
 det = PlaneDetector(
-    dist_to_origin = cfg.dist_to_detector - (0.1 if IS_MU else 0.1),  # save 2m before detector if muons
+    dist_to_origin = cfg.dist_to_detector - args.save_dist,
     eta = cfg.eta,
     phi = 0.0,
     width = cfg.det_width,
@@ -154,7 +154,7 @@ trajs = []
 n_hits = 0
 it = range(evt_start, evt_start+Nevt)
 using_tqdm = False
-if "redirect" not in sys.argv[3]:
+if "redirect" not in args.input_file:
     # condor jobs have "redirect" in file name (xrootd). Don't use tqdm for these since it blows up logs
     it = tqdm(it)
     using_tqdm = True
