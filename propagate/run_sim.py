@@ -1,5 +1,14 @@
-import sys
 import argparse
+
+parser = argparse.ArgumentParser(description="Propagate mCPs or muons to the milliqan detector, starting from root files of four-vectors")
+parser.add_argument('input_file', help='input ROOT file containing the four-vectors to propagate')
+parser.add_argument('-q', '--charge', dest='charge', default="0.1", help="charge of the mCP, or \"mu\" to run in muon mode")
+parser.add_argument('-c', '--config', dest='config', default='MQ', help="configuration to use. Default is \"MQ\" for standard Milliqan")
+parser.add_argument('-d', '--density_mult', dest='density_mult', default=1.0, type=float, help="uniformly scale the density of all materials by this number")
+parser.add_argument('-s', '--save_dist', dest='save_dist', default=0.1, type=float, help="distance before detector face to save four-vectors (default 0.1m)")
+args = parser.parse_args()
+
+import sys
 import numpy as np
 import ROOT as r
 from millisim.Environment import Environment
@@ -14,14 +23,6 @@ except ImportError:
     loaded_tqdm = False
 
 DO_DRAW = False
-
-parser = argparse.ArgumentParser(description="Propagate mCPs or muons to the milliqan detector, starting from root files of four-vectors")
-parser.add_argument('input_file', help='input ROOT file containing the four-vectors to propagate')
-parser.add_argument('-q', '--charge', dest='charge', default="0.1", help="charge of the mCP, or \"mu\" to run in muon mode")
-parser.add_argument('-c', '--config', dest='config', default='MQ', help="configuration to use. Default is \"MQ\" for standard Milliqan")
-parser.add_argument('-d', '--density_mult', dest='density_mult', default=1.0, type=float, help="uniformly scale the density of all materials by this number")
-parser.add_argument('-s', '--save_dist', dest='save_dist', default=0.1, type=float, help="distance before detector face to save four-vectors (default 0.1m)")
-args = parser.parse_args()
    
 cfg = Config(args.config)
 IS_MU = False
@@ -37,7 +38,7 @@ env = Environment(
     mat_setup = cfg.mat_setup,
     bfield = cfg.bfield,
     bfield_file = "MilliqanSim/bfield/bfield_coarse.pkl" if cfg.bfield=='cms' else None,
-    rock_begins = cfg.rock_begins,
+    rock_begins = cfg.dist_to_detector - cfg.amount_of_rock - 0.20,
     rock_ends = cfg.dist_to_detector - 0.20,
     density_mult = args.density_mult,
 )

@@ -65,6 +65,7 @@ while True:
     fout = open(os.path.join(indir,"resubmit.cfg"), 'w')
     for line in header:
         fout.write(line)
+    n_done = 0
     n_resubmit = 0
     n_redundant = 0
     for job,f in jobs:
@@ -73,6 +74,7 @@ while True:
         if os.path.exists(f):            
             if f in running_files:
                 n_redundant += 1
+            n_done += 1
             continue
         if f in running_files:
             continue
@@ -81,12 +83,12 @@ while True:
             fout.write(line)
     fout.close()
 
-    print "Found {0} jobs to resubmit".format(n_resubmit)
+    print "Found {0}/{1} jobs done, {2} jobs to resubmit".format(n_done, len(jobs), n_resubmit)
     if n_resubmit >0:
         os.system("condor_submit "+os.path.join(indir,"resubmit.cfg"))
 
     print "Found {0} redundant jobs".format(n_redundant)
 
-    towait = 5*60
+    towait = 10*60
     print "Waiting {0} minutes".format(towait/60.0)
     time.sleep(towait)

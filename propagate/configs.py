@@ -10,7 +10,7 @@ class Config:
             self.bfield = 'cms'            
             self.dist_to_detector = 33.
             self.eta = 0.11
-            self.rock_begins = self.dist_to_detector - 17.
+            self.amount_of_rock = 17.
             self.max_nsteps = 3800
             self.etamin = self.eta - 0.18
             self.etamax = self.eta + 0.18
@@ -24,7 +24,7 @@ class Config:
             self.bfield = 'none'
             self.dist_to_detector = 33.
             self.eta = 1.51
-            self.rock_begins = self.dist_to_detector - 26.
+            self.amount_of_rock = 26.
             self.max_nsteps = 3800
             self.etamin = self.eta - 0.10
             self.etamax = self.eta + 0.10
@@ -38,7 +38,7 @@ class Config:
             self.bfield = 'none'
             self.dist_to_detector = 45.
             self.eta = 2.44
-            self.rock_begins = self.dist_to_detector - 32.
+            self.amount_of_rock = 32.
             self.max_nsteps = 5200
             self.etamin = self.eta - 0.20
             self.etamax = self.eta + 0.20
@@ -52,7 +52,7 @@ class Config:
             self.bfield = 'none'
             self.dist_to_detector = 55.
             self.eta = 3.13
-            self.rock_begins = self.dist_to_detector - 10.
+            self.amount_of_rock = 10.
             self.max_nsteps = 6400
             self.etamin = self.eta - 0.30
             self.etamax = self.eta + 0.30

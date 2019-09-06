@@ -69,6 +69,7 @@ echo "[wrapper] linux timestamp = " `date +%s`
 #
 
 echo "[wrapper] extracting input sandbox"
+mv *.tar.xz input.tar.xz
 tar -xJf input.tar.xz
 
 echo "[wrapper] input contents are"
