@@ -30,6 +30,8 @@ void MCPTree::Init(TTree *t){
         b_p4_p           = this->t->Branch("p4_p", &p4_p);
         b_p4_m           = this->t->Branch("p4_m", &p4_m);
         b_xsec           = this->t->Branch("xsec", &xsec, "xsec/F");
+        b_xsec_up        = this->t->Branch("xsec_up", &xsec_up, "xsec_up/F");
+        b_xsec_down      = this->t->Branch("xsec_down", &xsec_down, "xsec_down/F");
         b_BR_q1          = this->t->Branch("BR_q1", &BR_q1, "BR_q1/F");
         b_filter_eff     = this->t->Branch("filter_eff", &filter_eff, "filter_eff/F");
         b_weight         = this->t->Branch("weight", &weight, "weight/F");
@@ -54,6 +56,8 @@ void MCPTree::Init(TTree *t){
         this->t->SetBranchAddress("p4_p", &p4_p, &b_p4_p);
         this->t->SetBranchAddress("p4_m", &p4_m, &b_p4_m);
         this->t->SetBranchAddress("xsec", &xsec, &b_xsec);
+        this->t->SetBranchAddress("xsec_up", &xsec_up, &b_xsec_up);
+        this->t->SetBranchAddress("xsec_down", &xsec_down, &b_xsec_down);
         this->t->SetBranchAddress("BR_q1", &BR_q1, &b_BR_q1);
         this->t->SetBranchAddress("filter_eff", &filter_eff, &b_filter_eff);
         this->t->SetBranchAddress("weight", &weight, &b_weight);
@@ -81,6 +85,8 @@ void MCPTree::Reset(){
     *p4_p = LorentzPtEtaPhiMf();
     *p4_m = LorentzPtEtaPhiMf();
     xsec = -999;
+    xsec_up = -999;
+    xsec_down = -999;
     BR_q1 = -999;
     filter_eff = -999;
     weight = -999;

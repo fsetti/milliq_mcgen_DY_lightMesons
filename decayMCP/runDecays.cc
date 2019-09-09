@@ -169,7 +169,7 @@ int main(int argc, char **argv){
     std::cout << "**********************************************" << std::endl;
     std::cout << "  Doing decay mode: " << dg.decay_string << std::endl;
     std::cout << "    mCP mass (GeV): " << dg.m_mCP << std::endl;
-    std::cout << "         xsec (pb): " << dg.xsec_inclusive << std::endl;
+    std::cout << "         xsec (pb): " << dg.xsec_inclusive << " (" << dg.xsec_up << ", " << dg.xsec_down << ")\n";
     std::cout << "           BR(q=1): " << dg.BR << std::endl;
     std::cout << "      parent_pdgId: " << dg.parent_pdgId << std::endl;
     std::cout << "    m_parent (GeV): " << dg.m_parent << std::endl;

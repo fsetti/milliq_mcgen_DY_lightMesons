@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "TFile.h"
-#include "TGraph.h"
+#include "TGraphAsymmErrors.h"
 
 #include "../../decayMCP/DecayGen.h"
 
@@ -19,11 +19,11 @@ int main(int argc, char** argv){
 
     TFile* fout = new TFile("xsecs.root", "RECREATE");
 
-    TGraph *gt = new TGraph();
+    TGraphAsymmErrors *gt = new TGraphAsymmErrors();
     gt->SetName("xsecs_total");
 
     for(int i=1; i<=15; i++){
-        TGraph *g = new TGraph();
+        TGraphAsymmErrors *g = new TGraphAsymmErrors();
         g->SetName(("xsecs_"+std::to_string(i)).c_str());
 
         for(int j=0; j<=n_masses; j++){
@@ -37,26 +37,33 @@ int main(int argc, char** argv){
                 if(dg.decay_type == DecayGen::DALITZ)
                     mass_limit = (dg.m_parent - dg.m_X)/2;
                 g->SetPoint(g->GetN(), mass_limit, 0.001);
+                g->SetPointError(g->GetN()-1, 0, 0, 0.0005,0.0005);
                 break;
             }
             float xsec = dg.xsec_inclusive * dg.BR;
             xsec /= (dg.etamax - dg.etamin) / 4; // normalize to eta in [-2,2]
+            float xsec_up = xsec * dg.xsec_up/dg.xsec_inclusive;
+            float xsec_dn = xsec * dg.xsec_down/dg.xsec_inclusive;
             g->SetPoint(g->GetN(), mass, xsec);
-            
+            g->SetPointError(g->GetN()-1, 0, 0, xsec-xsec_dn, xsec_up-xsec);
             // get current total xsec at this mass, and add the current xsec
-            double x,y, cur_xs;
+            double x,y, cur_xs, cur_errup, cur_errdn;
             if(gt->GetN() > j){
                 gt->GetPoint(j, x, y);
                 cur_xs = y;
+                cur_errup = gt->GetErrorYhigh(j);
+                cur_errdn = gt->GetErrorYlow(j);
             }else
-                cur_xs = 0.0;
+                cur_xs = 0.0, cur_errup = 0.0, cur_errdn = 0.0;;
             gt->SetPoint(j, mass, cur_xs + xsec);
+            gt->SetPointError(j, 0, 0, sqrt(pow(cur_errdn,2)+pow(xsec-xsec_dn,2)), sqrt(pow(cur_errup,2)+pow(xsec_up-xsec,2)));
         }
         fout->cd();
         g->Write(g->GetName(), TObject::kWriteDelete);
     }
     // add final point at highest kinematic threshold (half of Ups(3S) mass) at "zero"
     gt->SetPoint(gt->GetN(), 5.1776, 0.001);
+    gt->SetPointError(gt->GetN()-1, 0, 0, 0.0005, 0.0005);
     gt->Write(gt->GetName(), TObject::kWriteDelete);
     fout->Close();
 

@@ -25,7 +25,7 @@ class DecayGen {
     int decay_mode;
     string decay_string;
     float etamin, etamax; // eta bounds of parent particle
-    float xsec_inclusive; // xsec before BR to mCPs (in pb)
+    float xsec_inclusive, xsec_up, xsec_down; // xsec before BR to mCPs (in pb)
     float BR; // branching ratio to mCP's
     float m_mCP, m_parent, m_X; // masses of mCP, parent particle, and "X" in dalitz decays
     int parent_pdgId;

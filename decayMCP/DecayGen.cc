@@ -111,6 +111,11 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
             m_X = 0.0;
             if(decay_mode == 10) m_X = 0.7827;
         }
+        h_up = (TH1D*)h_cn->Clone("h_up");
+        h_dn = (TH1D*)h_cn->Clone("h_dn");
+        // ad-hoc 50% uncertainty for now
+        h_up->Scale(1 + 0.50);
+        h_dn->Scale(1 - 0.50);
         etamin = -2.0;
         etamax = 2.0;
         // bins in this histogram are "particles per minbias event per 50 MeV bin"
@@ -179,6 +184,9 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
     }else{
         return -1;
     }
+
+    xsec_up   = xsec_inclusive * h_up->Integral("width") / h_cn->Integral("width");
+    xsec_down = xsec_inclusive * h_dn->Integral("width") / h_cn->Integral("width");
 
     if(h_cn) h_cn->SetDirectory(0);
     if(h_up) h_up->SetDirectory(0);

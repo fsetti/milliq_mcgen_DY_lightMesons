@@ -4,6 +4,7 @@ r.gROOT.SetBatch(1)
 r.gStyle.SetOptStat(0)
 
 DO_DY = True
+DY_ERR = 0.20
 
 f = r.TFile("xsecs.root")
 
@@ -53,7 +54,7 @@ for i in range(1,16):
     gs[i] = f.Get("xsecs_"+str(i))
     gs[i].SetLineWidth(2)
     gs[i].SetLineColor(colors[i])
-    gs[i].Draw("SAME L")
+    gs[i].Draw("SAME LX")
 
 ##### Handle DY curve #####
 
@@ -79,7 +80,7 @@ if DO_DY:
     gdy.SetLineWidth(3)
     gdy.SetLineStyle(1)
     gdy.SetLineColor(r.kYellow+1)
-    gdy.Draw("SAME L")
+    gdy.Draw("SAME LX")
 
 ###########################
 
@@ -88,16 +89,31 @@ if DO_DY:
     x, y = r.Double(), r.Double()
     for i in range(gt.GetN()):
         gt.GetPoint(i, x, y)
+        err_up = gt.GetErrorYhigh(i)
+        err_dn = gt.GetErrorYlow(i)
         dy = np.interp(float(x), m_dy, smoothed)
         gt.SetPoint(i, x, y+dy)
+        dy_err = DY_ERR*dy
+        gt.SetPointError(i, 0, 0, np.sqrt(err_dn**2 + dy_err**2), np.sqrt(err_up**2 + dy_err**2))
     idx = np.argmax(m_dy > float(x))
     N = gt.GetN()
     for i in range(m_dy.size - idx):
         gt.SetPoint(N+i, m_dy[idx+i], smoothed[idx+i])
+        gt.SetPointError(N+i, 0, 0, smoothed[idx+i]*DY_ERR, smoothed[idx+i]*DY_ERR)
 gt.SetLineWidth(3)
 gt.SetLineStyle(2)
 gt.SetLineColor(r.kBlack)
-gt.Draw("SAME L")
+gray = r.TColor.GetFreeColorIndex()
+gray_c = r.TColor(gray, *([0.85]*3))
+gt.SetFillColor(gray)
+gt.Draw("SAME 3")
+
+# re-draw curves so they're on top of error bar
+for i in range(1,16):
+    gs[i].Draw("SAME LX")
+gdy.Draw("SAME LX")
+gt.Draw("SAME LX")
+
 
 line = r.TLine()
 line.SetLineWidth(gt.GetLineWidth())
@@ -108,11 +124,16 @@ text.SetNDC(1)
 text.SetTextFont(42)
 text.SetTextAlign(12)
 text.SetTextSize(0.032)
-line.DrawLineNDC(0.357, 0.916, 0.395, 0.916)
+x1, x2, y = 0.357, 0.395, 0.917
+box = r.TLegend(x1, y-0.013, x2, y+0.013)
+box.SetFillColor(gray)
+box.SetLineWidth(0)
+box.Draw()
+line.DrawLineNDC(x1, y, x2, y)
 if DO_DY:
-    text.DrawLatex(0.405, 0.919, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section")
+    text.DrawLatex(x2+0.01, y+0.000, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 #sigma_{#lower[-0.15]{theory}}#kern[0.25]{)}")
 else:
-    text.DrawLatex(0.405, 0.919, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section")
+    text.DrawLatex(x2+0.01, y+0.000, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 #sigma_{#lower[-0.15]{theory}}#kern[0.25]{)}")
 
 text.SetTextAlign(32)
 text.DrawLatex(0.95, 0.65, "#bf{pp} (13 TeV)")
