@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1.0in]{geometry}
-\usepackage{hyperref}
+\usepackage[hidelinks,pdfencoding=auto,psdextra]{hyperref}
 \usepackage{amsmath}
 \usepackage{graphicx}
 % \usepackage[extendedchars]{grffile}
@@ -149,7 +149,7 @@ piecewise-joins a gaussian core with non-gaussian tails modeled by the Rutherfor
 in \cite{kuhn_msc}. Here we describe the technical implementation.
 
 First, constants are defined:
-\begin{equation}
+\begin{equation}\label{eq:kuhn_chi}
 \chi_c^2 = 0.1569\,\frac{z^2Z(Z+1)}{(pc)^2\beta^2}\frac{\rho\Delta s}{A}
 \end{equation}
 and
@@ -168,17 +168,27 @@ rather than $B_0$ straight from Eq. \ref{eq:kuhn_B}.
 This was found by Kuhn to fix an empirically too-narrow final distribution.
 
 The core of the scattering angle distribution is described by a gaussian of width
-\begin{equation}
+\begin{equation}\label{eq:kuhn_th1e}
 \theta_{1/e} = \chi_c\sqrt{B-1.25}.
 \end{equation}
-Using this, we can compute
+The cumulative distribution function (i.e. the probability for the scattering angle to be between 0 and $\theta$) is then given by
 \begin{equation}
+\begin{split}
+P(\theta)=(1-0.827&/B)\left\{1-\exp\left[-\left(\frac{\theta}{\theta_{1/e}}\right)^2\right]\right\} \\
+&+\Theta(\theta-\sqrt{2}\theta_{1/e})\frac{\chi_c^2}{4}\left(\frac{1}{\sin^2(\theta_{1/e}/\sqrt{2})}-\frac{1}{\sin^2(\theta/2)}\right).
+\end{split}
+\end{equation}
+
+This is not quite normalized correctly, as $P(\pi)$ is slightly below 1. So we compute
+\begin{equation}\label{eq:kuhn_ppi}
 P(\pi) = 1-0.827\frac{1}{B}+\frac{\chi_c^2}{4}\left(\frac{1}{\sin^2(\theta_{1/e}/\sqrt{2})} - 1\right).
 \end{equation}
 
 Then the actual algorithm is as follows: 
 \begin{enumerate}
-\item Generate a random number $R$ in $[0,P(\pi)]$. 
+\item Compute $\chi_c$ from Eq.~\ref{eq:kuhn_chi}, solve Eq.~\ref{eq:kuhn_B} for $B_0$ and add 1 to get $B$,
+and plug these into Eqs.~\ref{eq:kuhn_th1e} and \ref{eq:kuhn_ppi} to get $\theta_{1/e}$ and $P(\pi)$.
+\item Generate a random number $R$ in $[0,P(\pi)]$.
 \item If $R\geq1-0.827/B$, then
 \[
 R' = R - 1 + 0.827/B
@@ -199,20 +209,24 @@ However, the paper shows that the final spatial distribution of a particle is we
 using only angular deflections at each timestep.
 
 \subsection{Comparison of algorithms}
-Figure \ref{fig:msccomp} shows a comparison of projected angular distributions for muons incident on the Milliqan detector face,
-using either the PDG algorithm or the Kuhn algorithm. The width of the central gaussian core does not change much
+Figure \ref{fig:msccomp} (left) shows a comparison of the scattering angle for a 16 GeV muon traversing 3 cm of iron,
+using either the PDG or Kuhn multiple scattering algorithms. The small-angle gaussian cores agree well, while the 
+Kuhn algorithm has a substantially larger tail.
+
+Figure \ref{fig:msccomp} (right) shows a comparison of projected angular distributions for muons incident on the Milliqan detector face,
+using either the PDG or Kuhn algorithms. The width of the central gaussian core does not change much
 ($1.07^\circ$ vs. $1.14^\circ$). However, there is a small but noticable shift in the Kuhn algorithm to a smaller core and
 larger tails, as might be expected. The overall fraction of events in the fitted gaussian core goes from 74\% o 70\%,
 but the decrease in the central-most region (less than $\sim$1$^\circ$) most relevant for through-going particles
- is closer to 10\%. This corresponds well with an observed decrease in predicted four-slab muon rate of
-10\% when switching to the Kuhn algorithm.
+is closer to 10\%. This corresponds well with an observed decrease in predicted four-slab muon rate of
+about 10\% when switching to the Kuhn algorithm.
 
 
 \begin{figure}
 \centering
 \includegraphics[width=0.47\textwidth]{plots/pdg_kuhn_single_comp.pdf}
 \includegraphics[width=0.52\textwidth]{plots/pdg_kuhn_final_comp.pdf}
-\caption{(left) The scattering angle distribution of a 16 GeV muon through 3 cm of iron, as simulated with the PDG algorithm (blue) or the Kuhn algorithm (red). 
+\caption{(left) The scattering angle distribution of a 16 GeV muon through 3 cm of iron, as simulated with the PDG algorithm (red) or the Kuhn algorithm (blue). 
 Note the much larger high-angle tail when using the Kuhn algorithm.
 (right) The distribution of incidence angles (projected into the horizontal plane) of muons on the Milliqan detector face for each algorithm.
 Dotted lines are gaussian fits to the cores of the distributions. The Kuhn algorithm slightly
