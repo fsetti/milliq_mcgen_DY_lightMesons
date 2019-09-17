@@ -6,7 +6,7 @@ import subprocess
 TAG = "v5_v6_save2m"
 NEVT_PER_JOB = 1000
 
-indir = "/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/muons_{0}/".format(TAG)
+indir = "/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/muons_{0}/skim_0p5m".format(TAG)
 outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/muons_txt/{0}".format(TAG)
 proc_types = ["qcd","qcd_nonbc","w","dy"]
 

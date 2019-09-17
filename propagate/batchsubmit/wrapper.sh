@@ -9,13 +9,15 @@ INPUT=$2
 CONFIG=$3
 CHARGE=$4
 DENSITY=$5
-COPYDIR=$6
+SAVEDIST=$6
+COPYDIR=$7
 
 echo "[wrapper] FILEID    = " ${FILEID}
 echo "[wrapper] INPUT     = " ${INPUT}
 echo "[wrapper] CONFIG    = " ${CONFIG}
 echo "[wrapper] CHARGE    = " ${CHARGE}
 echo "[wrapper] DENSITY   = " ${DENSITY}
+echo "[wrapper] SAVEDIST   = " ${SAVEDIST}
 echo "[wrapper] COPYDIR   = " ${COPYDIR}
 
 # if [ -r "$OSGVO_CMSSW_Path"/cmsset_default.sh ]; then
@@ -80,9 +82,9 @@ PYTHONPATH=./MilliqanSim:${PYTHONPATH}
 #
 # run it
 #
-echo "[wrapper] running: python -u run_sim.py --config ${CONFIG} --charge ${CHARGE} -d ${DENSITY} ${INPUT}"
+echo "[wrapper] running: python -u run_sim.py --config ${CONFIG} --charge ${CHARGE} -d ${DENSITY} -s ${SAVEDIST} ${INPUT}"
 
-python -u run_sim.py --config ${CONFIG} --charge ${CHARGE} -d ${DENSITY} ${INPUT}
+python -u run_sim.py --config ${CONFIG} --charge ${CHARGE} -d ${DENSITY} -s ${SAVEDIST} ${INPUT}
 
 #
 # do something with output

@@ -15,6 +15,7 @@ c.SetLeftMargin(0.11)
 c.SetRightMargin(0.03)
 c.SetLogx()
 c.SetLogy()
+c.SetTicky()
 
 xmax = 15 if DO_DY else 10
 ymin = 1.0e2 if DO_DY else 1.0e2
@@ -30,7 +31,7 @@ hdummy.GetYaxis().SetTitle("#sigma #times #bf{#it{#Beta}} / Q^{2} [pb]")
 hdummy.GetYaxis().SetTitleSize(0.045)
 hdummy.GetYaxis().SetTitleOffset(1.16)
 
-hdummy.Draw()
+hdummy.Draw("AXIS")
 
 colors = {
     1:  r.kBlue+2,
@@ -113,7 +114,7 @@ for i in range(1,16):
     gs[i].Draw("SAME LX")
 gdy.Draw("SAME LX")
 gt.Draw("SAME LX")
-
+hdummy.Draw("SAME AXIS")
 
 line = r.TLine()
 line.SetLineWidth(gt.GetLineWidth())
@@ -124,7 +125,7 @@ text.SetNDC(1)
 text.SetTextFont(42)
 text.SetTextAlign(12)
 text.SetTextSize(0.032)
-x1, x2, y = 0.357, 0.395, 0.917
+x1, x2, y = 0.342, 0.380, 0.917
 box = r.TLegend(x1, y-0.013, x2, y+0.013)
 box.SetFillColor(gray)
 box.SetLineWidth(0)
@@ -136,10 +137,10 @@ else:
     text.DrawLatex(x2+0.01, y+0.000, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 #sigma_{#lower[-0.15]{theory}}#kern[0.25]{)}")
 
 text.SetTextAlign(32)
-text.DrawLatex(0.95, 0.65, "#bf{pp} (13 TeV)")
-text.DrawLatex(0.95, 0.60, "#eta(parent) #in [-2, 2]")
+text.DrawLatex(x1+0.590, 0.65, "#bf{pp} (13 TeV)")
+text.DrawLatex(x1+0.590, 0.60, "#eta(parent) #in [-2, 2]")
 
-leg = r.TLegend(0.35,0.7,0.96,0.892)
+leg = r.TLegend(x1-0.007,0.7,x1+0.600,0.892)
 leg.SetFillStyle(0)
 leg.SetLineWidth(0)
 leg.SetNColumns(4)
