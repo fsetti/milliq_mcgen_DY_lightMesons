@@ -201,7 +201,7 @@ for i in it:
                 traj_array.append((tvec,traj))
             return idict, slabs_intersects, bars_intersects
         else:
-            return None, None
+            return None, None, None
 
     if IS_MU:
         np.random.seed(tin.event)
