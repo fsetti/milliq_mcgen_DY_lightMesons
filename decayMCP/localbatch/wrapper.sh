@@ -89,7 +89,7 @@ cd decayMCP
 #
 EVT=$((($FILEID-1)*$NEVENTS))
 OUTFILE=output_${DECAYMODE}_${MASS}_${FILEID}.root
-echo "[wrapper] running: ./runDecays -d $DECAYMODE -m $MASS -n $NEVENTS -e $EVT -o output_${DECAYMODE}_${MASS}_${FILEID}.root"
+echo "[wrapper] running: ./runDecays -d $DECAYMODE -m $MASS -n $NEVENTS -N $NEVENTSTOTAL -e $EVT -o output_${DECAYMODE}_${MASS}_${FILEID}.root"
 
 ./runDecays -d $DECAYMODE -m $MASS -n $NEVENTS -N $NEVENTSTOTAL -e $EVT -o $OUTFILE
 

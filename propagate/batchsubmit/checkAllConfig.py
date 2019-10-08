@@ -51,6 +51,8 @@ while True:
     condor_out = out.split("\n")
     running_files = []
     for line in condor_out:
+        if " R " not in line and " I " not in line:
+            continue
         if "bemarsh" not in line:
             continue
         if "wrapper" not in line:
