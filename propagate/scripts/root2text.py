@@ -5,7 +5,7 @@ import os
 import glob
 import subprocess
 
-TAG = "v7_v1"
+TAG = "v7_v1_save2m"
 SKIM = "skim0p25m"
 NEVT_PER_JOB = 10000
 
@@ -23,6 +23,8 @@ for mdir in glob.glob(os.path.join(indir, "m_*")):
         for f in glob.glob(os.path.join(qdir, SKIM, "*.root")):
             s = f.split("/")[-1].split(".")[0]
             odir = os.path.join(outdir, m, q, s)
+            if os.path.exists(odir):
+                continue
             os.system("mkdir -p "+odir)
             fin = r.TFile(f)
             t = fin.Get("Events")

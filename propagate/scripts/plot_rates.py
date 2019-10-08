@@ -7,11 +7,13 @@ r.gROOT.SetBatch(1)
 
 # ntuple_tag = "mapp_theta5_v1"
 ntuple_tag = "v7"
-sim_tag = "v1"
+sim_tag = "v1_save2m"
 extra_tag = ""
 # extra_tag = "_upsFix"
 qs = [0.1,0.07,0.05,0.02,0.01]
 # qs = [0.3,0.2,0.1,0.05,0.01]
+
+Z_ZOOM = True
      
 fin = r.TFile("rate_files/{0}_{1}.root".format(ntuple_tag,sim_tag))
 # lumi = None
@@ -73,16 +75,16 @@ def make_plots(type_):
             c.SetLogy()
         c.SetTicky()
 
-        hdummy = r.TH1F("hdummy"+str(q),"",100,5e-3,16)
+        hdummy = r.TH1F("hdummy"+str(q),"",100,5e-3,160 if Z_ZOOM else 16)
         hdummy.SetLineColor(r.kWhite)
-        hdummy.GetXaxis().SetRangeUser(5e-3,16)
+        hdummy.GetXaxis().SetRangeUser(5e-3,160 if Z_ZOOM else 16)
         if type_=="rate":
             mult = 1.0
             if lumi is not None:
                 mult *= lumi
             if area is not None:
                 mult *= area
-            hdummy.GetYaxis().SetRangeUser(1e-1*q**2*mult,1e12*q**2*mult)
+            hdummy.GetYaxis().SetRangeUser((1e-3 if Z_ZOOM else 1e-1)*q**2*mult,1e12*q**2*mult)
             if lumi is None:
                 if area is None:
                     hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
@@ -97,7 +99,7 @@ def make_plots(type_):
             mult = 1.0
             if lumi is not None:
                 mult *= lumi
-            hdummy.GetYaxis().SetRangeUser(1e-3*q**2*mult, 1e10*q**2*mult)
+            hdummy.GetYaxis().SetRangeUser((1e-5 if Z_ZOOM else 1e-3)*q**2*mult, 1e10*q**2*mult)
             hdummy.GetYaxis().SetTitle("Yield")
         elif type_=="acc":
             # hdummy.GetYaxis().SetRangeUser(1e-6, 1e-2)
@@ -204,16 +206,16 @@ def make_charge_comparisons(type_):
     c.SetGridx()
     c.SetGridy()
 
-    hdummy = r.TH1F("hdummy","",100,5e-3,16)
+    hdummy = r.TH1F("hdummy","",100,5e-3,160 if Z_ZOOM else 16)
     hdummy.SetLineColor(r.kWhite)
-    hdummy.GetXaxis().SetRangeUser(5e-3,16)
+    hdummy.GetXaxis().SetRangeUser(5e-3,160 if Z_ZOOM else 16)
     if type_=="rate":
         mult = 1.0
         if lumi is not None:
             mult *= lumi
         if area is not None:
             mult *= area
-        hdummy.GetYaxis().SetRangeUser(1e-3*mult, 2e7*mult)
+        hdummy.GetYaxis().SetRangeUser((1e-6 if Z_ZOOM else 1e-3)*mult, 2e7*mult)
         if lumi is None:
             if area is None:
                 hdummy.GetYaxis().SetTitle("Incidence rate [hits / m^{2} / fb^{-1}]")
@@ -228,7 +230,7 @@ def make_charge_comparisons(type_):
         mult = 1.0
         if lumi is not None:
             mult *= lumi
-        hdummy.GetYaxis().SetRangeUser(1e-5*mult, 2e5*mult)
+        hdummy.GetYaxis().SetRangeUser((1e-7 if Z_ZOOM else 1e-5)*mult, 2e5*mult)
         hdummy.GetYaxis().SetTitle("Yield")
     elif type_=="acc":
         hdummy.GetYaxis().SetRangeUser(0, 1.5e-4)
