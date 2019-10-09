@@ -34,13 +34,13 @@ for mdir in glob.glob(os.path.join(indir, "m_*")):
                 output = open("blah.txt", 'w')
                 for ievt in range(startevt, min(startevt+NEVT_PER_JOB, nevt)):
                     t.GetEntry(ievt)
-                    if t.hit_p_xyz.Z() != 0:
+                    if t.does_hit_p:
                         output.write("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}\n".format(
                                 t.event, t.decay_mode, t.sim_q, t.p4_m.M(), 
                                 t.hit_p_xyz.Z(), t.hit_p_xyz.X(), t.hit_p_xyz.Y(), 
                                 t.hit_p_p4.Pz(), t.hit_p_p4.Px(), t.hit_p_p4.Py(), 
                                 t.sim_q**2 * t.xsec * t.BR_q1 * t.filter_eff * 1000 / t.n_events_total))
-                    if t.hit_m_xyz.Z() != 0:
+                    if t.does_hit_m:
                         output.write("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10}\n".format(
                                 t.event, t.decay_mode, t.sim_q, t.p4_m.M(), 
                                 t.hit_m_xyz.Z(), t.hit_m_xyz.X(), t.hit_m_xyz.Y(), 
