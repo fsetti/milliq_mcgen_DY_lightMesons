@@ -17,7 +17,7 @@ Z_ZOOM = True
      
 fin = r.TFile("rate_files/{0}_{1}.root".format(ntuple_tag,sim_tag))
 # lumi = None
-lumi = 30
+lumi = 35
 area = None
 # area = 0.0150
 
@@ -152,8 +152,13 @@ def make_plots(type_):
         text.DrawLatex(0.92, 0.65, "Q(mCP) = {0}#kern[0.3]{{#it{{e}}}}".format(q))
         # text.DrawLatex(0.92, 0.61, "#eta(parent) #in [-2, 2]")
 
+        text.SetTextAlign(11)
+        text.SetTextFont(62)
+        text.DrawLatex(0.12,0.96,"milliQan simulation")
+
         if lumi is not None and "acc" not in type_:
             text.SetTextAlign(31)
+            text.SetTextFont(42)
             text.DrawLatex(0.96,0.96, "{0} fb^{{-1}} (13 TeV)".format(lumi))
 
         leg = r.TLegend(0.32,0.7,0.93,0.892)
@@ -266,11 +271,15 @@ def make_charge_comparisons(type_):
 
     leg.Draw()
 
+    text = r.TLatex()
+    text.SetNDC(1)
+    text.SetTextFont(62)
+    text.SetTextSize(0.040)
+    text.SetTextAlign(11)
+    text.DrawLatex(0.12,0.94,"milliQan simulation")
+
     if lumi is not None and "acc" not in type_:
-        text = r.TLatex()
-        text.SetNDC(1)
         text.SetTextFont(42)
-        text.SetTextSize(0.040)
         text.SetTextAlign(31)
         text.DrawLatex(0.94,0.94, "{0} fb^{{-1}} (13 TeV)".format(lumi))
 

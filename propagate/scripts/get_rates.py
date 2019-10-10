@@ -8,10 +8,10 @@ r.gROOT.SetBatch(1)
 
 # ntuple_tag = "mapp_theta5_v1"
 ntuple_tag = "v7"
-sim_tag = "v1"
+sim_tag = "v1_save2m"
 use_metadata = False
 
-lumi = 30.0 # in fb^-1
+lumi = 35.0 # in fb^-1
 area = 1.0 # in m^2
 # lumi = 30.0 # in fb^-1
 # area = 0.0150 # in m^2
