@@ -156,9 +156,10 @@ int main(int argc, char **argv){
         std::cout << "\nusage:\n";
         std::cout << "    " << argv[0] << " -d production_mode -o outfile [-n n_events=1000] [-N n_events_total=n_events] [-e evtnum_offset=0]\n\n";
         std::cout << "--- PRODUCTION MODES ---" << std::endl;
-        std::cout << "--- 1. QCD" << std::endl;
-        std::cout << "--- 1. W -> lv" << std::endl;
-        std::cout << "--- 1. Drell-Yan" << std::endl;
+        std::cout << "--- 1. QCD (b- or c-hadron)" << std::endl;
+        std::cout << "--- 2. W -> lv" << std::endl;
+        std::cout << "--- 3. Drell-Yan" << std::endl;
+        std::cout << "--- 4. QCD (non-b- or c-hadron, usually pi+-, K+-, K0L, or tau)" << std::endl;
         std::cout << "\n";
         return 1;
     }    
