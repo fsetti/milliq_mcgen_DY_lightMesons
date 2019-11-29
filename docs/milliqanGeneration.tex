@@ -199,10 +199,10 @@ with the electron and muon masses are in excellent agreement with the PDG.
   400             &        &        & 5.6 e-7 &         &        \\ \hline 
   \end{tabular}
   }
-  \caption{\protect Branching ratios for different Dalitz decay modes as
-    a function of $m_\zeta$ for $Q=1$ calculated
-    based on equations~\ref{dalitz1},~\ref{dalitz2}, and~\ref{dalitz11}.
-When possible we compare with
+  \caption{\protect Branching ratios for different Dalitz decay modes as 
+    a function of $m_\zeta$ for $Q=1$ calculated 
+    based on equations~\ref{dalitz1},~\ref{dalitz2}, and~\ref{dalitz11}. 
+When possible we compare with 
   the values from the 2019 PDG.}
 \label{tab:dalitz1}
   \end{center}
@@ -233,12 +233,30 @@ When possible we compare with
 
   \noindent where $x_\zeta = m_\zeta/m_V$, and $m_\zeta$ is the mass of $\zeta$.
   
-  As a sanity check, we use equation~\ref{V1} and BR($\psi(2S) \to ee$)=7.93e-3
-  to predict
-  BR($\psi(2S) \to \tau \tau$) = 3.1e-3, in agreement with the PDG value
-  of (3.1 $\pm$ 0.4)e-3.
+  As a sanity check, we use equation~\ref{V1} to predict several $V \to \ell \ell$
+  branching ratios and compare them with their PDG values, see Table~\ref{tab:VBR}.
+  To be fair the tests with $\ell = \mu$ are not very powerful since
+  $x_{\mu}^2 \approx x_{e}^2 \approx 0$.
 
-
+  \begin{table}
+    \begin{center}
+      \begin{tabular}{|l|c|c|}
+        \hline
+        Decay mode & PDG BR value & Calculation \\
+        \hline
+        $\Upsilon(1S) \to \tau \tau$  & (2.6 $\pm$ 0.1)e-2 & (2.4 $\pm$ 0.1)e-2 \\
+        $\psi(2S) \to \tau \tau$  & (3.1 $\pm$ 0.4)e-3 & (3.1 $\pm$ 0.0)e-3 \\
+        $\phi \to \mu \mu$       & (2.9 $\pm$ 0.2)e-4  & (3.0 $\pm$ 0.0)e-4 \\  
+        $\omega \to \mu \mu$ & (7.4 $\pm$ 1.8)e-5  & (7.3 $\pm$ 0.2)e-5 \\  
+        $\rho \to \mu \mu$      & (4.6 $\pm$ 0.3)e-5  &  (4.7 $\pm$ 0.1)e-5 \\  
+        \hline
+      \end{tabular}
+      \caption{Comparison of the PDG and calculated values od the $V \to \ell \ell$
+        branching ratios.  The quoted uncertainty on the calculation reflects the uncertainty
+        on the $V \to ee$ branching ratio.}
+      \label{tab:VBR}
+    \end{center}
+  \end{table}
   \section{Generation of SM particles decaying into $\zeta^+ \zeta^-$}
 
 
