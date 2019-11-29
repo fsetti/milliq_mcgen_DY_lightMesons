@@ -5,21 +5,21 @@ import os
 import glob
 import subprocess
 
-TAG = "v7_v1_save2m"
+TAG = "v7ext1_v1_save2m"
 SKIM = "skim0p25m"
 NEVT_PER_JOB = 10000
 
 indir = "/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/{0}".format(TAG)
 outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/mcp_txt/{0}_{1}".format(TAG,SKIM)
 
-particles = ["b_jpsi", "jpsi", "etaprime_omega", "etaprime_photon", "eta", "omega", "omega_pi0", "pi0", "phi", "rho", "b_psiprime", "psiprime", "dy"]
-masses = [0.010, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.35, 0.4, 0.5, 0.7, 1.0, 1.4, 1.6, 1.8, 2.0, 3.0, 3.5, 4.0, 4.5, 5.0, 7.0, 10.0]
-charges = [0.005, 0.01, 0.02, 0.03, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
-
 for mdir in glob.glob(os.path.join(indir, "m_*")):
     m = mdir.split("/")[-1]
     for qdir in glob.glob(os.path.join(mdir, "q_*")):
         q = qdir.split("/")[-1]
+        nq = float(q.split("_")[-1].replace("p","."))
+        NEVT_PER_JOB = 10000
+        if nq >= 0.1:
+            NEVT_PER_JOB = 2000
         for f in glob.glob(os.path.join(qdir, SKIM, "*.root")):
             s = f.split("/")[-1].split(".")[0]
             odir = os.path.join(outdir, m, q, s)
