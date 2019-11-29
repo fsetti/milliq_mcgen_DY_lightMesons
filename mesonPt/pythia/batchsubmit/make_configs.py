@@ -1,9 +1,10 @@
 import os
 
-tag = "v2_with_mus"
+tag = "v2_monash2013"
 nevts_per_job = 500000
 njobs = 500
-offset = 500
+offset = 0
+tune = 0
 
 fout = open("config.cmd",'w')
 fout.write("""
@@ -31,6 +32,6 @@ names = ["minbias","qcd_pt15to30","qcd_pt30to50","qcd_pt50to80","qcd_pt80to120"]
 for mode in range(len(names)):
     outdir = os.path.join("/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/pionPt/fromPythia/",tag,names[mode])
     for ijob in range(njobs):
-        fout.write("arguments={0} {1} {2} {3}\nqueue\n\n".format(ijob+1+offset, mode, nevts_per_job, outdir))
+        fout.write("arguments={0} {1} {2} {3} {4}\nqueue\n\n".format(ijob+1+offset, mode, tune, nevts_per_job, outdir))
 
 fout.close()

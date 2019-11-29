@@ -20,16 +20,17 @@ bool is_c(int id){
 
 int main(int argc, char** argv) {
 
-    if(argc < 3){
-        std::cout << "usage: " << argv[0] << " <mode> <n_events> <seed=0>\n";
+    if(argc < 4){
+        std::cout << "usage: " << argv[0] << " <mode> <tune> <n_events> <seed=0>\n";
         return -1;
     }
 
     int mode = atoi(argv[1]);
-    int nevt = atoi(argv[2]);
+    int tune = atoi(argv[2]);
+    int nevt = atoi(argv[3]);
     int seed = 0;
-    if(argc >= 4)
-        seed = atoi(argv[3]);
+    if(argc >= 5)
+        seed = atoi(argv[4]);
 
         // Generator. Process selection. LHC initialization. Histogram.
     Pythia pythia;
@@ -82,12 +83,17 @@ int main(int argc, char** argv) {
     // pythia.readString("ParticleDecays:tau0Max = 10");
     pythia.readString("ParticleDecays:allowPhotonRadiation = on");
 
-    // pythia8 CUEP8M1 settings
-    pythia.readString("Tune:pp 14");
-    pythia.readString("Tune:ee 7");
-    pythia.readString("MultipartonInteractions:pT0Ref=2.4024");
-    pythia.readString("MultipartonInteractions:ecmPow=0.25208");
-    pythia.readString("MultipartonInteractions:expPow=1.6");
+    // pythia8 Monash2013 settings
+    if(tune <= 1){
+        pythia.readString("Tune:pp 14");
+        pythia.readString("Tune:ee 7");
+    }
+    // pythia8 CUEP8M1 settings (apply ON TOP OF monash 2013)
+    if(tune == 1){
+        pythia.readString("MultipartonInteractions:pT0Ref=2.4024");
+        pythia.readString("MultipartonInteractions:ecmPow=0.25208");
+        pythia.readString("MultipartonInteractions:expPow=1.6");
+    }
 
     pythia.init();
 

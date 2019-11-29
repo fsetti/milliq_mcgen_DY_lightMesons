@@ -6,11 +6,13 @@
 
 FILEID=$1
 MODE=$2
-NEVT=$3
-COPYDIR=$4
+TUNE=$3
+NEVT=$4
+COPYDIR=$5
 
 echo "[wrapper] FILEID    = " ${FILEID}
 echo "[wrapper] MODE      = " ${MODE}
+echo "[wrapper] TUNE      = " ${TUNE}
 echo "[wrapper] NEVT      = " ${NEVT}
 echo "[wrapper] COPYDIR   = " ${COPYDIR}
 
@@ -74,7 +76,7 @@ export PYTHIA8DATA=$XMLDIR
 #
 echo "[wrapper] running: ./main $MODE $NEVT $FILEID"
 
-./main $MODE $NEVT $FILEID
+./main $MODE $TUNE $NEVT $FILEID
 
 #
 # do something with output
