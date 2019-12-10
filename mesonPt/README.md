@@ -24,8 +24,10 @@ To run with a standalone pythia program:
 cd pythia
 . setup.sh  # this will download and compile pythia if it hasn't been done yet
 make
-./main <mode> <n_events>  # mode = 0 (minbias), 1, 2, 3 (qcd pT-binned 15to30, 30to50, 50to80)
+./main <mode> <tune> <n_events>  # mode = 0 (minbias), 1, 2, 3 (qcd pT-binned 15to30, 30to50, 50to80)
 ```
+
+Possible tunes are 0 for Monash2013, 1 for CUETP8M1, 7 for A2-CTEQ6L1, and 8 for A2-MSTW2008LO.
 
 Tools for batch submission are in `looper/looper/batchsubmit` or `pythia/batchsubmit`.
 

@@ -1,13 +1,13 @@
 import os
 import ROOT as r
-from math import log
+from math import log, exp
 r.gStyle.SetOptStat(0)
 r.gROOT.SetBatch(1)
 
-plotdir = "/home/users/bemarsh/public_html/milliqan/milliq_mcgen/pionPt/fromPythia_v2_with_mus/stitch"
+plotdir = "/home/users/bemarsh/public_html/milliqan/milliq_mcgen/pionPt/fromPythia_v2_monash2013/stitch"
 os.system("mkdir -p "+plotdir)
 
-dname = "hadded/fromPythia_v2_with_mus"
+dname = "hadded/fromPythia_v2_monash2013"
 
 doPlot = True
 
@@ -16,6 +16,9 @@ fq1 = r.TFile(os.path.join(dname, "qcd_pt15to30.root"))
 fq2 = r.TFile(os.path.join(dname, "qcd_pt30to50.root"))
 fq3 = r.TFile(os.path.join(dname, "qcd_pt50to80.root"))
 fq4 = r.TFile(os.path.join(dname, "qcd_pt80to120.root"))
+
+# special file to get phis from pythia6 DW tune
+fphi = r.TFile("hadded/pythia6_DW_minbias_franny.root")
 
 fout = r.TFile("pt_dists.root", "RECREATE")
 
@@ -29,18 +32,42 @@ cuts = [10.0, 18.5, 30.0, 50.0]
 
 ps = ["pi","pi0","rho","omega","phi","eta","etap","mu","mu_nonbc"]
 for p in ps:
-    hm = fm.Get("h_"+p)
+    if p != "phi":
+        hm = fm.Get("h_"+p)
+    else:
+        hm = fphi.Get("h_phi_pT")
     hq1 = fq1.Get("h_"+p)
     hq2 = fq2.Get("h_"+p)
     hq3 = fq3.Get("h_"+p)
     hq4 = fq4.Get("h_"+p)
 
     # scale by # events
-    hm.Scale(1.0 / nev_m)
+    if p!= "phi":
+        hm.Scale(1.0 / nev_m)
     hq1.Scale(1.0 / nev_q1)
     hq2.Scale(1.0 / nev_q2)
     hq3.Scale(1.0 / nev_q3)
     hq4.Scale(1.0 / nev_q4)
+
+    # ad-hoc adjustments based on data comparisons
+    linedef = None
+    if p=="eta":
+        linedef = ((3.0, 1.0), (0.5, 2.0))
+    if p=="rho" or p=="omega":
+        linedef = ((1.0, 1.0), (0.5, 2.0))
+    if linedef:
+        m = (linedef[0][1]-linedef[1][1])/(log(linedef[0][0])-log(linedef[1][0]))
+        b = linedef[0][1]-m*log(linedef[0][0])
+        f = lambda x: m*log(x)+b
+        for i in range(1, hm.GetNbinsX()+1):
+            x = hm.GetBinCenter(i)
+            if x>linedef[0][0]:
+                break
+            scale = 1.0 / f(x)
+            hm.SetBinContent(i, hm.GetBinContent(i)*scale)
+            hm.SetBinError(i, hm.GetBinError(i)*scale)
+            
+            
 
     # scale by xsec ratios
     hq1.Scale(1837410. / 78418400)
@@ -147,6 +174,7 @@ for p in ps:
     c = r.TCanvas()
     c.SetLogy()
     
+    hm.GetXaxis().SetTitle("p_{T} [GeV]")
     hm.GetXaxis().SetRangeUser(0,40)
     if "mu" in p:
         hm.GetYaxis().SetRangeUser(1e-13, 2e0)

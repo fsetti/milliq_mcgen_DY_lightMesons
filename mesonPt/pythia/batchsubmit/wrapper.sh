@@ -74,7 +74,7 @@ export PYTHIA8DATA=$XMLDIR
 #
 # run it
 #
-echo "[wrapper] running: ./main $MODE $NEVT $FILEID"
+echo "[wrapper] running: ./main $MODE $TUNE $NEVT $FILEID"
 
 ./main $MODE $TUNE $NEVT $FILEID
 

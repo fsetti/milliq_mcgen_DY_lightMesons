@@ -1,10 +1,10 @@
 import os
 
-tag = "v2_monash2013"
-nevts_per_job = 500000
-njobs = 500
+tag = "v2_A2-MSTW2008LO"
+nevts_per_job = 100000
+njobs = 2500
 offset = 0
-tune = 0
+tune = 8
 
 fout = open("config.cmd",'w')
 fout.write("""
@@ -27,7 +27,8 @@ transfer_executable=True
 """
 )
 
-names = ["minbias","qcd_pt15to30","qcd_pt30to50","qcd_pt50to80","qcd_pt80to120"]
+# names = ["minbias","qcd_pt15to30","qcd_pt30to50","qcd_pt50to80","qcd_pt80to120"]
+names = ["minbias"]
 
 for mode in range(len(names)):
     outdir = os.path.join("/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/pionPt/fromPythia/",tag,names[mode])

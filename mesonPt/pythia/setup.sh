@@ -9,7 +9,13 @@ if [ ! -d ${ver} ]; then
 fi
 
 cd $ver
-./configure --with-root=$ROOTSYS
+
+./configure --with-root=$ROOTSYS \
+    --with-lhapdf6-lib=/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/lib \
+    --with-lhapdf6-include=/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/include \
+    --with-lhapdf6-bin=/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/bin
+#    --with-lhapdf6 \
+
 make -j12
 export PYTHIA8DATA=`pwd`/share/Pythia8/xmldoc
 

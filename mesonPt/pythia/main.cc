@@ -88,11 +88,19 @@ int main(int argc, char** argv) {
         pythia.readString("Tune:pp 14");
         pythia.readString("Tune:ee 7");
     }
-    // pythia8 CUEP8M1 settings (apply ON TOP OF monash 2013)
+    // pythia8 CUETP8M1 settings (apply ON TOP OF monash 2013)
     if(tune == 1){
         pythia.readString("MultipartonInteractions:pT0Ref=2.4024");
         pythia.readString("MultipartonInteractions:ecmPow=0.25208");
         pythia.readString("MultipartonInteractions:expPow=1.6");
+    }
+    // A2-CTEQ6L1
+    if(tune == 7){
+        pythia.readString("Tune:pp 7");
+    }
+    // A2-MSTW2008LO
+    if(tune == 8){
+        pythia.readString("Tune:pp 8");
     }
 
     pythia.init();
