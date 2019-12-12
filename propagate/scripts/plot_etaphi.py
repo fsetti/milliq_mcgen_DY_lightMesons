@@ -95,8 +95,8 @@ def plot_etaparent(ch, outname=None):
         c.SaveAs(outname+".pdf")
         c.SaveAs(outname+".png")
 
-ntuple_tag = "v7"
-sim_tag = "v1"
+ntuple_tag = "v8"
+sim_tag = "v1_save2m"
 
 basedir = "/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/{0}_{1}/".format(ntuple_tag, sim_tag)
 for mdir in glob.glob(os.path.join(basedir, "*")):

@@ -26,8 +26,8 @@ for MDIR in `ls -d $INDIR/m_*`; do
         fi
         for QDIR in `ls -d ${SDIR}/postsim_${STAG}/q_*`; do
             Q=`basename $QDIR`
-            # if [ $Q != q_0p14 ]; then
-                # continue
+            # if [ $Q != q_0p014 ]; then
+            #     continue
             # fi
             OUTDIR=/nfs-7/userdata/bemarsh/milliqan/milliq_mcgen/merged_sim/${TAG}_${STAG}/$M/$Q
             if [ -e ${OUTDIR}/${S}.root ]; then

@@ -6,12 +6,14 @@ r.gStyle.SetOptStat(0)
 r.gROOT.SetBatch(1)
 
 # ntuple_tag = "mapp_theta5_v1"
-ntuple_tag = "v7"
+ntuple_tag = "v8"
 sim_tag = "v1_save2m"
 extra_tag = ""
 # extra_tag = "_upsFix"
 qs = [0.1,0.07,0.05,0.02,0.01]
 # qs = [0.3,0.2,0.1,0.05,0.01]
+# qs = [0.02,0.014,0.01,0.007,0.005]
+# qs = [0.3,0.2,0.14]
 
 Z_ZOOM = True
      

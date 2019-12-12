@@ -2,6 +2,7 @@ import os
 import ROOT as r
 import glob
 r.TH1.StatOverflows(True)
+r.gROOT.ProcessLine(".L ~/scripts/rootalias.C")
 
 TAG = "v7_v1_save2m_skim0p25m_simmcp_v1_v1"
 indir = "/nfs-7/userdata/bemarsh/milliqan/geant_ntuples/mcp_"+TAG
@@ -29,8 +30,8 @@ def get_rate(ch, sel="mcTruth_threeBarLine", lumi=35.0):
 
 def get_slab_nPE(ch, h, lumi=35.0):
     h.Reset()
-    ch.Draw("chan_nPE[20]>>+"+h.GetName(), "(mcTruth_fourSlab)*({0}*scale1fb)".format(lumi), "goff")
-    ch.Draw("chan_nPE[28]>>+"+h.GetName(), "(mcTruth_fourSlab)*({0}*scale1fb)".format(lumi), "goff")
+    ch.Draw("RandomBinom(chan_nPE[20],0.6)>>+"+h.GetName(), "(mcTruth_fourSlab)*({0}*scale1fb)".format(lumi), "goff")
+    ch.Draw("RandomBinom(chan_nPE[28],0.6)>>+"+h.GetName(), "(mcTruth_fourSlab)*({0}*scale1fb)".format(lumi), "goff")
     # ch.Draw("chan_nPE[20]*chan_fracMuon[20]>>+"+h.GetName(), "(mcTruth_fourSlab)*({0}*scale1fb)".format(lumi), "goff")
     # ch.Draw("chan_nPE[28]*chan_fracMuon[28]>>+"+h.GetName(), "(mcTruth_fourSlab)*({0}*scale1fb)".format(lumi), "goff")
     return h
@@ -44,11 +45,19 @@ def get_bar_nPE(ch, h, lumi=35.0):
                 # "(chan_muDist[{0}]>0 && chan_muDist[{1}]>0 && chan_muDist[{2}]>0)*({3}*scale1fb)".format(c1,c2,c3,lumi), "goff")
     return h
 
+def get_bar_MaxMin(ch, h, lumi=35.0):
+    h.Reset()
+    for c1,c2,c3 in line_triplets:        
+        ch.Draw("max(max(chan_nPE[{0}],chan_nPE[{1}]),chan_nPE[{2}]) / min(min(chan_nPE[{0}],chan_nPE[{1}]),chan_nPE[{2}])>>+{3}".format(c1,c2,c3,h.GetName()), 
+                "(chan_muDist[{0}]>0 && chan_muDist[{1}]>0 && chan_muDist[{2}]>0 && chan_nPE[{0}]>0 && chan_nPE[{1}]>0 && chan_nPE[{2}]>0)*({3}*scale1fb)".format(c1,c2,c3,lumi), "goff")
+    return h    
+
 
 rate_sels = ["mcTruth_threeBarLine", "atLeast1PE_threeBarLine"]
 rates = {}
 slab_nPE_hists = {}
 bar_nPE_hists = {}
+bar_MaxMin_hists = {}
 
 for mdir in glob.glob(os.path.join(indir, "m_*")):
     sm = os.path.basename(mdir).replace("_","")
@@ -56,6 +65,7 @@ for mdir in glob.glob(os.path.join(indir, "m_*")):
     if sm not in slab_nPE_hists:
         slab_nPE_hists[sm] = {}
         bar_nPE_hists[sm] = {}
+        bar_MaxMin_hists[sm] = {}
     for f in glob.glob(os.path.join(mdir, "q_*.root")):
         print f
         sq = os.path.basename(f).split(".")[0].replace("_","")
@@ -83,6 +93,9 @@ for mdir in glob.glob(os.path.join(indir, "m_*")):
         bar_nPE_hists[sm][sq] = r.TH1D("h_barNPE_{0}_{1}".format(sm,sq), ";nPE", *binning)
         get_bar_nPE(ch, bar_nPE_hists[sm][sq])
 
+        bar_MaxMin_hists[sm][sq] = r.TH1D("h_barMaxMin_{0}_{1}".format(sm,sq), ";maxNPE/minNPE", 200, 0, 100)
+        get_bar_MaxMin(ch, bar_MaxMin_hists[sm][sq])
+
 for sq in rates:
     for sel in rates[sq]:
         g = r.TGraphErrors()
@@ -99,5 +112,6 @@ for sm in slab_nPE_hists:
     for sq in slab_nPE_hists[sm]:
         slab_nPE_hists[sm][sq].Write()
         bar_nPE_hists[sm][sq].Write()
+        bar_MaxMin_hists[sm][sq].Write()
 
 fout.Close()

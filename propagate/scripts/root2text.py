@@ -5,7 +5,7 @@ import os
 import glob
 import subprocess
 
-TAG = "v7ext1_v1_save2m"
+TAG = "v8_v1_save2m"
 SKIM = "skim0p25m"
 NEVT_PER_JOB = 10000
 
@@ -20,6 +20,8 @@ for mdir in glob.glob(os.path.join(indir, "m_*")):
         NEVT_PER_JOB = 10000
         if nq >= 0.1:
             NEVT_PER_JOB = 2000
+        if nq >= 0.2:
+            NEVT_PER_JOB = 500
         for f in glob.glob(os.path.join(qdir, SKIM, "*.root")):
             s = f.split("/")[-1].split(".")[0]
             odir = os.path.join(outdir, m, q, s)
