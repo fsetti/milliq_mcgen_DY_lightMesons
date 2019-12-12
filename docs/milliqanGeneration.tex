@@ -7,7 +7,9 @@
 % \usepackage[extendedchars]{grffile}
 \usepackage{chngpage}
 \usepackage{calc}
+\usepackage{xspace}
 
+\newcommand{\pythia}{\textsc{Pythia}\xspace}
 
 \title{Generation of milliCharged particles at the LHC}
 
@@ -441,32 +443,52 @@ Figure~\ref{fig:sanity}, right\cite{Khachatryan:2010yr}.
 \subsection{$\pi^0$, $\eta$, $\eta'$, $\phi$, $\rho$, and $\omega$}
 \label{sec:mesons}
 
-We generate these from Pythia.  The measurement of the 
+We generate these from \pythia.  The measurement of the 
 $\pi^{\pm}$
 $p_T$ spectrum from CMS\cite{Sirunyan:2017zmn} is in good agreement
-with Pythia 8 Minimum Bias at low momentum.  This gives us some
-confidence in Pythia Min Bias, and consequently we use this MC for all
-mesons.  We do not attempt to use QCD $2 \to 2$ at very low $p_T$ since the 
-process is infrared divergent.
+with \pythia 8 Minimum Bias at low momentum, which gives us some
+confidence in \pythia MinBias. However, we compare \pythia to actual
+measurements of specific particles where possible, to guide the choice
+of tune and any corrections if necessary.
 
-Pythia {\tt SoftQcd:nonDiffractive} includes all
+For $\pi_0$'s and $\eta$'s, ALICE measures the differential cross section 
+at 8 TeV and compares to various \pythia tunes~\cite{ALICE:eta}.
+The \pythia 8 Monash2013 tune~\cite{Monash} predicts $\pi^0$'s well and
+$\eta$'s well until low $p_\mathrm{T}$ ($<$3 GeV), where it overpredicts.
+So we use the Monash2013 tune and scale down low-$p_\mathrm{T}$ $\eta$'s
+by a function that grows from 1.0 at 3 GeV to 2.0 at 0.5 GeV.
+
+For $\rho$'s, ALICE measures the differential cross section at 2.76 TeV~\cite{ALICE:rho}.
+Again Monash2013 agrees well, except at very low $p_\mathrm{T}$ ($<1$ GeV).
+So we use this tune, and scale low-$p_\mathrm{T}$ $\rho$'s down by a function
+that grows from 1.0 at 1 GeV to 2.0 at 0.5 GeV.
+
+For $\omega$'s, ALICE measures the differential cross section at 7 TeV~\cite{ALICE:omega}.
+Good agreement with Monash2013 is seen everywhere, but the measurement only goes down in 
+$p_\mathrm{T}$ to 2 GeV. Since $\omega$ production should be similar to $\rho$ production,
+we use the same low-$p_\mathrm{T}$ reweigting scheme as described above.
+
+For $\phi$'s, ATLAS measures the differential cross section at 7 TeV~\cite{ATLAS:phi}.
+Good agreement is seen with the \pythia 6 DW tune~\cite{pythia6DW}, while the \pythia 8 tunes all
+underpredict. So for $\phi$ mesons only, we use the \pythia 6 DW tune.
+
+To account for observed disagreements with data and variation between tunes, we apply
+a 30\% uncertainty on the production rate for each of these light mesons, uncorrelated
+across different meson types.
+
+We do not attempt to use QCD $2 \to 2$ at very low $p_T$ since the 
+process is infrared divergent.
+\pythia \texttt{SoftQcd:nonDiffractive} includes all
 hard QCD processes\cite{wwwPythia} so in principle this is all that is
 needed.    However, we run out of statistics at high $p_T$.  So 
 at high $p_T$ we stitch together the Min Bias distributions with 
 distributions obtained from QCD $2 \to 2$ at moderate $p_T$.
 
-%% Eventually we will generate Pythia events in ``standalone'' mode to
-%% be independent of CMS software.  For now we use existing CMS Monte
-%% Carlos for MinBias and for QCD.  
-
-This has been done both with CMS MC samples and with events generated
-from standalone Pythia, using the same public CUETP8M1 tune (\cite{CMS:tunes}, table 3).
-They have been verified to give equivalent results.
-
 The QCD samples are
-``$p_T$-binned'', using the \texttt{PhaseSpace:pTHat[Min/Max]} parameters in Pythia, 
+``$p_T$-binned'', using the \texttt{PhaseSpace:pTHat[Min/Max]} parameters in \pythia, 
 in bins 15-30 GeV, 30-50 GeV, and 50-80 GeV.  
-The MinBias cross-section is taken to be 69.8 mb (CMS-recommended value).  
+The 13 TeV MinBias cross-section is taken to be $80\pm10$ mb (80 mb is the value measured by ATLAS~\cite{Atlas:ppxsec}
+and predicted by \pythia, and the 10 mb uncertainty is to account for a 70 mb measurement by CMS~\cite{CMS:ppxsec}).  
 Then the stitching procedure is the following:
 \begin{itemize}
 \item The QCD samples are first normalized to their LO cross-sections.
@@ -873,20 +895,57 @@ Aloni, D., Efrati, A., Grossman, Y. et al. J. High Energ. Phys. (2017) 2017: 19.
   [arXiv:1706.10194 [hep-ex]].
   %%CITATION = doi:10.1103/PhysRevD.96.112003;%%
   %25 citations counted in INSPIRE as of 20 Jun 2019
-
-\bibitem{CMS:tunes}
-  A.~M.~Sirunyan {\it et al.} [CMS Collaboration],
-  %``Event generator tunes obtained from underlying event and multiparton scattering measurements,''
-  Eur. Phys. J. C (2016) 76: 155.
-  doi:10.1140/epjc/s10052-016-3988-x
-  [arXiv:1512.00815 [hep-ex]]
    
 \bibitem{wwwPythia}
 \href{http://home.thep.lu.se/\~torbjorn/pythia81php/Welcome.php}
 {http://home.thep.lu.se/\~torbjorn/pythia81php/Welcome.php}.  Click on 
 {\tt QCD} on the left panel.
 
+\bibitem{Atlas:ppxsec}
+  M.~Aaboud {\it et al.} [ATLAS Collaboration],
+  %``Measurement of the Inelastic Proton-Proton Cross Section at $\sqrt{s}=13$ TeV with the ATLAS Detector at the LHC,''
+  Phys.\ Rev. Lett.\ {\bf 117} (2016) 182002
+  doi:10.1103/PhysRevLett.117.182002
+  [arXiv:1606.02625 [hep-ex]].
 
+\bibitem{CMS:ppxsec}
+  CMS Collaboration,
+  %``Measurement of the inelastic proton-proton cross section at $\sqrt{s}=13$ TeV,''
+  CMS-PAS-FSQ-15-005.
+
+\bibitem{ALICE:eta}
+  S.~Acharya {\it et al.} [ALICE Collaboration],
+  %``$\pi^0 and $\eta$ meson production in proton-proton collisions at $\sqrt{s}=8$ TeV,''
+  Eur.\ Phys.\ J.\ C (2018) 78: 263.
+  doi:10.1140/epjc/s10052-018-5612-8
+  [arXiv:1708.08745 [hep-ex]].
+
+\bibitem{Monash}
+   P. Skands, S. Carrazza, and J. Rojo,
+  %``Tuning PYTHIA,''
+  Eur.\ Phys.\ J.\ C (2014) 3024.
+  [arXiv:1404.5630 [hep-ph]].
+
+\bibitem{ALICE:rho}
+  S.~Acharya {\it et al.} [ALICE Collaboration],
+  Phys.\ Rev.\ C \textbf{99} (2019), 064901.
+  doi:10.1103/PhysRevC.99.064901
+  [arXiv:1805.04365 [hep-ex]].
+
+\bibitem{ALICE:omega}
+  ALICE Collaboration,
+  ALICE-PUBLIC-2018-004.
+
+\bibitem{ATLAS:phi}
+  G.~Aad {\it et al.} [ATLAS Collaboration],
+  Eur.\ Phys.\ J.\ C (2014) 74: 2895.
+  doi:10.1140/epjc/s10052-014-2895-2
+  [arXiv:1402.6162 [hep-ex]].
+
+\bibitem{pythia6DW}
+  M.~Albrow {\it et al.} (TeV4 QCD Working Group),
+  [arXiv:0610012 [hep-ph]].
+  Fermilab-Conf-06-359.
 
   
 \end{thebibliography}
