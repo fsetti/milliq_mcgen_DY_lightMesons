@@ -12,7 +12,8 @@
 #include "../utils/decay.h"
 #include "../utils/branching_ratios.h"
 
-const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
+// const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
+const float MINBIAS_XSEC = (80.0e-3) * 1e12; // 69.2 mb converted to pb
 
 string DecayGen::GetDecayString(int decay_mode){
     if(decay_mode == 1)       return "B -> J/psi X, J/psi -> mCP mCP";
@@ -114,8 +115,8 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         h_up = (TH1D*)h_cn->Clone("h_up");
         h_dn = (TH1D*)h_cn->Clone("h_dn");
         // ad-hoc 50% uncertainty for now
-        h_up->Scale(1 + 0.50);
-        h_dn->Scale(1 - 0.50);
+        h_up->Scale(1 + 0.30);
+        h_dn->Scale(1 - 0.30);
         etamin = -2.0;
         etamax = 2.0;
         // bins in this histogram are "particles per minbias event per 50 MeV bin"
@@ -185,8 +186,8 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         return -1;
     }
 
-    xsec_up   = xsec_inclusive * h_up->Integral("width") / h_cn->Integral("width");
-    xsec_down = xsec_inclusive * h_dn->Integral("width") / h_cn->Integral("width");
+    xsec_up   = xsec_inclusive * h_up->Integral() / h_cn->Integral();
+    xsec_down = xsec_inclusive * h_dn->Integral() / h_cn->Integral();
 
     if(h_cn) h_cn->SetDirectory(0);
     if(h_up) h_up->SetDirectory(0);
