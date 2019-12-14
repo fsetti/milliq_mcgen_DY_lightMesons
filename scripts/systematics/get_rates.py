@@ -8,7 +8,7 @@ r.gROOT.SetBatch(1)
 
 # ntuple_tag = "mapp_theta5_v1"
 ntuple_tag = "v8"
-sim_tag = "v1_save2m"
+sim_tag = "v1_save2m_dens1p07"
 
 lumi = 37.0 # in fb^-1
 
