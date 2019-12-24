@@ -1,0 +1,6 @@
+3,55
+MINT(200)=100
+MINT(199)=0
+221:alloff
+221:offifany = 111
+221:onifmatch = 13 13 13 13 
