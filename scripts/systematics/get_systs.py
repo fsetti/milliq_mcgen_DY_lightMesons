@@ -1,3 +1,4 @@
+import math
 import os
 import json
 
@@ -5,6 +6,7 @@ TAG = "v8_v1_save2m"
 
 rates = json.load(open(os.path.join("rates", TAG+".json")))
 rates_dens = json.load(open(os.path.join("rates", TAG+"_dens1p07"+".json")))
+calib_systs = json.load(open("/home/users/bemarsh/analysis/milliqan/geantDemoSim/slim_ntupler/calibration_toys/analysis/test_systs.json"))
 systs = {}
 
 for sq in rates:
@@ -51,7 +53,20 @@ for sq in rates:
             systs[sq][sm][s][1] /= tot
             if systs[sq][sm][s][0] < 0.001 and systs[sq][sm][s][1] < 0.001:
                 del systs[sq][sm][s]
-
+                
+        smq = "{0}_{1}".format(sm.replace("_",""), sq.replace("_",""))
+        if smq in calib_systs:
+            d = calib_systs[smq]
+            for i in range(1,6):
+                vals = [round(float(x)-1,3) for x in d["syst"+str(i)].split()]
+                hasnan = False
+                allzero = True
+                for x in vals:
+                    hasnan = hasnan or math.isnan(x)
+                    allzero = allzero and x==0
+                if not hasnan and not allzero:
+                    systs[sq][sm]["npe_calib_"+str(i)] = vals
+                    
 json.dump(systs, open(os.path.join("systs", TAG+".json"), 'w'), ensure_ascii=True, sort_keys=True, indent=4)
 
 
