@@ -5,6 +5,9 @@ r.gStyle.SetOptStat(0)
 
 DO_DY = True
 DY_ERR = 0.20
+# If this is a number >0, then only display the portion of the graphs
+# where the contribution from the given mode is at least DISP_THRESH of total xsec
+DISP_THRESH = 0.00
 
 f = r.TFile("xsecs.root")
 
@@ -24,7 +27,7 @@ hdummy.SetLineColor(r.kWhite)
 hdummy.GetXaxis().SetRangeUser(1e-2,xmax)
 hdummy.GetYaxis().SetRangeUser(ymin,5.0e10)
 
-hdummy.GetXaxis().SetTitle("m_{mCP} [GeV]")
+hdummy.GetXaxis().SetTitle("m_{#kern[0.2]{#zeta}} [GeV]")
 hdummy.GetXaxis().SetTitleSize(0.045)
 hdummy.GetXaxis().SetTitleOffset(1.20)
 hdummy.GetYaxis().SetTitle("#sigma #times #bf{#it{#Beta}} / Q^{2} [pb]")
@@ -55,11 +58,19 @@ for i in range(1,16):
     gs[i] = f.Get("xsecs_"+str(i))
     gs[i].SetLineWidth(2)
     gs[i].SetLineColor(colors[i])
-    gs[i].Draw("SAME LX")
+    # gs[i].Draw("SAME LX")
 
 ##### Handle DY curve #####
 
 if DO_DY:
+
+    xvals_interp = []
+    x, y = r.Double(), r.Double()
+    for i in range(gs[15].GetN()):
+        gs[15].GetPoint(i, x, y)
+        xvals_interp.append(float(x))
+    xvals_interp = np.array(xvals_interp)
+
     def np2graph(g, m, xs):
         g.Set(0)
         for i in range(m.size):
@@ -77,11 +88,13 @@ if DO_DY:
     xs = x[:,1]
     eff = x[:,2]
     smoothed = np.exp(ma(np.log(xs*eff), n=15))
-    np2graph(gdy, m_dy, smoothed)
+    xvals_interp = np.append(xvals_interp, m_dy[np.argmax(m_dy>xvals_interp[-1]):])
+    smoothed_interp = np.interp(xvals_interp, m_dy, smoothed)
+    np2graph(gdy, xvals_interp, smoothed_interp)
     gdy.SetLineWidth(3)
     gdy.SetLineStyle(1)
     gdy.SetLineColor(r.kYellow+1)
-    gdy.Draw("SAME LX")
+    # gdy.Draw("SAME LX")
 
 ###########################
 
@@ -109,11 +122,23 @@ gray_c = r.TColor(gray, *([0.85]*3))
 gt.SetFillColor(gray)
 gt.Draw("SAME 3")
 
-# re-draw curves so they're on top of error bar
-for i in range(1,16):
-    gs[i].Draw("SAME LX")
+# now draw the individual modes, clipping out the portions
+# of the graphs where the contribution to the total xsec is less than DISP_THRESH
+all_gs = [gs[i] for i in range(1,16)]
 if DO_DY:
-    gdy.Draw("SAME LX")
+    all_gs.append(gdy)
+for g in all_gs:
+    to_remove = []
+    x, y = r.Double(), r.Double()
+    yt = r.Double()
+    for j in range(gt.GetN()):
+        gt.GetPoint(j, x, yt)
+        g.GetPoint(j, x, y)
+        if y < DISP_THRESH*yt:
+            to_remove.append(j)
+    for ip in to_remove[::-1]:
+        g.RemovePoint(ip)
+    g.Draw("SAME LX")
 gt.Draw("SAME LX")
 hdummy.Draw("SAME AXIS")
 
@@ -133,9 +158,9 @@ box.SetLineWidth(0)
 box.Draw()
 line.DrawLineNDC(x1, y, x2, y)
 if DO_DY:
-    text.DrawLatex(x2+0.01, y+0.000, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 #sigma_{#lower[-0.15]{theory}}#kern[0.25]{)}")
+    text.DrawLatex(x2+0.01, y+0.000, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 s.d._{#lower[-0.15]{#kern[0.8]{t}heory}}#kern[0.25]{)}")
 else:
-    text.DrawLatex(x2+0.01, y+0.000, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 #sigma_{#lower[-0.15]{theory}}#kern[0.25]{)}")
+    text.DrawLatex(x2+0.01, y+0.000, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 s.d._{#lower[-0.15]{#kern[0.8]{t}heory}}#kern[0.25]{)}")
 
 text.SetTextAlign(32)
 text.DrawLatex(x1+0.590, 0.64, "#bf{pp} (13 TeV)")
