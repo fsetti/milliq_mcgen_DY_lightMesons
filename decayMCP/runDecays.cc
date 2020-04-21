@@ -95,6 +95,11 @@ int main(int argc, char **argv){
     //   eta = 0.11, theta ~84 degrees
     //   33 m from IP
     //   17 m of rock shielding
+    // NOTE: these eta/phi bound formulas are completely made up by me looking
+    // at eta/phi distributions of mCPs that hit milliQan, finding the max/min
+    // values and coming up with some function of mass that covers everything.
+    // The goal is to get as close as possible to true bound without cutting
+    // any events out, to maximize the efficiency of hitting milliQan.
     MCP_PHIMIN = -0.03;
     MCP_PHIMAX = 1.9/(1.0+exp(4.5*(log10(m_mCP)+0.75))) + 0.5;
     if(m_mCP >= 0.99) MCP_PHIMAX = 0.45;

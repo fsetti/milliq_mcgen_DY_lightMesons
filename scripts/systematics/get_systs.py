@@ -6,7 +6,7 @@ TAG = "v8_v1_save2m"
 
 rates = json.load(open(os.path.join("rates", TAG+".json")))
 rates_dens = json.load(open(os.path.join("rates", TAG+"_dens1p07"+".json")))
-calib_systs = json.load(open("/home/users/bemarsh/analysis/milliqan/geantDemoSim/slim_ntupler/calibration_toys/analysis/test_systs.json"))
+calib_systs = json.load(open("/home/users/bemarsh/analysis/milliqan/geantDemoSim/slim_ntupler/calibration_toys/analysis/jsons/systs_v5_4sr.json"))
 systs = {}
 
 for sq in rates:
@@ -41,11 +41,13 @@ for sq in rates:
                 systs[sq][sm][sp+"_xs"][0] += d[p][rate+"_up"] - cn
                 systs[sq][sm][sp+"_xs"][1] += d[p][rate+"_dn"] - cn
 
+        # material systematic
         nom_rate = d["total"]["rate_cn"]
         dens_rate = rates_dens[sq][sm]["total"]["rate_cn"]
         s = abs(nom_rate-dens_rate) * tot/nom_rate
         systs[sq][sm]["material"] = [s, -s]
-
+    
+        # now normalize absolute variations by total rate to get fractional uncertainties
         for s in systs[sq][sm].keys():
             if tot==0:
                 print sq, sm, s
@@ -54,10 +56,11 @@ for sq in rates:
             if systs[sq][sm][s][0] < 0.001 and systs[sq][sm][s][1] < 0.001:
                 del systs[sq][sm][s]
                 
+        # deal with NPE calibration systematics
         smq = "{0}_{1}".format(sm.replace("_",""), sq.replace("_",""))
         if smq in calib_systs:
             d = calib_systs[smq]
-            for i in range(1,6):
+            for i in range(1,len(d)):
                 vals = [round(float(x)-1,3) for x in d["syst"+str(i)].split()]
                 hasnan = False
                 allzero = True

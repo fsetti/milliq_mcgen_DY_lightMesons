@@ -79,7 +79,8 @@ if __name__=="__main__":
     for fout in fouts:
         chunk = int(fout.split("chunk")[1].split("/")[0])
         mass = fout.split("/mq5_")[1].split("_")[0]
-        outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_v7/m_{0}/dy/".format(mass)
+        nchunks = 1 + max([int(f.split("chunk")[1].split("/")[0]) for f in fs if "mq5_"+mass in f])
+        outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_v8/m_{0}/dy/".format(mass)
         # outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_mapp_theta5_v1/m_{0}/dy/".format(mass)
         outfile = os.path.join(outdir,"output_{0}.root".format(chunk+1))
         if os.path.exists(outfile):

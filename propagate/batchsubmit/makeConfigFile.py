@@ -1,13 +1,13 @@
 import glob
 import os
 
-ntuple_tag = "v7"
+ntuple_tag = "v8"
 sim_tag = "v1_save2m"
 config = "MQ"
 dens_mult = 1.00
 save_dist = 2.00
 
-charges = [0.005, 0.01, 0.02, 0.03, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
+charges = [0.005, 0.006, 0.007, 0.008, 0.01, 0.012, 0.014, 0.017, 0.02, 0.03, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
 # charges = [0.01,0.05,0.07,0.1]
 
 indir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_{0}".format(ntuple_tag)
@@ -38,9 +38,14 @@ transfer_executable=True
 
 for massdir in glob.glob(os.path.join(indir, "m_*")):
     mname = os.path.split(massdir)[1]
+    mass = float(mname.split("_")[1].replace("p","."))
     for sampdir in glob.glob(os.path.join(massdir, "*")):
         sampname = os.path.split(sampdir)[1]
         for q in charges:
+            # if (mass <= 0.5 and q >= 0.021) or (mass >= 2.0 and q<0.11):
+            #     continue
+            # if mass>0.4 or (mass==0.35 and q<0.2) or (mass==0.3 and q<0.14) or (mass==0.2 and q<0.1) or (mass==0.1 and q<0.105) or (mass in [0.01,0.02,0.03,0.05] and q<0.03):
+            #     continue
             qname = "q_"+str(q).replace(".","p")
             cfgdir = "configs/{0}_{1}/{2}/{3}".format(ntuple_tag, sim_tag, mname, qname)
             outdir = os.path.join(indir, mname, sampname, "postsim_"+sim_tag, qname)

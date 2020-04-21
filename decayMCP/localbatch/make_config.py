@@ -6,17 +6,15 @@ import numpy as np
 import ROOT as r
 
 # outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_mapp_theta5_v1"
-outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_v7"
+outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_v8"
 
-masses = [0.010, 0.020, 0.030, 0.050, 0.100, 0.200, 0.300, 0.350, 0.400, 0.500, 0.700, 1.000, 1.400, 1.600, 1.800, 2.000, 3.000, 3.500, 4.000, 4.500, 5.000]
+masses = [0.010, 0.020, 0.030, 0.040, 0.050, 0.070, 0.100, 0.140, 0.200, 0.300, 0.350, 0.400, 0.500, 0.700, 1.000, 1.400, 1.600, 1.800, 2.000, 3.000, 3.500, 4.000, 4.500, 5.000]
+# masses = [0.010, 0.020, 0.030, 0.050, 0.100, 0.200, 0.300, 0.350, 0.400, 0.500]
+# masses = [2.000, 3.000, 3.500, 4.000, 4.500, 5.000]
 N_target_events = 5e7
 min_events = 500000
 round_to = 500000
 nevts_per_job = 500000  
-# N_target_events = 5e6
-# min_events = 100000
-# round_to = 100000
-# nevts_per_job = 100000  
 assert round_to % nevts_per_job == 0
 
 xsec_file = r.TFile("../../scripts/plot-xsecs/xsecs.root")

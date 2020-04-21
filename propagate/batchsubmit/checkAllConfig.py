@@ -81,11 +81,14 @@ while True:
         if f in running_files:
             continue
         n_resubmit += 1
-        for line in job:
-            fout.write(line)
+        if n_resubmit <= 10000:
+            for line in job:
+                fout.write(line)
     fout.close()
 
     print "Found {0}/{1} jobs done, {2} jobs to resubmit".format(n_done, len(jobs), n_resubmit)
+    if n_resubmit > 10000:
+        print "   (only submitting 10000 for now)"
     if n_resubmit >0:
         os.system("condor_submit "+os.path.join(indir,"resubmit.cfg"))
 

@@ -30,7 +30,7 @@ hdummy.GetYaxis().SetRangeUser(ymin,5.0e10)
 hdummy.GetXaxis().SetTitle("m_{#kern[0.2]{#zeta}} [GeV]")
 hdummy.GetXaxis().SetTitleSize(0.045)
 hdummy.GetXaxis().SetTitleOffset(1.20)
-hdummy.GetYaxis().SetTitle("#sigma #times #bf{#it{#Beta}} / Q^{2} [pb]")
+hdummy.GetYaxis().SetTitle("#sigma #times #bf{#it{#Beta}} / (Q/e)^{2} [pb]")
 hdummy.GetYaxis().SetTitleSize(0.045)
 hdummy.GetYaxis().SetTitleOffset(1.16)
 
@@ -158,7 +158,8 @@ box.SetLineWidth(0)
 box.Draw()
 line.DrawLineNDC(x1, y, x2, y)
 if DO_DY:
-    text.DrawLatex(x2+0.01, y+0.000, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 s.d._{#lower[-0.15]{#kern[0.8]{t}heory}}#kern[0.25]{)}")
+    # text.DrawLatex(x2+0.01, y+0.000, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 s.d._{#lower[-0.15]{#kern[0.8]{t}heory}}#kern[0.25]{)}")
+    text.DrawLatex(x2+0.01, y+0.000, "Total #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 st. dev.)")
 else:
     text.DrawLatex(x2+0.01, y+0.000, "Total non-Drell-Yan #zeta^{+}#zeta^{#kern[0.3]{#minus}} cross section (#kern[0.25]{#pm}1 s.d._{#lower[-0.15]{#kern[0.8]{t}heory}}#kern[0.25]{)}")
 

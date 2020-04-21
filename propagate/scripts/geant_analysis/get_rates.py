@@ -4,7 +4,7 @@ import glob
 r.TH1.StatOverflows(True)
 r.gROOT.ProcessLine(".L ~/scripts/rootalias.C")
 
-TAG = "v7_v1_save2m_skim0p25m_simmcp_v1_v1"
+TAG = "v8ext1_v1_save2m_skim0p25m_mcpData_v5_v4calib"
 indir = "/nfs-7/userdata/bemarsh/milliqan/geant_ntuples/mcp_"+TAG
 
 fout = r.TFile("rate_files/{0}.root".format(TAG), "RECREATE")

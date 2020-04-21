@@ -13,7 +13,7 @@
 #include "../utils/branching_ratios.h"
 
 // const float MINBIAS_XSEC = (69.2e-3) * 1e12; // 69.2 mb converted to pb
-const float MINBIAS_XSEC = (80.0e-3) * 1e12; // 69.2 mb converted to pb
+const float MINBIAS_XSEC = (80.0e-3) * 1e12; // 80 mb converted to pb
 
 string DecayGen::GetDecayString(int decay_mode){
     if(decay_mode == 1)       return "B -> J/psi X, J/psi -> mCP mCP";
@@ -114,7 +114,7 @@ int DecayGen::Initialize(int decay_mode, float m_mCP){
         }
         h_up = (TH1D*)h_cn->Clone("h_up");
         h_dn = (TH1D*)h_cn->Clone("h_dn");
-        // ad-hoc 50% uncertainty for now
+        // ad-hoc 30% uncertainty for now
         h_up->Scale(1 + 0.30);
         h_dn->Scale(1 - 0.30);
         etamin = -2.0;
@@ -225,7 +225,7 @@ int DecayGen::DoDecay(MCPTree& tree){
 
 // Some histograms are given in dsigma / dpt
 // However, TH1::GetRandom assumes that it is dsigma / bin, so doesn't work correctly
-// for variable binned histograms. Correct for that here
+// for variable-binned histograms. Correct for that here
 void DecayGen::FixHistogram(TH1D* h){
     for(int i=1; i<=h->GetNbinsX(); i++)
         h->SetBinContent(i, h->GetBinContent(i) * h->GetBinWidth(i));
