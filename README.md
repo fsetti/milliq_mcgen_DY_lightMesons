@@ -1,9 +1,11 @@
 ## milliq_mcgen
 
-A collection of tools for generating signal Monte Carlo for the Milliqan experiment:
+A collection of tools for generating signal Monte Carlo for the milliQan experiment:
 * Compute cross sections and branching ratios for all mCP production modes
 * Simulate both two-body and Dalitz decays of parent particles into mCP's
 * Generate root files with all relevant information needed to feed generated mCP's into propagation/simulation software
+
+**NOTE:** A master milliQan MC tutorial, from initial event generation all the way through pulse injection, [can be found here](docs/MASTER_TUTORIAL.md)
 
 <p align="center"><a href="./scripts/plot-xsecs/mcp-xsec.pdf">
 <img src="./scripts/plot-xsecs/mcp-xsec.png" alt="plot of mCP cross sections" width="700"/>
