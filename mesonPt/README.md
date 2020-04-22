@@ -1,7 +1,7 @@
 Code to obtain cross sections and pT distributions for pi0, rho, omega, phi, eta, etaprime production.
 The distributions are stored in `pt_dists.root`. y-axis units are "particles per minbias event per 50 MeV bin".
 So, the total cross section for a given particle is the sum of all bin contents ("particles per minbias event")
-times the MinBias cross section (CMS recommends 69.2 mb @ 13 TeV).
+times the MinBias cross section (CMS recommends 69.2 mb @ 13 TeV, for demonstrator paper we ended up using 80 mb found by ATLAS and various tools).
 
 This was originally done using CMS MC samples (Summer16, with TuneCUETP8M1).
 To avoid using CMS samples for non-CMS work, this was duplicated in standalone pythia
