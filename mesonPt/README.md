@@ -6,7 +6,9 @@ times the MinBias cross section (CMS recommends 69.2 mb @ 13 TeV, for demonstrat
 This was originally done using CMS MC samples (Summer16, with TuneCUETP8M1).
 To avoid using CMS samples for non-CMS work, this was duplicated in standalone pythia
 using the public tune. The two methods were verified to give identical results.
-Instructions for running both are below:
+Instructions for running both are below.
+
+**Note:** for phi meson production, we decided to use the DW tune in pythia6 as this was found to best reproduced experimental measurements. pythia6 is fortran-based, so requires some extra work. Franny Setti implemented this, with scripts in the `pythia6` directory. The output of this is a histogram just like produced in the pythia8 steps below, which can be fed into `stitch.py`.
 
 To run over CMS MC samples using a CMSSW analyzer:
 ```
