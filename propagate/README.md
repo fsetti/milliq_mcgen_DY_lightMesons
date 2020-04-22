@@ -8,17 +8,21 @@ and set the correct `PYTHONPATH` environment variable.
 There are configurable parameters at the top of `run_sim.py` that control the location
 and size of the detector, as well as various simulation parameters.
 
-After setting up, run with `python run_sim.py <cfg_name> <Q> <input_file>`, where `cfg_name`
+After setting up, run with `python run_sim.py --config <cfg_name='MQ'> --charge <charge> <input_file>`, where `cfg_name`
 is the name of the setup config ("MQ" for default milliqan, more are defined in `configs.py`), and
-`Q` is the charge of the mCPs you want to simulate. This will propagate all of the mCPs, add branches
+`charge` is the charge of the mCPs you want to simulate. This will propagate all of the mCPs, add branches
 to the tree, throw away events where there were no hits, and output to `output.root`.
+Other optional arguments are `--density-mult <mult>`, which scales the density of all materials uniformly
+by `mult` (used for deriving a material systematic), and `--save_dist <dist>`, which is the distance
+in meters in front of the detector face to save the particle trajectories (we use 2 m for feeding into Geant).
 
 This was very slow, but has been sped up considerably by the integration of [numba](https://numba.pydata.org) into the python looping. It runs at close to 100 Hz now.
 
 By default, the `run_sim.py` script is set up to only save events where at least one mCP hits a 1m x 1m square around the Milliqan detector face (i.e. `does_hit_p || does_hit_m`, if using the branch names below).
 
 **Coordinates:** coordinates used for the position/momentum of hit are *not* in CMS coordinates.
-x and y are parallel to the Milliqan detector face (x in the phi-hat direction, y in the eta-hat direction), 
+x and y are parallel to the Milliqan detector face (x in the phi-hat direction, or vertically when standing in gallery,
+and y in the eta-hat direction, or horizontally when standing in gallery), 
 and z is perpendicular (positive z points *into* the detector, in the same direction as traveling particles).
 x and y are centered on the center of the detector face, while z is centered at the CMS origin
 (so if the detector is 33m away from the IP, the center of the detector face is (0,0,33)).
