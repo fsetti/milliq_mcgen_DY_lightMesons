@@ -11,11 +11,15 @@ outdir = "/hadoop/cms/store/user/bemarsh/milliqan/milliq_mcgen/ntuples_v8"
 masses = [0.010, 0.020, 0.030, 0.040, 0.050, 0.070, 0.100, 0.140, 0.200, 0.300, 0.350, 0.400, 0.500, 0.700, 1.000, 1.400, 1.600, 1.800, 2.000, 3.000, 3.500, 4.000, 4.500, 5.000]
 # masses = [0.010, 0.020, 0.030, 0.050, 0.100, 0.200, 0.300, 0.350, 0.400, 0.500]
 # masses = [2.000, 3.000, 3.500, 4.000, 4.500, 5.000]
+
+# we target this amount of events per mass point, in practice it will be a bit higher since we
+# put a floor on the number of events in each mode
 N_target_events = 5e7
-min_events = 500000
-round_to = 500000
+
+# the number of events in each job (i.e. each output file).
+# Since every mode must have at least 1 job, this is effectively the minimum number of events per mode
 nevts_per_job = 500000  
-assert round_to % nevts_per_job == 0
+
 
 xsec_file = r.TFile("../../scripts/plot-xsecs/xsecs.root")
 
@@ -73,8 +77,8 @@ for m in masses:
     print "\nmass =", m
     for i, (dm, xs) in enumerate(sorted_xs[:max_idx+1]):
         Nevt = xs / total_xsec * N_target_events
-        Nevt = max(Nevt, min_events)
-        Nevt = int(round(Nevt / round_to) * round_to)
+        Nevt = max(Nevt, nevts_per_job)
+        Nevt = int(round(Nevt / nevts_per_job) * nevts_per_job)
         subdir = os.path.join(outdir, "m_{0}".format(str(m).replace(".","p")), samp_names[dm])
         os.system("mkdir -p "+subdir)
         print "  {0:2d} {1:.3e} {2:.4f} {3:8d}".format(dm, xs, cum_xs[i], Nevt)
