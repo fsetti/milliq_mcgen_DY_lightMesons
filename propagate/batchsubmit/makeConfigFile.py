@@ -4,8 +4,8 @@ import os
 ntuple_tag = "v8"
 sim_tag = "v1_save2m"
 config = "MQ"
-dens_mult = 1.00
-save_dist = 2.00
+dens_mult = 1.00 # scale all material densities by this number (used for deriving a systematic)
+save_dist = 2.00 # save mCP trajectories this many meters before the milliqan detector face
 
 charges = [0.005, 0.006, 0.007, 0.008, 0.01, 0.012, 0.014, 0.017, 0.02, 0.03, 0.05, 0.07, 0.1, 0.14, 0.2, 0.3]
 # charges = [0.01,0.05,0.07,0.1]
