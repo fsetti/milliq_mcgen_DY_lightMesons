@@ -14,9 +14,13 @@ For all non-DY modes, we need to convert the differential cross section distribu
 
 For a full production, it is easiest to submit jobs to the grid. Scripts and instructions are in [decayMCP/localbatch](../decayMCP/localbatch). These scripts automatically adjust the number of events in each production mode so that event weights are ~constant (i.e. # of events is proportional to xsec*BR). If this is done correctly, you should have a hadoop directory structured as `<mass_dir>/<mode_dir>/output_*.root` with MCPTrees in the ROOT files.
 
-**Misc:** C++ files containing the functions used to compute branching ratios and do the four-vector decay math are in [utils](../utils). Python versions (not really used for anything any more) are in [scripts](../scripts). These shouldn't need to be touched unless you find a bug (hopefully not, since we will have published with that bug....). Scripts to generate a ROOT file with mCP cross sections and turn these into the [xsec plot used in the paper](http://uaf-8.t2.ucsd.edu/~bemarsh/milliqan/mcp-xsec.pdf) are in [scripts/plot-xsecs](../scripts/plot-xsecs).
+**Misc:** C++ files containing the functions used to compute branching ratios and do the four-vector decay math are in [utils](../utils). Python versions (not really used for anything any more) are in [scripts](../scripts). These shouldn't need to be touched unless you find a bug (hopefully not, since we will have published with that bug....). Scripts to generate a ROOT file with mCP cross sections and turn these into the [xsec plot used in the paper](../scripts/plot-xsecs/mcp-xsec.pdf) are in [scripts/plot-xsecs](../scripts/plot-xsecs).
+
+**Muons:** The equivalent event generation for muons is in the [muons](../muons) directory. Cross section data for the various modes is in [muons/data](../muons/data). The QCD modes come from pythia, using the same tools as described above. Batch submission tools are in [muons/localbatch](../muons/localbatch). Note that it is currently set up pretty inefficiently, as it generates the same number of events for each mode even though the QCD modes have much higher cross sections than the W/Z modes. For the future someone should fix this to generate in rough proportion to the total cross sections, like I did for signal.
 
 ### Propagation
+
+Once we have the generated events, we need to propagate them to the milliQan detector. The propagation engine that drives this is in the [MilliqanSim](https://github.com/bjmarsh/MilliqanSim) repository; details can be found there. This repository contains a wrapper around this in the [propagate](../propagate) directory
 
 ### Geant4 simulation
 
