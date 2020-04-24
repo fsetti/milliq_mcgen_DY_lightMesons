@@ -1,9 +1,9 @@
-## Master milliQan MC generation tutorial
+# Master milliQan MC generation tutorial
 The full milliQan simulation pipeline involves numerous steps, pulling from multiple repositories written by multiple people. The initial event generation is handled by this repository, the propagation engine is in [MilliqanSim](https://github.com/bjmarsh/MilliqanSim), Geant4 simulation and ntuplization is in [milliQanDemoSim](https://github.com/milliQan-sw/milliQanDemoSim), and pulse injection is handled by macros in [milliqanOffline](https://github.com/milliQan-sw/milliqanOffline). Various scripts for analysis, plotting, and deriving calibrations/systematics are scattered across these repositories.
 
 Here I've tried to organize everything into a single place, to provide some kind of instruction for anyone in the future trying to run through this whole process.
 
-### Event Generation
+## Event Generation
 
 Generation of initial events (mCPs or beam muons) is handled by this [milliq_mcgen](https://github.com/bjmarsh/milliq_mcgen) repository. First, we consider mCPs. Cross sections and p<sub>T</sub> distributions for all of the various production modes come from different places. All of these should already be in place in a fresh clone of the repository, and you can proceed straight to the generation, but I list them here for reference.
 * Light meson production is done with pythia. All use the pythia8 Monash2013 tune, except for &phi;s which use the pythia6 DW tune. Instructions/scripts for running pythia and generating the p<sub>T</sub> distributions can be found in the [mesonPt](../mesonPt) directory. The output is a set of histograms with units of "particles per minbias event per 50 MeV bin" (for the eta range |&eta;|<2). So, the total cross section for a given particle is the sum of all bin contents ("particles per minbias event") times the MinBias cross section. The histograms used in the demonstrator paper are in [pt_dists.root](../mesonPt/pt_dists.root).
@@ -19,7 +19,7 @@ For a full production, it is easiest to submit jobs to the grid. Scripts and ins
 
 **Muons:** The equivalent event generation for muons is in the [muons](../muons) directory. Cross section data for the various modes is in [muons/data](../muons/data). The QCD modes come from pythia, using the same tools as described above. Batch submission tools are in [muons/localbatch](../muons/localbatch). Note that it is currently set up pretty inefficiently, as it generates the same number of events for each mode even though the QCD modes have much higher cross sections than the W/Z modes. For the future someone should fix this to generate in rough proportion to the total cross sections, like I did for mCPs.
 
-### Propagation
+## Propagation
 
 Once we have the generated events, we need to propagate them to the milliQan detector. The propagation engine that drives this is in the [MilliqanSim](https://github.com/bjmarsh/MilliqanSim) repository; details can be found there. This repository contains a wrapper around this in the [propagate](../propagate) directory. This takes the output ntuples from the previous step, propagates them to the milliQan detector, and adds relevant branches to the tree. General instructions are in the README there.
 
@@ -37,11 +37,11 @@ Running `get_rates.py` then `plot_rates.py` will make useful plots like [these](
 
 The `muangles` directory has scripts to do the rough check of muon angular distribution, like [this](http://uaf-8.t2.ucsd.edu/~bemarsh/milliqan/geant_sim/muangles/test/geantsim_run3_franny_data/top.pdf).
 
-### Geant4 simulation
+## Geant4 simulation
 
 The Geant4 simulation is contained in the [milliQanDemoSim](https://github.com/milliQan-sw/milliQanDemoSim) repository. It was developed and maintained by Ryan Schmitz, so he is the one to ask questions on how to run. It takes as input text files of propagated mCPs/muons, generated with the `root2text.py` script described above.
 
-### Geant ntuplization
+## Geant ntuplization
 
 Geant produces raw ROOT files with low-level information on individual tracks and PMT hits. This is a bit hard to analyze, so I've created an ntuples that takes the raw Geant output and produces ntuples with higher level information, aggregated by channel. It is located in the [slim_ntupler](https://github.com/milliQan-sw/milliQanDemoSim/tree/master/slim_ntupler) directory of milliQanDemoSim. General instructions on compiling and running, as well as a description of the output format, can be found in the README there.
 
@@ -55,8 +55,20 @@ I'll discuss here various constants/calibrations used in the ntupler that might 
 
 All of the branches with info about the material in which hits originated (`chan_fracElScint`, `chan_fracElAl`, etc) involve tracing tracks through the parent-child relationships back to the source. The various functions for doing this are in `utils/TrackFinding.[cc,h]`.
 
+There are scripts for batch submission in the `metis` directory. There are separate submission scripts for beam muons, cosmic muons, and mCPs.
+
 **Looper:** I have a looper set up that runs over the ntupler output and makes histograms used to make nice plots [like this](http://uaf-8.t2.ucsd.edu/~bemarsh/milliqan/geant_sim/beammuons_run3/inclusive/nPE/), located in `slim_ntupler/looper`. Sorry, this has gotten quite convoluted as I've added more and more histograms to it. Anyway, if you can manage to get it to run you can dump plots with the `slim_ntupler/looper/make_plots.py` script. I also have a script to make data/MC plots [like this](http://uaf-8.t2.ucsd.edu/~bemarsh/milliqan/geant_sim/data_comp/run3_pmtcalib/nonneighbBars/) (though I didn't run over data, that was mostly from Franny) in `slim_ntupler/datacomp`.
 
 **Event display:** I've made a jsroot-based event display to visualize all of the tracks in an event ([see here for some examples](http://uaf-10.t2.ucsd.edu/~bemarsh/dump/jsroot/index.htm?file=inputs/mq_events.root)). First we need to extract all of the tracks in an event. There is a tool to do this in `slim_ntupler/printTracks` that runs over raw Geant output. Within an output file of the ntupler, there are branches `fileID` and `orig_event` that give the index of the original Geant output file and the event number within that file. Once you know the file and event number you want to inspect, run `./printTracks /path/to/geant/output/file.root event_number ch1 [ch2 ch3 ...]`, where the last arguments are a list of channels whose PE hits you want to inspect. You can just pass -1 as ch1 if you want to do all channels. This will dump a bunch of probably-not-comprehensible-except-to-bennett information to stdin. Redirect to a text file (possibly located in `../scripts/events`) with whatever name you want. Now go to `slim_ntupler/scripts`, and you can run `python event_display.py events/*` (or change the argument to whatever text files you want to draw). Note you will have to change the path near the top of the script to point to your local clone of the MilliqanSim repository, which controls a lot of the geometry. If this works, you will have a `mq_events.root` file that you can upload to a server where you have installed [jsroot](https://root.cern.ch/js/).
 
-### Pulse injection
+**Calibration toys:** For deriving the NPE calibration systematic, I have a C++ program to generate "calibration toys" by randomly varying PMT efficiencies and re-computing SR yields. This is in `slim_ntupler/calibration_toys`. The uncertainty model is defined in the main program `generate_toys.cc`. It takes a while to generate 1000 toys, so there are batch submission scripts in the `metis` directory.
+
+## Pulse injection
+
+Pulse injection is the trickiest step, since it involves the tree-making code in [milliqanOffline](https://github.com/milliQan-sw/milliqanOffline) that really wasn't designed for batch submission.  The latest code is stored locally in a milliqan user area (`ssh milliqan@[uafino,cms2].physics.ucsb.edu`, usual password), at `/net/cms26/cms26r0/milliqan/milliqanOffline`. `mix_events.C` (compile with `compileMix.sh`) performs the injection and creates DRS-like output files with raw waveforms. Then `make_tree.C` makes the final tree in the same way as for actual data (Matthew is the main author for both of these, so ask him with questions). These can be run locally, but there are many hard-coded paths/files that make them not work for batch submission.
+
+For now, I've taken a very hacky approach by duplicating them into the `batchsubmit_mixing` directory, along with all of their file dependencies, and editing them to refer to relative paths instead of absolute ones. This is obviously not very sustainable since every time make_tree is updated, it needs to be updated in two locations. Ideally the workflow should be improved so this is not needed, but I never got around to it.
+
+Anyway, within the `batchsubmit_mixing` directory you can compile the programs with `compileMix.sh` and `compile.sh`, then run `createTar.sh` to bundle everything into a tarball. This tarball can be copied to the UAF and used for batch submission.
+
+I have metis scripts for batch submission in [milliQanDemoSim/slim_ntupler/batchsubmit_mixing](https://github.com/milliQan-sw/milliQanDemoSim/tree/master/slim_ntupler/batchsubmit_mixing). There are separate submission files for muons and mCPs. Note that the injection uses zero-bias events, so I had to manually copy a number of zero-bias data trees to hadoop on the UAF (located at `/hadoop/cms/store/user/bemarsh/milliqan/zero_bias/`). The `condor_exe.sh` explicitly points to these when running the mixing. The executable is set to only copy the final analysis tree, but if you want the intermediate file with DRS-like raw waveforms (e.g. for making event displays), you can uncomment the final block in `condor_exe.sh` (note that these files are very big, so do this carefully).
