@@ -13,3 +13,7 @@ utility can help, by running the jobs in parallel. e.g. `parallel --nice 10 --jo
 dump the kinematics into text files, then feed these into a C++ program `ntupler/run.cc` that converts them into ROOT files.
 7. These root files are placed into wherever you set `outdir` in the previous step. These should be in the same format as those from
 `decayMCP/runDecays.cc`, and can be fed into the propagator in the same way.
+
+### Grid submission
+
+I've now added scripts to `batchsubmit` to do all of the above with a single condor submission, allowing for larger samples and far less babysiting. See instructions there.
