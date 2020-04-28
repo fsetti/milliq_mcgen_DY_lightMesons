@@ -8,10 +8,6 @@ from tqdm import tqdm
 
 MAXLOCALJOBS = 20
 
-indir = sys.argv[1]
-fs = glob.glob(os.path.join(indir,"*/Events/*/*.lhe.gz"))
-# fs = ["runs/out_mq5_13tev_xsecscan/mq5_1p002_1p0_chunk0/Events/run_01/unweighted_events.lhe.gz"]
-
 def simple_parse(fin, fout):
     fout = open(fout, 'w')
     nevents = 0
@@ -41,6 +37,9 @@ def simple_parse(fin, fout):
     return nevents
 
 if __name__=="__main__":
+    indir = sys.argv[1]
+    fs = glob.glob(os.path.join(indir,"*/Events/*/*.lhe.gz"))
+    # fs = ["runs/out_mq5_13tev_xsecscan/mq5_1p002_1p0_chunk0/Events/run_01/unweighted_events.lhe.gz"]
 
     nchunks = 1 + max([int(f.split("chunk")[1].split("/")[0]) for f in fs])
 
