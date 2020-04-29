@@ -3,7 +3,8 @@ The full milliQan simulation pipeline involves numerous steps, pulling from mult
 
 Here I've tried to organize everything into a single place, to provide some kind of instruction for anyone in the future trying to run through this whole process.
 
-[Note: A good high-level overview of the whole process used for the demonstrator paper can be found in [these slides](https://docs.google.com/presentation/d/1RQ2l8dykOk_f2HA-a-QmwXzpqHG1SnlHV4S8BNC7Lc4/edit?usp=sharing)].
+[Note: A good high-level overview of the whole process used for the demonstrator paper can be found in [these slides](https://docs.google.com/presentation/d/1RQ2l8dykOk_f2HA-a-QmwXzpqHG1SnlHV4S8BNC7Lc4/edit?usp=sharing). A description
+of all of the theory/experiment comparisons used to derive cross sections and uncertainties are in [these slides](https://docs.google.com/presentation/d/1fFwFP4A6epERyUvavHiA5V4gAMegDhOSLu6k6_2aDrE/edit?usp=sharing).]
 
 ## Event Generation
 
