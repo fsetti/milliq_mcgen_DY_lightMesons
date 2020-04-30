@@ -6,6 +6,8 @@ Here I've tried to organize everything into a single place, to provide some kind
 [Note: A good high-level overview of the whole process used for the demonstrator paper can be found in [these slides](https://docs.google.com/presentation/d/1RQ2l8dykOk_f2HA-a-QmwXzpqHG1SnlHV4S8BNC7Lc4/edit?usp=sharing). A description
 of all of the theory/experiment comparisons used to derive cross sections and uncertainties are in [these slides](https://docs.google.com/presentation/d/1fFwFP4A6epERyUvavHiA5V4gAMegDhOSLu6k6_2aDrE/edit?usp=sharing).]
 
+[Also note: some of the merging/skimming scripts depend on my copyTree.py tool. That can be [found here](https://github.com/cmstas/Software/tree/master/scripts). You should put this somewhere and then add that directory to your PATH]
+
 ## Event Generation
 
 Generation of initial events (mCPs or beam muons) is handled by this [milliq_mcgen](https://github.com/bjmarsh/milliq_mcgen) repository. First, we consider mCPs. Cross sections and p<sub>T</sub> distributions for all of the various production modes come from different places. All of these should already be in place in a fresh clone of the repository, and you can proceed straight to the generation, but I list them here for reference.
