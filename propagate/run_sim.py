@@ -8,7 +8,7 @@ parser.add_argument('-d', '--density_mult', dest='density_mult', default=1.0, ty
 parser.add_argument('-s', '--save_dist', dest='save_dist', default=0.1, type=float, help="distance before detector face to save four-vectors (default 0.1m)")
 args = parser.parse_args()
 
-import sys
+import os, sys
 import numpy as np
 import ROOT as r
 from millisim.Environment import Environment
@@ -33,6 +33,12 @@ else:
     q = float(args.charge)
 
 #########################
+
+# For grid submissions. Do not put bfield file in tarball to avoid large file transfers, so gfal-copy from hadoop here
+if not os.path.exists("MilliqanSim/bfield/bfield_coarse.pkl"):
+    os.system("mkdir -p MilliqanSim/bfield")
+    os.system("gfal-copy -p -f -t 4200 --verbose gsiftp://gftp.t2.ucsd.edu/hadoop/cms/store/user/bemarsh/milliqan/bfield/bfield_coarse.pkl.tar.xz file://{0}/MilliqanSim/bfield/bfield_coarse.pkl.tar.xz".format(os.getcwd()))
+    os.system("tar xf MilliqanSim/bfield/bfield_coarse.pkl.tar.xz -C MilliqanSim/bfield/")
 
 env = Environment(
     mat_setup = cfg.mat_setup,

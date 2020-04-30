@@ -90,7 +90,10 @@ while True:
     if n_resubmit > 10000:
         print "   (only submitting 10000 for now)"
     if n_resubmit >0:
-        os.system("condor_submit "+os.path.join(indir,"resubmit.cfg"))
+        if len(running_files) > 25000:
+            print "Too many jobs currently running, not submitting any more"
+        else:
+            os.system("condor_submit "+os.path.join(indir,"resubmit.cfg"))
 
     print "Found {0} redundant jobs".format(n_redundant)
 
