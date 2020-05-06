@@ -7,21 +7,21 @@ Usage:
 ```
 
 `decay_mode` is an integer specifiying which mode you want to generate. Currently supported:
-1. B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-2. B &rarr; &psi;(2S) X, &psi;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-3. &rho; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-4. &omega; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-5. &phi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-6. &pi;<sup>0</sup> &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&gamma;
-7. &eta; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&gamma;
-8. &eta;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&gamma;
-9. &omega; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&pi;<sup>0</sup>
-10. &eta;' &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>&omega;
-11. J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-12. &psi;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-13. &Upsilon;(1S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-14. &Upsilon;(2S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
-15. &Upsilon;(3S) &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>
+1. B &rarr; J/&psi; X, J/&psi; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+2. B &rarr; &psi;(2S) X, &psi;(2S) &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+3. &rho; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+4. &omega; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+5. &phi; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+6. &pi;<sup>0</sup> &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>&gamma;
+7. &eta; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>&gamma;
+8. &eta;' &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>&gamma;
+9. &omega; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>&pi;<sup>0</sup>
+10. &eta;' &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>&omega;
+11. J/&psi; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+12. &psi;(2S) &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+13. &Upsilon;(1S) &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+14. &Upsilon;(2S) &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
+15. &Upsilon;(3S) &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>
 
 `outfile` is the name of the ROOT file to output to.
 
@@ -41,7 +41,7 @@ Output root tree has the following branches:
 * `n_events_total`: total number of events in the sample. Defaults to the number of events in the given file, but can be overridden
 in the case that the sample is split over many files (see above)
 * `decay_mode`: copy of the `decay_mode` argument to the program, defined above
-* `parent_p4`: four-momentum of parent of mCP's (e.g. the J/&psi; for B &rarr; J/&psi; X, J/&psi; &rarr; &zeta;<sup>+</sup>&zeta;<sup>&ndash;</sup>)
+* `parent_p4`: four-momentum of parent of mCP's (e.g. the J/&psi; for B &rarr; J/&psi; X, J/&psi; &rarr; &chi;<sup>+</sup>&chi;<sup>&ndash;</sup>)
 * `parent_pdgId`: PDG ID of parent of mCP's
 * `p4_p`: four-momentum of positively-charged mCP (in GeV)
 * `p4_m`: four-momentum of negatively-charged mCP (in GeV)

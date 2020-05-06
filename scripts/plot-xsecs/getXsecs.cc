@@ -56,7 +56,13 @@ int main(int argc, char** argv){
             }else
                 cur_xs = 0.0, cur_errup = 0.0, cur_errdn = 0.0;;
             gt->SetPoint(j, mass, cur_xs + xsec);
-            gt->SetPointError(j, 0, 0, sqrt(pow(cur_errdn,2)+pow(xsec-xsec_dn,2)), sqrt(pow(cur_errup,2)+pow(xsec_up-xsec,2)));
+            // for the xsec_total graph, add in a correlated minbias xsec uncertainty (using 10/80 = 12.5%)
+            if(i>=3 && i<=10){
+                float frac = 10.0/80.0;
+                gt->SetPointError(j, 0, 0, sqrt(pow(cur_errdn,2)+pow(xsec-xsec_dn,2)) + frac*xsec, sqrt(pow(cur_errup,2)+pow(xsec_up-xsec,2)) + frac*xsec);
+            }else{
+                gt->SetPointError(j, 0, 0, sqrt(pow(cur_errdn,2)+pow(xsec-xsec_dn,2)), sqrt(pow(cur_errup,2)+pow(xsec_up-xsec,2)));                
+            }
         }
         fout->cd();
         g->Write(g->GetName(), TObject::kWriteDelete);

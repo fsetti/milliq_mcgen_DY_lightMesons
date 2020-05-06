@@ -21,17 +21,17 @@
 
 \section{Introduction}
 We discuss the MC generation of milliCharged
-particles ($\zeta$) in $pp$ collisions at the LHC in the central rapidity
+particles ($\chi$) in $pp$ collisions at the LHC in the central rapidity
 region. 
 Except for Drell-Yan (DY), this is done in a few steps
 \begin{enumerate}
 \item Generate in various ways SM particles ($A$) that can decay as
-  $A \to X \zeta^+ \zeta^-$
+  $A \to X \chi^+ \chi^-$
 \item Keep track of the cross-section for SM production of $A$.
-\item Calculate the branching ratio for $A \to X \zeta^+ \zeta^-$
+\item Calculate the branching ratio for $A \to X \chi^+ \chi^-$
   for milliCharge $Q=1$.  For different charges, it is easy to
   scale the branching ratio as $Q^2$.
-\item Generate the $A \to X \zeta^+ \zeta^-$ decay with proper
+\item Generate the $A \to X \chi^+ \chi^-$ decay with proper
   kinematics.
 \item Save the ``event'' for further processing in a root file.
   \end{enumerate}
@@ -39,26 +39,26 @@ Except for Drell-Yan (DY), this is done in a few steps
 
 
 \section{Special (simplest) case: Drell-Yan}
-The Drell-Yan process $pp \to \zeta^+ \zeta^-$ is generated with
+The Drell-Yan process $pp \to \chi^+ \chi^-$ is generated with
 the external model interface in MadGraph.  Note that we cannot use
 SM $pp \to \ell^+ \ell^-$ with a different lepton mass
 because the couplings of the $Z$ to
-$\zeta$'s and leptons are different
-(in our model $\zeta$'s are weak isospin
+$\chi$s and leptons are different
+(in our model $\chi$s are weak isospin
 singlets\cite{Holdom}\cite{Haas:2014dda}).
 
 Technically, this was achieved in MadGraph by simply modifying the mass and couplings
 of the SM electron. The couplings are $\varepsilon e$ and $-\varepsilon e\tan\theta_W$ to
 the $\gamma$ and $Z_0$, respectively, where $\varepsilon = Q/e$.
 
-The $pp\to\zeta^+\zeta^-$ process is generated with up to 1 extra parton. This is not very 
+The $pp\to\chi^+\chi^-$ process is generated with up to 1 extra parton. This is not very 
 relevant at lower masses since a large majority of events don't include an extra parton. At 
 higher masses, however, it can increase cross section by $O$(20-30\%). The MadGraph
 parameter \texttt{xqcut} is set to 0, but there still seems to be a 20 GeV cut on the $p_T$
 of the extra parton.
 
-We can't find a parameter to control this, but there appears to be a $\zeta^+\zeta^-$ invariant
-mass cut of 2 GeV. Correspondingly, the cross section plateaus below $m_\zeta = 1$ GeV. This shouldn't
+We can't find a parameter to control this, but there appears to be a $\chi^+\chi^-$ invariant
+mass cut of 2 GeV. Correspondingly, the cross section plateaus below $m_\chi = 1$ GeV. This shouldn't
 matter, however, as production from J/$\psi$, $\phi$, $\omega$, $\rho$, etc. is expected do dominate
 at low masses.
 
@@ -86,13 +86,13 @@ The main processes for  $A \to e^+ e^- X$ at the LHC are:
     \item $V \to e^+ e^-$ ($V$ = onia, $\phi$, $\rho$, $\omega$)
 \end{itemize}
 
-Note that if we are only interested in $\zeta$ masses above 100 MeV,
+Note that if we are only interested in $\chi$ masses above 100 MeV,
 Dalitz decays of $\pi^0$ and decays of $\eta'$ into $\omega$
 do not contribute.
-In all cases the BR for $A \to \zeta^+ \zeta^- X$ can be obtained
+In all cases the BR for $A \to \chi^+ \chi^- X$ can be obtained
 by rescaling $A \to e^+ e^- X$ by a factor of $Q^2$ times an
 additional mass-dependent factor.  In general this factor consists
-of a phase space piece $\sqrt{1 - (2m_\zeta/m_A)^2}$ plus an additional
+of a phase space piece $\sqrt{1 - (2m_\chi/m_A)^2}$ plus an additional
 piece that arises from the matrix element.
 
 Note also that among these processes, the paper~\cite{Haas:2014dda} that
@@ -167,7 +167,7 @@ form factor $F_{AX}$ can also be approximated as in equation~\ref{dalitz2}.
 For milliCharged particles, Dalitz decays branching ratios 
 can be obtained by integrating equation~\ref{dalitz1} or~\ref{dalitz11}
 from 
-$q^2=4m^2_\zeta$ to the kinematical limit, substituting $m_\zeta$ for 
+$q^2=4m^2_\chi$ to the kinematical limit, substituting $m_\chi$ for 
 $m_e$, and rescaling by $Q^2$.
 Some numerical results for $Q=1$ are given in Table~\ref{tab:dalitz1}.  Note the
 sharp drop in branching ratios with mass.  This is due to the $1/q^2$ behavior.
@@ -181,9 +181,9 @@ with the electron and muon masses are in excellent agreement with the PDG.
     { \footnotesize
   \begin{tabular}{|c|c|c|c|c|c|}
     \hline
-    $m_\zeta$ (MeV) & $\pi^0 \to \zeta \zeta \gamma$ & $\eta \to \zeta \zeta \gamma$
-    & $\eta' \to \zeta \zeta \gamma$ & $\eta' \to \zeta \zeta \omega$
-    & $\omega \to \zeta \zeta \pi^0$ \\ \hline \hline
+    $m_\chi$ (MeV) & $\pi^0 \to \chi \chi \gamma$ & $\eta \to \chi \chi \gamma$
+    & $\eta' \to \chi \chi \gamma$ & $\eta' \to \chi \chi \omega$
+    & $\omega \to \chi \chi \pi^0$ \\ \hline \hline
   0.511 (=$m_e$)  & 1.17 e-2 & 6.6 e-3 & 4.6 e-4 & 1.8 e-4 & 7.6 e-4 \\
   PDG for ee  & ($1.17 \pm 0.04$)e-2 & ($6.9 \pm 0.4$)e-4 & ($4.7 \pm 0.3$)e-4  &
   ($2.0 \pm 0.4$)e-4  & ($7.7 \pm 0.6$)e-4 \\ \hline
@@ -202,7 +202,7 @@ with the electron and muon masses are in excellent agreement with the PDG.
   \end{tabular}
   }
   \caption{\protect Branching ratios for different Dalitz decay modes as 
-    a function of $m_\zeta$ for $Q=1$ calculated 
+    a function of $m_\chi$ for $Q=1$ calculated 
     based on equations~\ref{dalitz1},~\ref{dalitz2}, and~\ref{dalitz11}. 
 When possible we compare with 
   the values from the 2019 PDG.}
@@ -224,16 +224,16 @@ When possible we compare with
   vector mass, $Q_q$ is the charge of the quark that makes up the meson,
   $x_\ell = m_\ell/m_V$, and $m_\ell$ is the lepton mass.
 
-  \noindent Thus the ratio of BR for $V \to \zeta \zeta$ to $V \to ee$ is
+  \noindent Thus the ratio of BR for $V \to \chi \chi$ to $V \to ee$ is
   given by
 
   \begin{equation} 
-    \frac{\Gamma(V \to \zeta \zeta)}{\Gamma(V \to ee)} = Q^2
-    \frac{(1-4x_\zeta^2)^{1/2} (1+2x_\zeta^2)}{(1-4x_\ell^2)^{1/2} (1+2x_\ell^2)}
+    \frac{\Gamma(V \to \chi \chi)}{\Gamma(V \to ee)} = Q^2
+    \frac{(1-4x_\chi^2)^{1/2} (1+2x_\chi^2)}{(1-4x_\ell^2)^{1/2} (1+2x_\ell^2)}
     \label{V1}
     \end{equation}
 
-  \noindent where $x_\zeta = m_\zeta/m_V$, and $m_\zeta$ is the mass of $\zeta$.
+  \noindent where $x_\chi = m_\chi/m_V$, and $m_\chi$ is the mass of $\chi$.
   
   As a sanity check, we use equation~\ref{V1} to predict several $V \to \ell \ell$
   branching ratios and compare them with their PDG values, see Table~\ref{tab:VBR}.
@@ -259,7 +259,7 @@ When possible we compare with
       \label{tab:VBR}
     \end{center}
   \end{table}
-  \section{Generation of SM particles decaying into $\zeta^+ \zeta^-$}
+  \section{Generation of SM particles decaying into $\chi^+ \chi^-$}
 
 
   The key features of our approach are the following
@@ -527,14 +527,14 @@ The total cross section for milliCharged particle production (excluding
 DY) is shown in Fig.~\ref{fig:total-rates}.  
 % Note that the considered contributions from $\eta'$ are negligible. 
 As mentioned in
-Section~\ref{sec:list}, we are skipping $\eta' \to \pi^+ \pi^- \zeta^+
-\zeta^-$.
+Section~\ref{sec:list}, we are skipping $\eta' \to \pi^+ \pi^- \chi^+
+\chi^-$.
 Note that the other contributions from $\eta'$ in the plot are neglogible.
-Since for $\zeta = e$ the branching ratio of the skipped process is four
+Since for $\chi = e$ the branching ratio of the skipped process is four
 times higher than
 that of $\eta' \to e^+ e^- \gamma$ (Dalitz decay), one worries that
 this
-process could actually be important.  However, for reasonable $\zeta$
+process could actually be important.  However, for reasonable $\chi$
 masses, say above 100 MeV, this process is suppressed by phase space
 with respect to Dalitz decay, e.g., from the PDG,
 BR($\eta' \to \mu^+ \mu^- \gamma$) $\approx$ 1e-4 while
@@ -545,19 +545,19 @@ BR($\eta' \to \pi^+ \pi^- \mu^+ \mu^-$) $<$ 3e-5.  So we can safely ignore it.
   \begin{center}
   \includegraphics[width=0.8\linewidth]{../scripts/plot-xsecs/mcp-xsec.pdf}
   \caption{\protect Cross-section times branching ratios for various
-    decays into $\zeta^+ \zeta^-$ pairs.  Note: this is
+    decays into $\chi^+ \chi^-$ pairs.  Note: this is
     the cross section for producing the mother particle times the
-    branching ratio for the mother particle to decay into $\zeta^+ \zeta^-$.
-    Multiply by two to get the $\zeta^{\pm}$ production cross section.
+    branching ratio for the mother particle to decay into $\chi^+ \chi^-$.
+    Multiply by two to get the $\chi^{\pm}$ production cross section.
     For non-DY modes, the mother particle must be in $|\eta|<2$, but the
-    daughter $\zeta^{\pm}$ could have $|\eta|>2$.  On the other hand some
-    $\zeta$'s with $|\eta|<2$ can arise from mothers of $|\eta|>2$. For DY,
+    daughter $\chi^{\pm}$ could have $|\eta|>2$.  On the other hand some
+    $\chi$s with $|\eta|<2$ can arise from mothers of $|\eta|>2$. For DY,
     it doesn't make sense to use ``mother $\eta$'' (it's almost always $\pm\infty$), 
     so the plotted cross section requires at least one mCP to have $|\eta|<1$. 
     This threshold was chosen so that the probability of an mCP pointing in the vicinity of 
     the detector is similar to that from the other non-DY production modes, 
     in order to facilitate comparison. The plateau in DY cross section below 
-    $m_\zeta=1~\text{GeV}$ is due to a 2 GeV $\zeta^+\zeta^-$ invariant mass cut in MadGraph.}
+    $m_\chi=1~\text{GeV}$ is due to a 2 GeV $\chi^+\chi^-$ invariant mass cut in MadGraph.}
 \label{fig:total-rates}
 \end{center}
   \end{figure}
@@ -565,7 +565,7 @@ BR($\eta' \to \pi^+ \pi^- \mu^+ \mu^-$) $<$ 3e-5.  So we can safely ignore it.
 
 
 As mentioned in the caption of Figure~\ref{fig:total-rates} some
-of the $\zeta$'s in the central region (i.e.: potentially within
+of the $\chi$s in the central region (i.e.: potentially within
 the acceptance of milliQan) could result from decays of mother
 particles at higher $|\eta|$, especially in the cases where
 the mother particles have low momentum and the boost in the
@@ -619,7 +619,7 @@ Note that in this $p_T$ range the theoretical uncertainties are large.}
 \section{Generation of the decays}
 
 We provide functions that take as input the lab frame 4-vector of either pseudoscalar
-($P$) or vector ($V$) meson, and return the 4 vectors of the two $\zeta$'s from the decay.
+($P$) or vector ($V$) meson, and return the 4 vectors of the two $\chi$s from the decay.
 We assume that the $V$'s are unpolarized.
 
 
@@ -637,18 +637,18 @@ decay of the $\omega$, whcih has J=1,  as long as it is unpolarized):
 \item Rotate the $\gamma^*$ 4-vector into a frame $S_3$ 
   such that the $\gamma^*$ is traveling in the $z$-direction.
 \item Boost along $z$ into frame $S_4$ where $\gamma^*$ is at rest.
-\item Generate a decay $\gamma^* \to \zeta^+ \zeta^-$ such that
-  the angle $\phi$ of the $\zeta^+$ is random and
+\item Generate a decay $\gamma^* \to \chi^+ \chi^-$ such that
+  the angle $\phi$ of the $\chi^+$ is random and
   $\cos \theta$ is picked according to~\cite{adlarson}
   \begin{equation}
-    \frac{dN}{d \cos \theta} = 1 + \cos^2\theta + \frac{4 m^2_\zeta}{q^2} \sin^2\theta
+    \frac{dN}{d \cos \theta} = 1 + \cos^2\theta + \frac{4 m^2_\chi}{q^2} \sin^2\theta
     \label{dalitzAngles}
   \end{equation}
-\item  Set the 3-vector of the $\zeta^-$ to be back-to-back with the $\zeta^+$.
-\item Boost the 4-vectors of the $\zeta$'s from $S_4$ to $S_3$.
-\item Rotate the 4-vectors of the $\zeta$'s from $S_3$ to $S_2$.
-\item Boost the 4-vectors of the $\zeta$'s from $S_2$ to $S_1$.
-\item Rotate the 4-vectors of the $\zeta$'s from $S_1$ to the lab frame.
+\item  Set the 3-vector of the $\chi^-$ to be back-to-back with the $\chi^+$.
+\item Boost the 4-vectors of the $\chi$s from $S_4$ to $S_3$.
+\item Rotate the 4-vectors of the $\chi$s from $S_3$ to $S_2$.
+\item Boost the 4-vectors of the $\chi$s from $S_2$ to $S_1$.
+\item Rotate the 4-vectors of the $\chi$s from $S_1$ to the lab frame.
 \end{itemize}
 
 
@@ -660,11 +660,11 @@ The procedure is the following:
   \item Rotate the 4-vector of $V$ from the lab frame into frame
     $S_1$ such that $V$ is traveling in the $z$-direction.
   \item  Boost along $z$ into frame $S_2$ where $V$ is at rest.
-  \item Generate a decay $V \to \zeta^+ \zeta^-$ such that
-    both the angle $\phi$ and the $\cos \theta$ of the $\zeta^+$ are random.
-  \item   Set the 3-vector of the $\zeta^-$ to be back-to-back with the $\zeta^+$.
-  \item Boost the 4-vectors of the $\zeta$'s from $S_2$ to $S_1$.
-\item Rotate the 4-vectors of the $\zeta$'s from $S_1$ to the lab frame.
+  \item Generate a decay $V \to \chi^+ \chi^-$ such that
+    both the angle $\phi$ and the $\cos \theta$ of the $\chi^+$ are random.
+  \item   Set the 3-vector of the $\chi^-$ to be back-to-back with the $\chi^+$.
+  \item Boost the 4-vectors of the $\chi$s from $S_2$ to $S_1$.
+\item Rotate the 4-vectors of the $\chi$s from $S_1$ to the lab frame.
 \end{itemize}
 
 
