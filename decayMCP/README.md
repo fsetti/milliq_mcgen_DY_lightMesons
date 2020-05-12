@@ -34,6 +34,7 @@ Usage:
 
 `evtnum_offset` is the value at which to start numbering events (so if you're making multiple files, event numbers don't overlap).
 
+**Note:** the milliQan demonstrator eta/phi location is hardcoded into runDecays.cc. If this changes, you need to edit this.
 
 ### File format
 Output root tree has the following branches:

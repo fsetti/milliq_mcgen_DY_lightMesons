@@ -9,6 +9,8 @@
 #include "DecayGen.h"
 #include "MCPTree/MCPTree.h"
 
+// NOTE: THESE ARE OVERWRITTEN IN THE main FUNCTION BELOW
+// EDIT THEM THERE
 float MCP_ETAMIN = 0.11 - 0.08;
 float MCP_ETAMAX = 0.11 + 0.08;
 float MCP_PHIMIN = -0.03;
