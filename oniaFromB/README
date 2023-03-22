@@ -8,7 +8,7 @@ Script to turn the txt file in the run2 and run3 folders into root histograms an
 pretty plots
 
 
-*Contents of run2 and run3 folders*
+## Contents of run2 and run3 folders
 
 psi.txt psiprime.txt
 ---------------------
