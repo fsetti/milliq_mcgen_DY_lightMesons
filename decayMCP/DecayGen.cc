@@ -160,17 +160,29 @@ int DecayGen::Initialize(int decay_mode, float m_mCP, bool isRun3){
             m_parent = 3.6861;
         }else if(decay_mode == 13){
             // direct Y(1S)
-            finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups1S_combined.root").c_str());
+	    if (isRun3) {
+	      finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups1S_combined_run3.root").c_str());
+	    } else {
+	      finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups1S_combined.root").c_str());
+	    }
             parent_pdgId = 553;
             m_parent = 9.4603;
         }else if(decay_mode == 14){
             // direct Y(2S)
-            finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups2S_combined.root").c_str());
+	    if (isRun3) {
+	      finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups2S_combined_run3.root").c_str());
+	    } else {
+	      finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups2S_combined.root").c_str());
+	    }
             parent_pdgId = 100553;
             m_parent = 10.023;
         }else if(decay_mode == 15){
             // direct Y(3S)
-            finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups3S_combined.root").c_str());
+	    if (isRun3) {
+	      finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups3S_combined_run3.root").c_str());
+	    } else {
+	      finfo = new TFile((BASE_DIR+"/oniaDirect/upsilon/ups3S_combined.root").c_str());
+	    }
             parent_pdgId = 200553;
             m_parent = 10.355;
         }
