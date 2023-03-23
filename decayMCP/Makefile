@@ -1,3 +1,7 @@
+# Uses the gnu version of getopt that is not on the mac
+# If you are using a MAC "brew install gnu-getopt"
+# and then
+# export PATH="/usr/local/opt/gnu-getopt/bin:$PATH"
 CC=g++ -Wno-deprecated
 LDFLAGS=
 LIBS=

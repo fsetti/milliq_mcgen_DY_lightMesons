@@ -3,11 +3,17 @@ atlas_cms_comparison.C
 Root macro to compare the rescaled 7 TeV Atlas upsilon xsections
 with the 13 TeV CMS ones
 
+
 combineXsec.py
 --------------
 Reads the upsilon ROOT files for Atlas and CMS from
 ../CMS_13_TeV/data and ../Atlas_7_Tev
-and combines them into output ROOT file
+and combines them into output ROOT file for Run 2 (13 TeV)
+
+From_13_to_13p6_TeV.ipynb
+-------------------------
+Takes ups*_combined.root (Run 2) and rescales it to Run 3.
+Output files are then ups*_combined_run3.root
 
 histio.cc
 ---------
@@ -15,7 +21,7 @@ utility
 
 make_pretty_plots.C
 -------------------
-Root macro to make plots from ups*_combined.root
+Root macro to make plots from ups*_combined.root for Run 2 (13 TeV)
 
 ups*_combined.root
 ------------------
@@ -24,13 +30,21 @@ Root files with the combined pt spectra of upsilons
 from Atlas and CMS.  Files contain "central" value,
 the "up" and the "down" variations
 The normalization is dsigma/dPt in nb/GeV for the
-rapidity interval abs(y)<1.2
+rapidity interval abs(y)<1.2 for Run 2 (13 TeV)
 
+ups*_combined_run3.root
+-----------------------
+Same as ups*_combined.root but rescaled for Run 3 (13.6 TeV).
+
+upsilon-*s-atlas-cms-comparison.pdf
+-----------------------------------
+Plots made by atlas_cms_comparisons.C (Run 2, 13 TeV)
+
+
+ 
 ups*s-full.pdf
 --------------
 Plots made by make_pretty_plots.C
 
-upsilon-*s-atlas-cms-comparison.pdf
------------------------------------
-Plots made by atlas_cms_comparisons.C
+
 
