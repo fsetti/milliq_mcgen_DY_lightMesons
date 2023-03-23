@@ -7,6 +7,16 @@ fonll2root.py
 Script to turn the txt file in the run2 and run3 folders into root histograms and make
 pretty plots
 
+compare_Run2_Run3.C
+-------------------
+Root script to make psi*_fromB_*comparison.pdf
+
+psiprime_fromB_Run2_Run3_comparison.pdf psi_fromB_Run2_Run3_comparison.pdf
+--------------------------------------------------------------------------
+Comparisons of Run2 and Run3 pt spectra.
+The blue dashed band is the Run2 variation as a function of Pt from the central value.
+The red line is the ration of the central Run3 spectrum to the central Run2 spectrum.
+Note that the PDFs have changed between Run2 and Run3
 
 ## Contents of run2 and run3 folders
 
