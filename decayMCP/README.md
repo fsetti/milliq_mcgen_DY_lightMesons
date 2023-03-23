@@ -3,7 +3,7 @@
 Usage: 
 ```
 ./runDecays -d decay_mode -o outfile [-m m_mCP=0.001 (GeV)] [-n n_events=1000] \
-               [-N n_events_total=n_events] [-e evtnum_offset=0]
+               [-N n_events_total=n_events] [-e evtnum_offset=0] [-2 (if Run2)]
 ```
 
 `decay_mode` is an integer specifiying which mode you want to generate. Currently supported:

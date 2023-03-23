@@ -18,11 +18,12 @@ class DecayGen {
     enum DecayType{ TWOBODY, DALITZ };
     static string GetDecayString(int decayMode);
     static void FixHistogram(TH1D* h);
-    int Initialize(int decayMode, float m_mCP);
+    int Initialize(int decayMode, float m_mCP, bool isRun3);
     int DoDecay(MCPTree& tree);
     
     TH1D *h_cn, *h_up, *h_dn;
     int decay_mode;
+    bool isRun3;
     string decay_string;
     float etamin, etamax; // eta bounds of parent particle
     float xsec_inclusive, xsec_up, xsec_down; // xsec before BR to mCPs (in pb)

@@ -42,9 +42,10 @@ int main(int argc, char **argv){
     int decay_mode = -1;
     float m_mCP = 0.001;
     int n_events = 1000, evt_offset = 0;
+    bool run3 = true;
     uint n_events_total = 0;
     string output_name = "";
-    while((opt = getopt(argc, argv, ":hd:o:m:n:N:e:p")) != -1) {
+    while((opt = getopt(argc, argv, ":hd:o:m:n:N:e:p:2")) != -1) {
         switch(opt){
         case 'h':
             help = true;
@@ -70,6 +71,9 @@ int main(int argc, char **argv){
         case 'p':
             do_pairs = true;
             break;
+	case '2':
+	  run3 = false;
+	  break;
         case '?':
             std::cout << "\nWARNING: unrecognized option " << argv[optind-1] << std::endl;
             break;
@@ -126,8 +130,7 @@ int main(int argc, char **argv){
     // MCP_PHIMIN = -0.10;
     // MCP_PHIMAX = 0.10;
     // MCP_ETAMIN = 2.44 - 0.20;
-    // MCP_ETAMAX = 2.44 + 0.20;
-
+    // MCP_ETAMAX = 2.44 + 0.20
     // // MAPP theta=5
     // //   eta = 3.13, theta = 5
     // //   55 m from IP, 10 m of rock shielding
@@ -141,7 +144,7 @@ int main(int argc, char **argv){
 
     gRandom->SetSeed(0);
     
-    if(dg.Initialize(decay_mode, m_mCP)){
+    if(dg.Initialize(decay_mode, m_mCP, run3)){
         std::cout << "Invalid decay mode!\n";
         return 1;
     }
@@ -174,6 +177,11 @@ int main(int argc, char **argv){
     std::cout << "**********************************************" << std::endl;
     std::cout << "*   Milli-Charged Particle Decay Generator   *" << std::endl;
     std::cout << "**********************************************" << std::endl;
+    if (run3) {
+        std::cout << "  Run 3 configuration " << std::endl;
+    } else {
+        std::cout << "  Run 2 configuration " << std::endl;
+    }
     std::cout << "  Doing decay mode: " << dg.decay_string << std::endl;
     std::cout << "    mCP mass (GeV): " << dg.m_mCP << std::endl;
     std::cout << "         xsec (pb): " << dg.xsec_inclusive << " (" << dg.xsec_up << ", " << dg.xsec_down << ")\n";
@@ -191,7 +199,6 @@ int main(int argc, char **argv){
     std::cout << " mCP phi min (q>0): " << MCP_PHIMIN << std::endl;
     std::cout << " mCP phi max (q>0): " << MCP_PHIMAX << std::endl;
     std::cout << "----------------------------------------------" << std::endl;
-    
 
     outtree.tree()->SetBranchStatus("filter_eff", 0); // turn off and fill later once we're done
     unsigned long n_attempts = 0;

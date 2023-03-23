@@ -34,25 +34,38 @@ string DecayGen::GetDecayString(int decay_mode){
     else return "BAD DECAY MODE";
 }
 
-int DecayGen::Initialize(int decay_mode, float m_mCP){
+int DecayGen::Initialize(int decay_mode, float m_mCP, bool isRun3){
     this->decay_mode = decay_mode;
     decay_string = GetDecayString(decay_mode);
     this->m_mCP = m_mCP;
     m_X = 9999;  // mass of X in dalitz decay A -> B+B-X;
+    this->isRun3 = isRun3;
 
     TFile *finfo;
     if(decay_mode >= 1 && decay_mode <= 2){
         // psi's produced from B's
         if(decay_mode == 1){
             // B -> psi X, psi -> mCP mCP
-            finfo = new TFile((BASE_DIR+"/oniaFromB/psi.root").c_str());
-            xsec_inclusive = 1.0167e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+	    if (isRun3) {
+	      finfo = new TFile((BASE_DIR+"/oniaFromB/run3/psi.root").c_str());
+	      xsec_inclusive = 9.4238e+05 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+	    } else {
+	      // finfo = new TFile((BASE_DIR+"/oniaFromB/psi.root").c_str());
+	      finfo = new TFile((BASE_DIR+"/oniaFromB/run2/psi.root").c_str());
+	      xsec_inclusive = 1.0167e6 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+	    }
             parent_pdgId = 443;
             m_parent = 3.0969;
         }else if(decay_mode == 2){
             // B -> psi X, psi -> mCP mCP
-            finfo = new TFile((BASE_DIR+"/oniaFromB/psiprime.root").c_str());
-            xsec_inclusive = 2.6408e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+	    if (isRun3) {
+	      finfo = new TFile((BASE_DIR+"/oniaFromB/run3/psiprime.root").c_str());
+              xsec_inclusive = 2.4505e+05 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+	    } else {
+	      // finfo = new TFile((BASE_DIR+"/oniaFromB/psiprime.root").c_str());
+	      finfo = new TFile((BASE_DIR+"/oniaFromB/run2/psiprime.root").c_str());
+	      xsec_inclusive = 2.6408e5 * 2; // *2 since b's produced in pairs; from inclusive txt file *total_xsec.txt
+	    }
             parent_pdgId = 100443;
             m_parent = 3.6861;
         }
