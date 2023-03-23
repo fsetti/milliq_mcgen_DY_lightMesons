@@ -14,9 +14,11 @@ Root script to make psi*_fromB_*comparison.pdf
 psiprime_fromB_Run2_Run3_comparison.pdf psi_fromB_Run2_Run3_comparison.pdf
 --------------------------------------------------------------------------
 Comparisons of Run2 and Run3 pt spectra.
-The blue dashed band is the Run2 variation as a function of Pt from the central value.
-The red line is the ration of the central Run3 spectrum to the central Run2 spectrum.
-Note that the PDFs have changed between Run2 and Run3
+The blue band is the Run2 variation as a function of Pt from the central value.
+(Dashed = up/down, Solid = central = 1.0)
+The red band is the ratio of the Run3 spectrum to the central Run2 spectrum.
+(Dashed = up/down run3 divided by run2 central, Solid = run3 central/run2 central)
+Note that the PDFs have changed between Run2 and Run3.
 
 ## Contents of run2 and run3 folders
 
@@ -30,8 +32,6 @@ psi-eta.txt psiprime-eta.txt psi-y.txt psiprime-y.txt
 -------------------------------------------------------
 Tables of cross sections as a function of eta or y for B->psi B->psiprime
 The kinematical cuts are documented in the files (pt<10 is the key)
-
-
 
 *.root *.pdf
 ------------
