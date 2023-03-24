@@ -34,8 +34,12 @@ Except for Drell-Yan (DY), this is done in a few steps
 \item Generate the $A \to X \chi^+ \chi^-$ decay with proper
   kinematics.
 \item Save the ``event'' for further processing in a root file.
-  \end{enumerate}
-  
+\end{enumerate}
+
+\noindent{\bf Note: the plots and discussions in Sections~\ref{sec:bpsi},
+  ~\ref{sec:onia},~\ref{sec:psiSanity},~\ref{sec:mesons},~\ref{sec:bottom-line}
+  are for the Run2 configuration $\sqrt{s}=13$ TeV.  The modifications
+  for the Run3 configurations $\sqrt{s}=13.6$ TeV are discussed in the Appendix.}
 
 
 \section{Special (simplest) case: Drell-Yan}
@@ -422,6 +426,7 @@ are integrated over $|\eta|<1.2$.}
 
 
 \subsection{J/$\psi$ sanity check}
+\label{sec:psiSanity}
 
 Most of the J/$\psi$ cross-section is from direct production, see
 Figure~\ref{fig:sanity}, left.  As a sanity check we also show
@@ -667,6 +672,62 @@ The procedure is the following:
 \item Rotate the 4-vectors of the $\chi$s from $S_1$ to the lab frame.
 \end{itemize}
 
+\clearpage
+
+\appendix
+
+\section{Modifications for Run 3}
+
+\subsection{J/$\psi$ and $\psi'$ from b-decays - Run 3}
+\label{sec:bpsi3}
+We use the exact method described in Section~\ref{sec:bpsi}, changing the center-of-mass energy
+from 13 to 13.6 TeV.  Note that for the Run 2 configuration we had used the CTEQ6.6 pfds,
+whereas for the Run 3 configuration we used the NNPDF30\_nlo\_as\_0118 pdfs.  The reason
+for this is simply that the CTEQ6.6 pdf is not an option in the \\
+\href{http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html}
+     {http://www.lpthe.jussieu.fr/~cacciari/fonll/fonllform.html} 
+     tool for 13.6 TeV.  Comparisons of Run 2 vs. Run 3 cross-sectiosn as a function
+     of $P_T$ are shhown in Figure~\ref{fig:psi_run_comparison} 
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.45\linewidth]{../oniaFromB/psi_fromB_Run2_Run3_comparison.pdf}
+    \includegraphics[width=0.45\linewidth]{../oniaFromB/psiprime_fromB_Run2_Run3_comparison.pdf}
+    
+    \caption{\protect Run 2 vs. Run 3 comparisons of of the J/$\psi$ (left) and
+      $\psi'$ (right) $P_T$ spectra
+      from b-decays.  The blue band is the Run2 variation as a function of Pt from the central value.
+(Dashed blue = up/down divided by central, Solid blue = central = 1.0).
+The red band is the ratio of the central Run 3 spectrum to the central Run2 spectrum.
+(Dashed red = up/down Run 3 divided by Run 2 central, Solid red = Run 3 central/Run 2 central)
+Note that the PDFs have changed between Run2 and Run3.  See text for details.}
+\label{fig:psi_run_comparison}
+\end{center}
+\end{figure}
+
+\subsection{Direct bottonium - Run 3}
+\label{sec:upsilon3}
+The quadratic functions from Figure~\ref{fig:upsratio} were used to extrapolate
+the LHCb 7 TeV data to 13 TeV (see discussion in Section~\ref{sec:upsilon}).
+We use these same functions to (linearly) further extrapolate 
+the direct bottonium 13 TeV $P_T$ spectra in
+Figure~\ref{fig:upsFinal} up to 13.6 TeV.  The Run 2 to Run 3 scale factors are
+displayed in Figure~\ref{fig:ups_run_2_run_3_sf}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.95\linewidth]{../oniaDirect/upsilon/Run2_to_Run3_scale.pdf}
+    \caption{\protect Run 2 to Run 3 scale factors for $\Upsilon$ production.  These
+      are further extrapolations from the LHCb 7 to 13 TeV ratios
+      of Figure~\ref{fig:upsratio}.  Scale factors are truncated at high $P_T$
+      where the LHCb data peters out.}
+\label{fig:ups_run_2_run_3_sf}
+\end{center}
+\end{figure}
+
+
+
+\clearpage
 
 \begin{thebibliography}{1}
 

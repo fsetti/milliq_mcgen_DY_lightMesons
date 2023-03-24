@@ -3,7 +3,6 @@ atlas_cms_comparison.C
 Root macro to compare the rescaled 7 TeV Atlas upsilon xsections
 with the 13 TeV CMS ones
 
-
 combineXsec.py
 --------------
 Reads the upsilon ROOT files for Atlas and CMS from
@@ -13,7 +12,12 @@ and combines them into output ROOT file for Run 2 (13 TeV)
 From_13_to_13p6_TeV.ipynb
 -------------------------
 Takes ups*_combined.root (Run 2) and rescales it to Run 3.
-Output files are then ups*_combined_run3.root
+Output files are then ups*_combined_run3.root and
+Run2_to_Run3_scale.pdf
+
+Run2_to_Run3_scale.pdf
+----------------------
+Scale factors from Run 2 to Run 3
 
 histio.cc
 ---------
