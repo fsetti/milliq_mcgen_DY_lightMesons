@@ -106,15 +106,22 @@ int main(int argc, char **argv){
     // values and coming up with some function of mass that covers everything.
     // The goal is to get as close as possible to true bound without cutting
     // any events out, to maximize the efficiency of hitting milliQan.
-    MCP_PHIMIN = -0.03;
-    MCP_PHIMAX = 1.9/(1.0+exp(4.5*(log10(m_mCP)+0.75))) + 0.5;
-    if(m_mCP >= 0.99) MCP_PHIMAX = 0.45;
-    if(m_mCP >= 1.39) MCP_PHIMAX = 0.40;
-    if(m_mCP >= 1.79) MCP_PHIMAX = 0.35;
-    if(m_mCP >= 2.99) MCP_PHIMAX = 0.30;
-    float deta = m_mCP >= 0.999 ? 0.08 : m_mCP >= 0.29 ? 0.12 : 0.18;
-    MCP_ETAMIN = 0.11 - deta;
-    MCP_ETAMAX = 0.11 + deta;
+    if (run3) {
+      MCP_PHIMIN = -0.1;
+      MCP_PHIMAX =  2.0;
+      MCP_ETAMIN = -0.1;
+      MCP_ETAMAX =  0.3;
+    } else {
+      MCP_PHIMIN = -0.03;
+      MCP_PHIMAX = 1.9/(1.0+exp(4.5*(log10(m_mCP)+0.75))) + 0.5;
+      if(m_mCP >= 0.99) MCP_PHIMAX = 0.45;
+      if(m_mCP >= 1.39) MCP_PHIMAX = 0.40;
+      if(m_mCP >= 1.79) MCP_PHIMAX = 0.35;
+      if(m_mCP >= 2.99) MCP_PHIMAX = 0.30;
+      float deta = m_mCP >= 0.999 ? 0.08 : m_mCP >= 0.29 ? 0.12 : 0.18;
+      MCP_ETAMIN = 0.11 - deta;
+      MCP_ETAMAX = 0.11 + deta;
+    }
 
     // // MAPP theta=25
     // //   eta = 1.51, theta = 25
